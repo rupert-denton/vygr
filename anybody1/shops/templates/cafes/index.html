@@ -1,0 +1,79 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    {% load static %}
+    <!DOCTYPE html>
+
+    <html lang="en">
+      <head>
+
+            <Meta charset="utf-8">
+            <title>Anybody</title>
+            <!---leaflet css --->
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+              integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+              crossorigin=""/>
+
+          <!---leaflet JS -->
+          <!-- Make sure you put this AFTER Leaflet's CSS -->
+            <script src="http://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+
+            <script src="{% static 'shops/js/leaflet-providers.js' %}"> </script>
+
+            <!---leaflet set map height -->
+
+            <style>
+            #anybody { height: 650px; }
+            </style>
+
+    </head>
+<body>
+    <h1>Anybody</h1>
+
+    <!--{% if cafe_name %}
+    <ul>
+    {% for cafe in cafe_name %}
+        <li>
+        {{ cafe.cafe_name }} : {{cafe.cafe_address}} : {{cafe.distance}}
+        </li>
+
+    {% endfor %}
+    </ul>
+    {% endif %}-->
+
+    <!-- mapdiv -->
+    <div id='anybody'>
+      <!-- mapjs -->
+        <script>
+        var map = L.map('anybody').setView([-37.7570553, 145.0058511], 15);
+
+        L.tileLayer.provider('Jawg.Streets', {
+        variant: 'jawg-streets',
+        accessToken: 'CfM4qaekho2FFKH1GyMBk2pj54YyjShGOReroBoUNYhX66tpfn9wUMKhkHtZ6fUQ'
+        }).addTo(map);
+
+        var myicon = L.icon({
+        iconUrl: "{% static 'shops/img/my-icon.png' %}",
+        iconSize: [30, 30],
+        //iconAnchor: [22, 94],
+        //popupAnchor: [-3, -76],
+        });
+
+        L.marker([-37.7570553, 145.0058511]).addTo(map)
+        .bindPopup('My House in Thornbury')
+        .openPopup();
+
+        //for each cafe make a circle
+        {% for cafe in cafe_name %}
+
+        L.marker(
+          [{{ cafe.geolocation.y }}, {{ cafe.geolocation.x }}],
+          {icon: myicon}).addTo(map)
+          .bindPopup( '{{ cafe.cafe_name }} <br> {{ cafe.cafe_address }}' ); //add cafe name
+
+        {% endfor %}
+        </script>
+      </div>
+
+
+</body>
+</html>
