@@ -91,4 +91,4 @@ def scrapecafes(city, area):
           conn.close()
           print('Database connection closed.')
 
-scrapecafes('melbourne', 'north-melbourne')
+scrapecafes('melbourne', 'footscray')

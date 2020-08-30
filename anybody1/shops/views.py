@@ -15,5 +15,5 @@ class Home(generic.ListView):
     context_object_name = 'cafe_name'
     queryset = ACafes.objects.annotate(distance=Distance('geolocation',
     user_location)
-    ).order_by('distance')[0:200]
+    ).order_by('distance')[0:300]
     template_name = 'cafes/index.html'
