@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 
 # Create your models here.
 
-class ACafes(models.Model):
+class mapCafes(models.Model):
     id = models.BigAutoField(primary_key=True)
     cafe_name = models.CharField(max_length=200)
     cafe_address = models.CharField(max_length=200)
@@ -14,6 +14,17 @@ class ACafes(models.Model):
         managed = False
         db_table = 'a_cafes'
 
+class listCafes(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    list_cafe_name = models.CharField(max_length=200)
+    list_cafe_address = models.CharField(max_length=200)
+    list_cafe_long = models.FloatField()
+    list_cafe_lat = models.FloatField()
+    list_geolocation = models.PointField(geography=True, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'a_cafes'
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)

@@ -66,7 +66,9 @@
               //popupAnchor: [-3, -76],
               });
 
-              L.marker([-37.7570553, 145.0058511]).addTo(map)
+              var home = L.marker([-37.7570553, 145.0058511],
+              {icon: myicon
+                }).addTo(map)
               .bindPopup('My House in Thornbury')
               .openPopup();
 
