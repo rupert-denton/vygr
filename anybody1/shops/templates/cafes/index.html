@@ -1,79 +1,113 @@
 {% load static %}
+
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
+<head>
+    <!-- required meta -->
+    <Meta charset="utf-8">
+    <title>Anybody</title>
 
-        <Meta charset="utf-8">
-        <title>Anybody</title>
+    <!--Bootsrap-->
 
-        <!---leaflet css --->
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!---leaflet css --->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin=""/>
 
-      <!---leaflet JS -->
-      <!-- Make sure you put this AFTER Leaflet's CSS -->
-        <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
-        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
-        crossorigin=""></script>
-        <!--<script src="http://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>-->
-        <script src="{% static 'shops/js/leaflet-providers.js' %}"> </script>
+    <!---leaflet JS -->
 
-        <!---leaflet set map height -->
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+    integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+    crossorigin=""></script>
+    <!--<script src="http://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>-->
+    <script src="{% static 'shops/js/leaflet-providers.js' %}"> </script>
 
-        <style>
-        #anybody { height: 650px; }
-        </style>
+    <!--my css -->
 
-      </head>
+    <link rel="stylesheet" href="{% static 'shops/css/anybody.css' %}">
+
+    <!---leaflet set map height -->
+    <style>
+      #anybody { height: 650px; }
+    </style>
+</head>
 
 <body>
     <h1>Anybody</h1>
-<!-- mapdiv -->
-    <div id='anybody'>
-      <script>
-        var map = L.map('anybody').setView([-37.7570553, 145.0058511], 15);
+    <!--viewport-->
+    <div class="container">
+      <div class="row">
+        <!-- mapside of screen -->
+        <!--map spacing -->
+        <div class="col-lg-9">
+          <!-- mapdiv -->
+          <div id='anybody'>
+            <script>
+              var map = L.map('anybody').setView([-37.7570553, 145.0058511], 15);
 
-        L.tileLayer.provider('Jawg.Streets', {
-        variant: 'jawg-streets',
-        accessToken: 'CfM4qaekho2FFKH1GyMBk2pj54YyjShGOReroBoUNYhX66tpfn9wUMKhkHtZ6fUQ'
-        }).addTo(map);
+              L.tileLayer.provider('Jawg.Streets', {
+              variant: 'jawg-streets',
+              accessToken: 'CfM4qaekho2FFKH1GyMBk2pj54YyjShGOReroBoUNYhX66tpfn9wUMKhkHtZ6fUQ'
+              }).addTo(map);
 
-        var myicon = L.icon({
-        iconUrl: "{% static 'shops/img/my-icon.png' %}",
-        iconSize: [30, 30],
-        //iconAnchor: [22, 94],
-        //popupAnchor: [-3, -76],
-        });
+              var myicon = L.icon({
+              iconUrl: "{% static 'shops/img/my-icon.png' %}",
+              iconSize: [30, 30],
+              //iconAnchor: [22, 94],
+              //popupAnchor: [-3, -76],
+              });
 
-        L.marker([-37.7570553, 145.0058511]).addTo(map)
-        .bindPopup('My House in Thornbury')
-        .openPopup();
+              L.marker([-37.7570553, 145.0058511]).addTo(map)
+              .bindPopup('My House in Thornbury')
+              .openPopup();
 
-        //for each cafe make a circle
-        {% for cafe in cafe_name %}
+              //for each cafe make a circle
+              {% for cafe in cafe_name %}
 
-        L.marker(
-          [{{ cafe.geolocation.y }}, {{ cafe.geolocation.x }}],
-          {icon: myicon}).addTo(map)
-          .bindPopup( '{{ cafe.cafe_name }} <br> {{ cafe.cafe_address }}' ); //add cafe name
+              L.marker(
+                [{{ cafe.geolocation.y }}, {{ cafe.geolocation.x }}],
+                {icon: myicon}).addTo(map)
+                .bindPopup( '<p> {{ cafe.cafe_name }} <br> {{ cafe.cafe_address }} </p>' ); //add cafe name
 
-        {% endfor %}
-      </script>
+              {% endfor %}
+            </script>
+          </div>
+        </div>
+
+        <!-- sidebar side -->
+        <!--sidebar spacing -->
+        <div class="col-lg-3">
+          <h3> Cafe List </h3>
+            <div id="cafe-list">
+              {% if cafe_name %}
+              <ul>
+              {% for cafe in cafe_name %}
+              <div class= "border-top p-1">
+                <p>
+                  {{ cafe.cafe_name }}
+                <br>
+                {{cafe.cafe_address}}
+                </br>
+                {{cafe.distance}}</p>
+              </div>
+              {% endfor %}
+              </ul>
+              {% endif %}
+            </div>
+        </div>
+      </div>
     </div>
 
-<!-- mapjs -->
+
+
 </body>
 </html>
-
-<!--{% if cafe_name %}
-<ul>
-{% for cafe in cafe_name %}
-    <li>
-    {{ cafe.cafe_name }} : {{cafe.cafe_address}} : {{cafe.distance}}
-    </li>
-
-{% endfor %}
-</ul>
-{% endif %}-->
