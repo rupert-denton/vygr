@@ -10,16 +10,16 @@ from geopy.extra.rate_limiter import RateLimiter
 def details(name, address):
     locator = Nominatim(user_agent="myGeocoder")
     location = locator.geocode(address)
-    print('Address located by Nominatim:' address)
+    print(f'Address located by Nominatim: {address}')
     print('Geocoding address.')
-    print('Geocoding complete:' name, location.longitude, location.latitude)
+    print('Geocoding complete:', location.longitude, location.latitude)
 
     long = location.longitude
     lat = location.latitude
 
     table = (name, address, long, lat)
 
-    print('The following data has been entered into database table:' table)
+    print(f'The following data has been entered into database table: {table}' )
 
         #add scraped data into PostgreSQL Database Table (Anybody1, a_cafes)
 
@@ -28,7 +28,7 @@ def details(name, address):
 
     try:
         ##read database configuration, I believe anybody1.ini
-        params = config()
+        params = config(filename= '/Users/rupertdenton/Desktop/Coding/anybody/anybody1.ini', section='postgresql')
 
         #connect to the PostgreSQL database (Anybody1.db)
         print('Connecting to the PostgreSQL DB')
@@ -57,4 +57,4 @@ def details(name, address):
           conn.close()
           print('Database connection closed.')
 
-details('Prince and The Duke Cafe', '73 Reid St, Fitzroy North VIC 3068')
+details('Johnnys Bodega', '159 Ormond Rd, Elwood VIC 3184')

@@ -62,7 +62,7 @@ def scrapecafes(city, area):
 
     try:
         ##read database configuration, I believe anybody1.ini
-        params = config()
+        params = config(filename= '/Users/rupertdenton/Desktop/Coding/anybody/anybody1.ini', section='postgresql')
 
         #connect to the PostgreSQL database (Anybody1.db)
         print('Connecting to the PostgreSQL DB')

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Electra</title>
+
+    <!--Bootsrap-->
+
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+
+    <!--Map-->
+    <style>
+      #map {
+        height: 100%;
+      }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+  </style>
+
+  </head>
+
+  <body>
+
+  {% block content %}
+  <div id="systems">
+    <h1> Electra </h1>
+    <h4> User Location </h4>
+    <p id="user_location"> </p>
+  </div>
+
+  <div id="cafes">
+    <div id='cafe_list'></div>
+  </div>
+
+  <div id="Google Map">
+  <h3>Anybody</h3>
+  <!--viewport-->
+  <div class="container">
+    <!--Map -->
+      <div class="row">
+        <!-- mapside of screen -->
+        <div class="col-lg-9"><!--map spread on screen -->
+            <!-- mapdiv -->
+            <div id='map' style="height:500px"></div>
+        </div>
+
+  <!-- sidebar  -->
+  <!--sidebar spacing -->
+  s
+  {% load static %}
+  <!-- <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCaMciXfNXBzO_lPINmrspp4_fZ17RA_Jk&callback=initMap"></script> -->
+  <script src = "{% static "/testingland/js/electra.js" %}"> </script>
+
+
+
+  {% endblock %}
+  </body>
+</html>
