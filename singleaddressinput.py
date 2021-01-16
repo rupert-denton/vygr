@@ -7,7 +7,7 @@ import geopy
 from geopy.geocoders import Nominatim
 from geopy.extra.rate_limiter import RateLimiter
 
-def details(name, address):
+def details(name, address, venue_type, source):
     locator = Nominatim(user_agent="myGeocoder")
     location = locator.geocode(address)
     print(f'Address located by Nominatim: {address}')
@@ -17,13 +17,13 @@ def details(name, address):
     long = location.longitude
     lat = location.latitude
 
-    table = (name, address, long, lat)
+    table = (name, address, long, lat, venue_type, source)
 
     print(f'The following data has been entered into database table: {table}' )
 
         #add scraped data into PostgreSQL Database Table (Anybody1, a_cafes)
 
-    sql = "INSERT INTO a_cafes(cafe_name, cafe_address, cafe_long, cafe_lat) VALUES(%s, %s, %s, %s)" #this variable preps table for data entry
+    sql = "INSERT INTO a_cafes(cafe_name, cafe_address, cafe_long, cafe_lat, venue_type, source) VALUES(%s, %s, %s, %s, %s, %s)" #this variable preps table for data entry
     conn = None
 
     try:
@@ -57,4 +57,4 @@ def details(name, address):
           conn.close()
           print('Database connection closed.')
 
-details('Johnnys Bodega', '159 Ormond Rd, Elwood VIC 3184')
+details('Télescope', '5 rue Villedo, Paris, France, 75001', 'cafe', 'Cereal City Guide')

@@ -1,0 +1,19 @@
+ar map = L.map('anybody').setView([-37.7570553, 145.0058511], 15);
+
+L.tileLayer.provider('Jawg.Streets', {
+variant: 'jawg-streets',
+accessToken: 'CfM4qaekho2FFKH1GyMBk2pj54YyjShGOReroBoUNYhX66tpfn9wUMKhkHtZ6fUQ'
+}).addTo(map);
+
+var myicon = L.icon({
+iconUrl: "{% static 'shops/img/my-icon.png' %}",
+iconSize: [30, 30],
+//iconAnchor: [22, 94],
+//popupAnchor: [-3, -76],
+});
+
+var home = L.marker([-37.7570553, 145.0058511],
+{icon: myicon
+  }).addTo(map)
+.bindPopup('My House in Thornbury')
+.openPopup();

@@ -1,0 +1,27 @@
+
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<div class="user_playlists">
+{% regroup playlist by list as user_playlist %}
+  <ul class="nav flex-column mb-2">
+      {% for list in user_playlist %}
+      <a class="nav-link" href="#">
+      <li class="nav-item"> {{ list.grouper }}
+      </a>
+        <ul>
+            {% for place in list.list %}
+            <li class="nav-item" class="pt-5">
+                {{ place.venue }}
+            </li>
+            {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+  </ul>
+</div>

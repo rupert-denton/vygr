@@ -1,0 +1,228 @@
+
+body {
+  background-color: white;
+  color: #1c1c1c;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+}
+
+#address-search {
+  line-height: 25px;
+}
+
+.big-div{
+  position: relative;
+}
+
+.info{
+  right: 1000px;
+  padding-top: 10px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  overflow: auto;
+  height: 800px;
+  /* width: 100px; */
+}
+
+#info{
+  right: 500px;
+  padding-top: 10px;
+  position: absolute;
+  background-color: white;
+  z-index: 1;
+  overflow: auto;
+  height: 800px;
+  /* width: 100px; */
+}
+
+#newlist{
+  height:40px;
+  width:30px;
+}
+#map {
+  height: 800px;
+  width: 1470px;
+}
+
+.header {
+  font-family: 'Satisfy', cursive;
+  font-size: 40px;
+  color: #ff1d58;
+  display: block;
+  text-decoration: none;
+}
+
+.top-nav {
+  background-color: #1CB2FF;
+}
+
+.registration-template{
+  font-family: 'Roboto', sans-serif;
+  font-size:14px;
+  background: #fafafa;
+  color: #7d7d7d;
+}
+
+.registration-header {
+  font-family:"Roboto", "sans-serif";
+  font-size:40px;
+  color: #ff1d58;
+  padding-bottom: 20px;
+  text-align: center;
+  margin-bottom: 10px:
+}
+
+.form-group {
+  top: 120px;
+  right: 30%;
+  z-index: 5;
+  text-align: left;
+  font-family: "Roboto", "sans-serif";
+  line-height: 30px;
+  padding: 15px;
+}
+
+#submit {
+  background-color: #ff1d58; /* Green */
+  border: none;
+  color: white;
+  margin: 10px;
+  padding: 4px 15px;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  display: inline-block;
+}
+
+.btn-primary {
+  background-color: #ff1d58;
+  border: none;
+  color: white;
+  margin: 10px;
+  padding: 4px 15px;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  display: inline-block;
+}
+
+.form-control {
+  min-height: 41px;
+  box-shadow: none;
+  border-color: #e6e6e6;
+}
+.form-control:focus {
+  border-color: #00c1c0;
+}
+
+.form-control, .btn {
+      border-radius: 3px;
+}
+
+.signup-form {
+  width: 425px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+.signup-form h2 {
+  color: #333;
+  font-weight: bold;
+  margin: 0 0 25px;
+}
+
+.signup-form form {
+  margin-bottom: 15px;
+  background: #fff;
+  border: 1px solid #f4f4f4;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  padding: 50px;
+}
+
+.login-form form {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  background: #fff;
+  border: 1px solid #f4f4f4;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  padding: 70px;
+}
+
+.login-form .form-group {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.signup-form .form-group {
+  margin-bottom: 20px;
+}
+
+.signup-form label {
+  font-weight: normal;
+  font-size: 12px;
+}
+
+.signup-form input[type="checkbox"] {
+  margin: 2px;
+}
+.signup-form .btn {
+    font-size: 16px;
+    font-weight: bold;
+    background: #ff1d58;
+    border: none;
+    min-width: 140px;
+    outline: none !important;
+}
+.signup-form .btn:hover, .signup-form .btn:focus {
+  background: #E51A4F;
+}
+.signup-form a {
+  color: #00c1c0;
+  text-decoration: none;
+}
+.signup-form a:hover {
+  text-decoration: underline;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  background-color: #ff1d58;
+  position: relative;
+  top: 200px;
+
+  margin: 100px auto;
+  -webkit-animation: sk-rotateplane 1s infinite ease-in-out;
+  animation: sk-rotateplane 1s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-rotateplane {
+  0% { -webkit-transform: perspective(120px) }
+  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
+  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+}
+
+@keyframes sk-rotateplane {
+  0% {
+    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
+  } 50% {
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+  } 100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+  }
+}
+
+.card {
+   position: absolute;
+   width: 100px;
+   border: 1px;
+   top: 75px;
+   bottom: 10px;
+   left: 25px;
+   z-index: 10040;
+   overflow: auto;
+   overflow-y: auto;
+}

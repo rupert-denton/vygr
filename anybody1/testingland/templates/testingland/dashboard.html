@@ -1,0 +1,40 @@
+{% extends 'testingland/index.html' %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Dashboard</title>
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<script
+src="https://code.jquery.com/jquery-3.5.1.js"
+integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+crossorigin="anonymous"></script>
+</head>
+
+  <body>
+    {% block content %}
+        <div class="container-fluid" style="padding:15px">
+          <!--location -->
+          <div class="row">
+            <div class="col-sm-3">
+              <h3 class="list-heading"> Your Playlists </h3>
+              <div id="playlist">
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endblock %}
+
+    <script src = "{% static "/testingland/js/electra.js" %}"> </script>
+  </body>
+</html>

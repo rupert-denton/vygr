@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Anybody</title>
+  <link rel="icon" type="image/png" href="{% static "testingland/img/favicon_io_white/favicon.ico" %}">
+
+  <!--Bootsrap-->
+
+  <!--Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <!--Bootstrap responsive meta tag -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
+    <a class="header ml-3" class="navbar-brand col-sm-3 col-md-2" href="/">Anybody</a>
+    <input id="address" class="form-control form-control-dark w-100 ml-4 mr-2" type="text" placeholder="Search" aria-label="Search">
+    <input id="submit" type="button" value="Search" />
+    <ul class="navbar-nav px-3">
+      <li class="nav-item text-nowrap">
+        <a href="#">{{ user.get_username }}</a>
+      </li>
+    </ul>
+  </nav>
+
+  {% block content %}
+  <h4 id="clear" type="button" class="pt-1 pr-2 pl-3 pb-3 border">Clear Markers</h4>
+  <div class="container-fluid">
+    <div class="row">
+      <div id="cafes">
+        <div id="cafe_list">
+        </div>
+      </div>
+      <!-- <div id="info-box" class="venue border rounded border-primary pt-3 pr-2">
+        <button> Venue Info </button>
+          <div id="venue_info">
+          </div> -->
+      </div>
+      <div id="map" class="border border-primary"></div>
+    </div>
+
+  </div>
+
+
+  {% endblock %}
+  <script src="{% static "/testingland/js/electra3.js" %}"> </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

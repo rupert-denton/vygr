@@ -1,0 +1,59 @@
+{% extends 'testingland/index.html' %}
+
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+
+    <!--Bootsrap-->
+
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Join Anybody</title>
+
+  </head>
+
+{% block content %}
+<body class="registration-template">
+
+<div class="signup-form">
+      <div class="form-group">
+        <form method="post">
+          <div>
+          <h1 class="registration-header">Join Anybody</h1>
+          </div>
+          <div id="signup-div">
+          {% csrf_token %}
+          {{ form.as_p }}
+          </div>
+          <div class="text-center">
+          <label class="checkbox-inline"><input type="checkbox" required="required">I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+          </div>
+          <div class="text-center">
+          <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
+          </div>
+        </form>
+          <div class="text-center">Already have an account? <a href="/login">Login here</a></div>
+      </div>
+  </div>
+</body>
+</html>
+
+
+    {% endblock %}
+  </body>
+</html>

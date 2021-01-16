@@ -1,12 +1,18 @@
-<!--what is the purpose of this fragmented code?-->
+        <div class="cafe-details list border rounded border-light pt-3 pr-2">
+          <h4 class="pt-1 pr-2 pl-3 pb-3">The Local List</h4>
+            <ul>
 
-<div class="col-lg-3">
-  <h3> Cafe List </h3>
-    <div id="cafe-list">
-      <ul>
-        {% for cafe in cafes %}
-          <p>{{ cafe.cafe_name }} <br> {{ cafe.cafe_address }}</p>
-        {% endfor %}
-      </ul>
-    </div>
-  </div>
+              {% for cafe in cafes %}
+              <li>
+                <address>
+                  <div>
+                    <a href="#" id="venue-button">
+                    <h6 class="cafe-name" data-id="">{{ cafe.cafe_name }}</h6>
+                    </a>
+                    <p>{{ cafe.cafe_address }}</p>
+                  </div>
+                </address>
+              </li>
+                {% endfor %}
+            </ul>
+          </div>

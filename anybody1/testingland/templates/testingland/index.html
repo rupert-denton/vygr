@@ -1,0 +1,198 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+      <title>Anybody</title>
+    <link rel="icon" type="image/png" href="{% static "testingland/img/favicon_io_white/favicon.ico" %}">
+
+    <!--Bootsrap-->
+
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static "testingland/css/electra.css" %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
+      <a class="header ml-3" class="navbar-brand col-sm-3 col-md-2" href="/">Anybody</a>
+        <input id="address" class="form-control form-control-dark w-100 ml-4 mr-2" type="text" placeholder="Search" aria-label="Search">
+        <input id="submit" type="button" value="Search"/>
+          <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+              <a href="#">{{ user.get_username }}</a>
+            </li>
+          </ul>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-white border-right pt-4 sidebar">
+              <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                  {% if user.is_authenticated %}
+                      <li class="nav-item">
+                        <a class="nav-link active" href="">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                          Home <span class="sr-only">(current)</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="dashboard">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                          Dashboard
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="logout">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                          Log Out
+                        </a>
+                      </li>
+                      {% else %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="login">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                          Log In
+                        </a>
+                      </li>
+                      {% endif %}
+                      {% if user.is_authenticated == False %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="signup">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                          Join
+                        </a>
+                      </li>
+                      {% endif %}
+                    </ul>
+
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                      <span>Your Lists</span>
+                      <a class="create" class="d-flex align-items-center text-muted" href="newlist">
+                        <svg xmlns="http://www.w3.org/2000/svg" data-toggle="modal" data-target="#modal2" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                      </a>
+                    </h6>
+
+                    <ul class="nav flex-column mb-2">
+                      <div id="playlist">
+                      </div>
+                    </ul>
+                </div>
+              </nav>
+
+        {% block content %}
+
+        <div id="cafes" class="big-div">
+          <div class="info" class="col-md-2 d-none d-md-block bg-white border-right pt-4">
+            <button type="button" class="close" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+              <div id="cafe_list" class="pt-3 pr-2 border-right"></div>
+          </div>
+
+          <div class="col-md-6">
+            <div id="map"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- This is the HTML for adding venues to list via the "add to list button" -->
+      </div>
+
+          <div class="modal" tabindex="-1" role="dialog" id="modal1">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{ cafe.cafe_name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <select id="list-choices"></select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="add-btn" data-dismiss="modal">Add {% csrf_token %}</button>
+                <button type="button" class="btn btn-secondary" id="cancel-btn" data-dismiss="modal">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        </main>
+      </div>
+    </div>
+    {% endblock %}
+    <script src = "{% static "/testingland/js/electra.js" %}"> </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+  </body>
+</html>
+
+
+
+
+
+
+
+<!-- This was a first attempt at creating a "create new list modal"   -->
+
+    <!-- <div class="modal" tabindex="-1" role="dialog" id="modal2"> -->
+        <!-- <form method="post" action="">
+
+      {% csrf_token %} -->
+
+     <!-- <div class="modal-header">
+        <h5 class="modal-title">Create new Book</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        {% for field in form %}
+          <div class="form-group{% if field.errors %} invalid{% endif %}">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% for error in field.errors %}
+              <p class="help-block">{{ error }}</p>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <button id="create-list" type="button" class="submit-btn btn btn-primary">Create</button>
+  </div>
+</div>
+
+      <script type="text/javascript">
+      $(document).ready(function() {
+
+      $("#create-list").modalForm({
+        formURL: "{% url 'create_list' %}"
+      });
+
+      });
+      </script>
+
+
+</form> -->

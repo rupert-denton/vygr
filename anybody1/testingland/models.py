@@ -1,18 +1,6 @@
 from django.contrib.gis.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
-
-class mapCafes(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    cafe_name = models.CharField(max_length=200)
-    cafe_address = models.CharField(max_length=200)
-    cafe_long = models.FloatField()
-    cafe_lat = models.FloatField()
-    geolocation = models.PointField(geography=True, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'a_cafes'
 
 class listCafes(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -144,3 +132,60 @@ class ShopsCafe(models.Model):
     class Meta:
         managed = False
         db_table = 'shops_cafe'
+
+class mapCafes(models.Model): #make this more
+    id = models.BigAutoField(primary_key=True)
+    cafe_name = models.CharField(max_length=200)
+    cafe_address = models.CharField(max_length=200)
+    cafe_long = models.FloatField()
+    cafe_lat = models.FloatField()
+    geolocation = models.PointField(geography=True, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'a_cafes'
+
+
+    def __str__(self):
+        return self.cafe_name
+
+
+#Create an intermediary class that references the mapCafes class (with a ForeignKey), when someone hits an "add-to-list"
+#the two keys needed are what is the venue/cafe and what is the list.
+
+# class VenueOnList(models.Model):
+
+class UserList(models.Model):
+    list_name = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE) #is this okay?
+
+    def __str__(self):
+        return self.list_name
+
+class UserVenue(models.Model):
+    venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
+    # this a manytomany relationships (1 user can have multiple lists, and 1 list
+    # can have many venues)
+    #user = models.ForeignKey(User, on_delete=models.PROTECT)
+    list = models.ForeignKey(UserList, on_delete=models.PROTECT)
+    #venue variable grabs the cafe details from mapCafes, the
+    #.PROTECT constraint stops the database mapCafes being wiped when someone deletes
+
+    class Meta:
+        unique_together = ['list','venue']
+
+#this is here because removing it made it a headache
+
+class Venues(models.Model):
+    venue_name = models.CharField(max_length=255)
+    venue_address = models.CharField(max_length=100)
+    venue_long = models.FloatField(null=True)
+    venue_lat = models.FloatField(null=True)
+    venue_geolocation = models.PointField(geography=True, blank=True, null=True)
+    user_list = models.ForeignKey(UserList, on_delete=models.CASCADE) #this may need to change to a manytomany model
+#this is here because removing it made it a headache
+
+class VenueList(models.Model):
+    title = models.CharField(max_length=100)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    venue_name = models.CharField(max_length=255)

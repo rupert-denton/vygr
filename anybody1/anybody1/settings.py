@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'cafes_home'
+LOGOUT_REDIRECT_URL = 'cafes_home'
 
 # Application definition
 
@@ -39,9 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'shops',
+    #'shops',
     'testingland',
-
+    'rest_framework',
+    'bootstrap_modal_forms',
 ]
 
 MIDDLEWARE = [
