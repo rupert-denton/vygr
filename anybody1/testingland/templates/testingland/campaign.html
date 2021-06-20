@@ -1,0 +1,60 @@
+{% extends 'testingland/index2.html' %}
+{% load static %}
+
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Create a Campaign</title>
+  </head>
+
+  <body>
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12 ml-4">
+          <form method="post"> {% csrf_token %}
+            <div class="col-6">
+              <h5 id="venue-id-div" class="ml-4 mr-2"></h5>
+              <h5 id="venue-name-div" class="ml-4 mr-2"></h5>
+              <h5 id="venue-address-div" class="ml-4 mr-2"></h5>
+            </div>
+
+          <input id="search-box" class="newVenueAdd form-control-dark ml-4 mr-2" type="text" placeholder="Search..." aria-label="Search">
+          <div class="dropdown">
+            <ul id="search-results"></ul>
+          </div>
+          
+
+          
+
+            <div class="form-group inputList m-2">
+              <label for="campaign-title">Campaign Title</label>
+              <textarea class="form-control" id="campaign-title" rows="3"></textarea>
+              <label for="voucher-quantity">Voucher Quantity</label>
+              <textarea class="form-control" id="voucher-quantity" rows="1"></textarea>
+            </div>
+             <input id="save" class="btn btn-primary" type="button" value="Save" />
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="{% static "/testingland/js/campaign.js" %}"> </script>
+    {% endblock %}
+  </body>
+
+</html>

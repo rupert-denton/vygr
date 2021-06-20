@@ -57,4 +57,4 @@ def details(name, address, venue_type, source):
           conn.close()
           print('Database connection closed.')
 
-details('Télescope', '5 rue Villedo, Paris, France, 75001', 'cafe', 'Cereal City Guide')
+details('Great Ocean Road Wellness', '3/11 Inverlochy St, Anglesea VIC 3230', 'cafe', 'Miranda Mildenhall')

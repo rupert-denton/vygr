@@ -1,7 +1,8 @@
-{% extends 'testingland/index.html' %}
+{% extends 'testingland/index3.html' %}
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
   <head>
     <meta charset="utf-8">
 
@@ -21,37 +22,40 @@
     <!--Bootstrap responsive meta tag -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Login Anybody</title>
+    <title>Login VYGR</title>
 
   </head>
 
-{% block content %}
-<body class="registration-template">
+  {% block content %}
+
+  <body class="registration-template">
 
     <div class="login-form">
-        <div class="form-group d-flex justify-content-center">
-            <form method="post">
-              <div>
-                <h1 class="registration-header">Login</h1>
-              </div>
-              <div id="login-div">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div>
-                  <button type="submit" class="btn btn-primary btn-lg">Login</button>
-                </div>
-                <div>
-                  Don't have an account? <a href="/signup">Signup Here</a>
-                </div>
-              </div>
-            </form>
-        </div>
+      <div class="form-group d-flex justify-content-center">
+        <form method="post">
+          <div>
+            <h1 class="registration-header">Login</h1>
+          </div>
+          <div id="login-div">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+              <button type="submit" class="btn btn-primary btn-lg">Login</button>
+            </div>
+            <div>
+              Don't have an account? <a href="/signup">Signup Here</a>
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
 
 
-</body>
+  </body>
+
 </html>
 
-    {% endblock %}
-  </body>
+{% endblock %}
+</body>
+
 </html>

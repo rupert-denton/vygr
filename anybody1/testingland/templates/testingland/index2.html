@@ -3,64 +3,276 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-<head>
-  <meta charset="utf-8">
-  <title>Anybody</title>
-  <link rel="icon" type="image/png" href="{% static "testingland/img/favicon_io_white/favicon.ico" %}">
+  <head>
+    <meta charset="utf-8">
+    <title>VYGR</title>
+    <link rel="icon" type="image/png" href="{% static "testingland/img/favicon_io_vygr/favicon.ico" %}">
 
-  <!--Bootsrap-->
+    <!-- icons -->
+    <script src="https://kit.fontawesome.com/343a7efeab.js" crossorigin="anonymous"></script>
 
-  <!--Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-  <!--Bootstrap responsive meta tag -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--Bootsrap-->
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
-  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+    <link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
 
-</head>
+    <link href="https://use.typekit.net/zgs1itb.css" rel="stylesheet">
 
-<body>
-  <nav class="navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
-    <a class="header ml-3" class="navbar-brand col-sm-3 col-md-2" href="/">Anybody</a>
-    <input id="address" class="form-control form-control-dark w-100 ml-4 mr-2" type="text" placeholder="Search" aria-label="Search">
-    <input id="submit" type="button" value="Search" />
-    <ul class="navbar-nav px-3">
-      <li class="nav-item text-nowrap">
-        <a href="#">{{ user.get_username }}</a>
-      </li>
-    </ul>
-  </nav>
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
-  {% block content %}
-  <h4 id="clear" type="button" class="pt-1 pr-2 pl-3 pb-3 border">Clear Markers</h4>
-  <div class="container-fluid">
-    <div class="row">
-      <div id="cafes">
-        <div id="cafe_list">
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
+        <a class="header ml-3" class="navbar-brand col-sm-3 col-md-2" href="/">VYGR</a>
+        <div class="input-group w-100 ml-4 mr-2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i></button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#">Addresses</a>
+              <a class="dropdown-item" href="#">Places</a>
+              <a class="dropdown-item" href="#">People</a>
+            </div>
+          </div>
+          <input id="search" type="text" class="form-control" aria-label="Text input with dropdown button">
         </div>
-      </div>
-      <!-- <div id="info-box" class="venue border rounded border-primary pt-3 pr-2">
-        <button> Venue Info </button>
-          <div id="venue_info">
-          </div> -->
-      </div>
-      <div id="map" class="border border-primary"></div>
+        <input id="submit" class="btn btn-primary" type="button" value="Search" />
+        {% if user.is_authenticated%}
+        <a id="username" class="ml-4 mr-4" class="navbar-brand col-sm-3 col-md-2"> {{ user.get_username }} </a>
+        <i class="fas fa-bell ml-3" type="button" data-toggle="dropdown"></i>
+
+        <ul class="navbar-nav px-3 ml-2 mr-3 mb-4">
+          <div class="dropdown">
+            <i class="fas fa-caret-down" type="button" data-toggle="dropdown"></i>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" id="profile">Profile</a>
+              <a class="dropdown-item" id="dashboard">Dashboard</a>
+              <a class="dropdown-item" href="/users">Users</a>
+              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+
+              {% else %}
+              <a id="login" class="ml-3" class="navbar-brand col-sm-3 col-md-2" href="{% url 'login' %}"> Login </a>
+              {% endif %}
+              {% if user.is_authenticated == False %}
+              <a id="signup" class="ml-3" class="navbar-brand col-sm-3 col-md-2" href="{% url 'signup' %}"> Sign Up </a>
+              {% endif %}
+            </div>
+          </div>
+        </ul>
+      </nav>
     </div>
 
-  </div>
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-2">
+          <div id="mySidebar" class="sidebar">
+            <div id="index-buttons" class="sidebar-group">
+              <button id="add-place" type="button" class="btn btn-primary" data-dismiss="modal"><a id="add-place-link" class="button-href" href="/add_cafe" target="_blank" rel="noreferrer noopener">Add Place</a></button>
+              <button id="view-promotions" type="button" class="btn btn-primary" data-dismiss="modal"><i class="fas fa-ticket-alt"></i></button>
+              <button id="friends" type="button" class="btn btn-primary" data-dismiss="modal"><i id="friends" class="fas fa-user-friends"></i></button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal"><i id="friends" class="fas fa-user-friends"></i></button>
+            </div>
+            <div class="sidebar-lists">
+              <button id="createList" type="button" class="btn btn-primary" data-dismiss="modal"><i class="far fa-plus-square pr-2"></i></button>
+              <ul id="userLists" class="list-group list-group-flush">
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- <div id="main">
+          <button class="openbtn" id="openNav">&#9776;</button>
+        </div> -->
+       
+          <div id="map" class="col-10 no-gutters"></div>
+          <div class="map-venue-cards row flex-nowrap" id="indexCardList"></div>
+       
+        <!-- <button id="area-search" type="button" class="btn btn-primary" data-dismiss="modal">Search Area</button> -->
+      </div>
 
 
-  {% endblock %}
-  <script src="{% static "/testingland/js/electra3.js" %}"> </script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+      <div class="modal" id="newlistmodal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Create a New List</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Create a New List</label>
+                <input type="email" class="form-control" id="newListName" placeholder="New List Name...">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="save-list" type="button" class="btn btn-primary">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-</body>
+      <div class="modal" id="editListModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit List</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="editedListName" id="editListLabel">Edit List</label>
+                <input type="email" class="form-control" id="editListName" placeholder="New List Name...">
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="save-edited-list" type="button" class="btn btn-primary" data-dismiss="modal">Save</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="userlist-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content rounded-0">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="modal-body">
+              <div id="lists-column" class="mt-1 ml-2 mb-1 col-2" style="height: 367px;">
+                <ul id="userListsModal" class="list-group list-group-flush" style="width: 250px">
+                </ul>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="profile-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content rounded-0">
+            <div class="modal-header">
+              <h5 class="modal-title" id="ModalLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="thumb-lg member-thumb mx-auto"><img src="{% static "testingland/img/rd.jpeg" %}" class="rounded-circle img-thumbnail" alt="profile-image"></div>
+              <div class="">
+                <h4>{{ user.get_username }}</h4>
+                <p class="text-muted">@Founder <span>| </span><span><a href="#" class="text-pink">websitename.com</a></span></p>
+              </div>
+              <ul class="social-links list-inline">
+                <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
+                <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
+                <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
+              </ul>
+              <button id="edit-profile" type="button" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">Edit Profile</button>
+              <div class="mt-4">
+                <div class="row">
+                  <a href="/connections">
+                    <div class="col-4">
+                      <div class="mt-3">
+                        <p class="mb-0 text-muted">Followed By</p>
+                        <h4 id="followers"></h4>
+                      </div>
+                    </div>
+                  </a>
+
+                  <a href="/connections">
+                    <div class="col-4">
+                      <div class="mt-3">
+                        <p class="mb-0 text-muted">Following</p>
+                        <h4 id="following"></h4>
+                      </div>
+                    </div>
+                  </a>
+
+                  <a href="/dashboard">
+                    <div class="col-4">
+                      <div class="mt-3">
+                        <p class="mb-0 text-muted">Lists</p>
+                        <h4 id="lists"></h4>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="edit-profile-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Profile</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="form-group">
+                  <div class="thumb-lg member-thumb mx-auto"><img src="{% static "testingland/img/rd.jpeg" %}" class="rounded-circle img-thumbnail" alt="profile-image"></div>
+                  <label for="displayName">Display Name</label>
+                  <input type="displayName" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Change Display Name">
+                  <p>Username: {{ user.get_username }}</p>
+
+                  <label for="exampleFormControlTextarea1">Bio</label>
+                  <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+
+                  <label for="location">Location</label>
+                  <input type="location" class="form-control" id="user-location" aria-describedby="emailHelp" placeholder="Change Location">
+                  <label for="website">Website</label>
+                  <input type="location" class="form-control" id="user-website" aria-describedby="emailHelp" placeholder="Add Website">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="{% static "/testingland/js/index2.js" %}"> </script>
+    {% endblock %}
+  </body>
 
 </html>

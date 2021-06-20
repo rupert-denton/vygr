@@ -15,6 +15,8 @@ class ACafes(models.Model):
     cafe_long = models.FloatField()
     cafe_lat = models.FloatField()
     geolocation = models.PointField(geography=True, blank=True, null=True)
+    venue_type = models.CharField(max_length=200)
+
 
     class Meta:
         managed = False

@@ -1,0 +1,96 @@
+{% extends 'testingland/index3.html' %}
+{% load static %}
+
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static "testingland/css/electra.css" %}">
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Write Description</title>
+  </head>
+
+  <body>
+    {% block content %}
+    <div class="container-fluid">
+      <div class="row mt-4">
+        <div class="col-lg-2">
+
+        </div>
+        <div class="col-lg-5 ml-2">
+          <input id="search-box" class="searchBar form-control-dark" type="text" placeholder="Search..." aria-label="Search">
+          <div class="dropdown">
+            <ul id="search-results" class="search-results"></ul>
+          </div>
+          <input id="search_cafe" class="btn btn-primary mt-3 ml-4 mr-1" type="button" value="Search Cafe" />
+          <input id="get_cafe" class="btn btn-primary mt-3 ml-4 mr-1" type="button" value="Random Cafe" />
+          <form method="post"> {% csrf_token %}
+            <h5 id="cafe-name-div" class="mt-4"></h5>
+            <ul class="inputList">
+              
+              <li>
+                <input id="venue-name-box" class="newVenueAdd form-control-dark " type="text" placeholder="Name..." aria-label="Search">
+              </li>
+              <li>
+                <div class="input-group" style="width: 500px; margin: 10px;">
+                  <input id="venue-address-box" type="text" class="form-control" placeholder="Address..." aria-label="Address..." aria-describedby="basic-addon2">
+                  <div class="input-group-append">
+                    <button id="geocode" class="btn btn-outline-secondary" type="button">Geocode</button>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <input id="latitude" class="newVenueAdd form-control-dark" type="text" placeholder="Latitude.." aria-label="Search">  
+              </li>
+              <li>
+                <input id="longitude" class="newVenueAdd form-control-dark" type="text" placeholder="Longitude" aria-label="Search">  
+              </li>
+              <li>
+                <div class="form-group newVenueAdd form-control-dark" placeholder="Venue Type...">
+                  <select class="form-control" id="venue-type-box">
+                    <option>Cafe</option>
+                    <option>Restaurant</option>
+                    <option>Bar</option>
+                    <option>Bakery</option>
+                    <option>Retail</option>
+                    <option>Entertainment</opton>
+                  </select>
+                </div>  
+              </li>
+              <li>
+                  <div class="newVenueAdd input-group">
+                    <textarea id="description-box" class="venue-info-form form-control" placeholder="Description..." aria-label="With textarea"></textarea>
+                  </div>
+                  <input id="create" class="btn btn-primary ml-4 mr-1" type="button" value="Create" />
+                  <input id="update" class="btn btn-primary ml-4 mr-1" type="button" value="Update" />
+              </li>
+            </ul>
+
+          </form>
+          
+        </div>
+      
+      <div class="col-lg-4">
+        <div id="addMap" class="small-map border"></div>
+      </div>
+    </div>
+      
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="{% static "/testingland/js/writeDescription.js" %}"> </script>
+    {% endblock %}
+  </body>
+
+</html>

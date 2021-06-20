@@ -1,30 +1,116 @@
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  
+}
 
 body {
   background-color: white;
   color: #1c1c1c;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
+  overflow: scroll;
 }
 
-#info-modal {
+/* navbar */
+
+#username{
+  color: black;
+}
+
+#username:hover{
+  cursor: pointer;
+}
+
+.userlist
+.dropdown{
   position: absolute;
-  top: 50px;
-  right: 500px;
-  bottom: 0;
-  left: 0;
-  z-index: 10040;
-  overflow: auto;
-  overflow-y: auto;
 }
 
-#address-search {
-  line-height: 25px;
+.button-href {
+  color: white !important;
+}
+/* cards */
+.card-btn {
+color: #black !important;
+text-transform: uppercase;
+text-decoration: none;
+background:  white;
+padding: 4px;
+margin: 3px;
+border: 2px solid #494949 !important;
+display: inline-block;
+transition: all 0.4s ease 0s;
 }
 
-.big-div{
-  position: relative;
+.card-btn:hover {
+  color: #ffffff !important;
+  background: black;
+  border-color: black !important;
+  transition: all 0.4s ease 0s;
+  }
+
+.card {
+  margin-top: 30px;
+  height: 150px;
+  padding-top: 10px;
 }
 
+.user-card{
+  margin-top: 30px;
+  height: 200px;
+  padding-top: 10px;
+}
+
+#contentPanel {
+  height: 500px;
+}
+
+.card-box {
+  padding: 20px;
+  border-radius: 3px;
+  margin-bottom: 30px;
+  background-color: #fff;
+}
+
+h4 {
+  line-height: 22px;
+  font-size: 18px;
+}
+
+.container-fluid {
+    padding-right:0;
+    padding-left:0;
+    margin-right:auto;
+    margin-left:auto
+ }
+
+
+.header {
+  font-family: 'navigo', sans-serif;
+  font-size: 40px;
+  font-weight: 500;
+  font-style: normal;
+  color: #0a0204;
+  display: block;
+  text-decoration: none;
+}
+
+.subheader {
+  font-family: 'navigo', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  font-style: normal;
+  color: #0a0204;
+  display: block;
+  text-decoration: none;
+}
+
+.nav-item{
+  font-family: Roboto;
+  color: #0a0204;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
 
 .list{
   margin-top: 70px;
@@ -39,37 +125,187 @@ body {
   width: 330px;
 }
 
-#info-box{
-  margin-top: 70px;
-  margin-bottom: 30px;
-  margin-left: 1000px;
-  padding-top: 10px;
-  position: absolute;
-  background-color: white;
-  z-index: 1;
-  overflow: auto;
-  height: 350px;
-  width: 330px;
+.modal-header {
+  border-bottom: 0 none;
 }
 
-#map {
-  height:850px;
-  width: 100%;
+.modal-footer {
+  border-top: 0 none;
 }
 
-#newlist{
-  height:40px;
-  width:30px;
+.venue-info {
+  padding-top: 200px;
+  }
+
+#userList {
+  color: #d3d3d3;
+  padding: 9px 8px 0;
 }
 
-.header {
-  font-family: 'Satisfy', cursive;
-  font-size: 40px;
-  color: #ff1d58;
+#user-lists{
+    overflow:scroll; /* something other than visible */
+}
+
+#userListsModal{
+  overflow:scroll; /* something other than visible */
+}
+
+
+
+.sidebar-group{
+  overflow: hidden; /* Disable horizontal scroll */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.sidebar-lists{
+  overflow: scroll; /* Disable horizontal scroll */
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.list-options{
+  color: gray;
+}
+
+.list-options:hover{
+  cursor: pointer;
+  color:black
+}
+
+#venue-name {
+  font-family: 'navigo', sans-serif;
+  font-weight: 200;
+  font-style: normal;
+  color: #b4b4b4;
   display: block;
   text-decoration: none;
 }
 
+.venue-name:hover{
+  cursor: pointer;
+  color:grey;
+}
+
+#venue-address {
+  font-family: 'navigo', sans-serif;
+  font-weight: 100;
+  font-style: normal;
+  color: #b4b4b4;;
+  display: block;
+  text-decoration: none;
+}
+
+#venue-description {
+   padding-top: 1px;
+ }
+  
+#address-search {
+  line-height: 25px;
+}
+
+#map {
+  min-height:100vh;
+  width: 100%;
+  position: fixed;
+}
+
+#dashMap {
+  height:100%;
+  width: 100%;
+}
+
+#venue-page-map{
+  height: 300px;
+  width: 400px;
+}
+
+#venue-page-image{
+  height: 400px;
+}
+
+#venue-type-div{
+  width: 115px;
+  background-color: rgba(121, 121, 121, .8);
+}
+
+#addMap {
+  height:400px;
+  width: 400px;
+  margin-top: 20px;
+  margin-left: 60px;
+  margin-bottom: 60px;
+}
+
+#userLists{
+  height:340px;
+  overflow: scroll;
+}
+
+.userlist {
+  cursor: default;
+  list-style-type: none;
+  margin-top: 8px;
+  margin-left: 20px;
+}
+
+.userlist:hover{
+  color: grey;
+  cursor: pointer;
+}
+
+.userlistModal {
+  cursor: default;
+  list-style-type: none;
+  margin-top: 8px;
+  margin-left: 20px;
+}
+
+.userlistModal:hover {
+  color: grey;
+}
+
+.fas{
+  color: grey;
+  cursor: pointer;
+}
+
+#venue-options:hover{
+  cursor:pointer;
+}
+
+#options:hover{
+  cursor:pointer;
+}
+
+.table_data:hover{
+  text-decoration: underline;
+}
+
+#dashboardTableBody {
+  cursor: default;
+}
+
+.map-venue-cards{
+  width: 100%;
+  overflow-x: scroll;
+  position: absolute;
+  top: 500px;
+  scroll-snap-type: mandatory;
+  scroll-padding: 50%;
+}
+
+.card-block {
+  min-height: 100px;
+}
+
+#listCafes {
+  height:400px;
+  width: 400px;
+  margin-top: 20px;
+  margin-left: 60px;
+  margin-bottom: 60px;
+}
 .top-nav {
   background-color: #1CB2FF;
 }
@@ -101,7 +337,7 @@ body {
 }
 
 #submit {
-  background-color: #ff1d58; /* Green */
+  background-color: #000000; /* Green */
   border: none;
   color: white;
   margin: 10px;
@@ -111,7 +347,26 @@ body {
   display: inline-block;
 }
 
+.newVenueAdd {
+  margin: 10px;
+  min-height: 41px;
+  box-shadow: none;
+  border-color: #e6e6e6;
+  width: 500px;
+}
+
 .btn-primary {
+  background-color: #000000;
+  border: none;
+  color: white;
+  margin: 10px;
+  padding: 4px 15px;
+  text-align: center;
+  font-family: "Roboto", "sans-serif";
+  display: inline-block;
+}
+
+#scrape {
   background-color: #ff1d58;
   border: none;
   color: white;
@@ -127,6 +382,7 @@ body {
   box-shadow: none;
   border-color: #e6e6e6;
 }
+
 .form-control:focus {
   border-color: #00c1c0;
 }
@@ -201,45 +457,198 @@ body {
   text-decoration: underline;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  background-color: #ff1d58;
-  position: relative;
-  top: 200px;
-
-  margin: 100px auto;
-  -webkit-animation: sk-rotateplane 1s infinite ease-in-out;
-  animation: sk-rotateplane 1s infinite ease-in-out;
+/* inputs for edit venue details page */
+.venue-info-form{
+  height: 100px;
+  width: 600px;
 }
 
-@-webkit-keyframes sk-rotateplane {
-  0% { -webkit-transform: perspective(120px) }
-  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
-  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
+#description-box {
+  height: 200px;
+  width: 450px;
 }
 
-@keyframes sk-rotateplane {
-  0% {
-    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-  } 50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-  } 100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+#embed-box {
+  height: 200px;
+  width: 450px;
+}
+
+#search-box{
+
+  width: 300px;
+}
+
+#search-results {
+  position: absolute;
+  margin-left: 100px;
+  width: 700px;
+  background-color: white;
+}
+
+.list-item:hover {
+  cursor:pointer;
+  color: #D4D4D4;
+}
+
+#map-canvas {
+  width:450px;
+  height:340px;
+}
+
+#infos {
+  position:absolute;
+  top:60px;
+  left:470px;
+  width:300px;
+}
+
+#infos .info {
+  background-color:#eee;
+  padding:15px 25px;
+  margin:10px 0;
+}
+
+/* connections */
+.connection-list {
+  background-color: #b4b4b4;
+  color: black;
+}
+
+.connection-hover:hover{ 
+  cursor: pointer;
+}
+
+.connection-profile-li {
+ padding: 10px;
+}
+
+.connection-profile-li:hover {
+  cursor: pointer;
+  color: #ffffff !important;
+  background: black;
+  border-color: black !important;
+  transition: all 0.4s ease 0s;
   }
+
+.date {
+    font-size: 11px
 }
 
-.card {
-   position: absolute;
-   width: 100px;
-   border: 1px;
-   top: 75px;
-   bottom: 10px;
-   left: 25px;
-   z-index: 10040;
-   overflow: auto;
-   overflow-y: auto;
+.comment-text {
+    font-size: 12px
 }
+
+.fs-12 {
+    font-size: 12px
+}
+
+.shadow-none {
+    box-shadow: none
+}
+
+.name {
+    color: #007bff
+}
+
+.cursor:hover {
+    color: blue
+}
+
+.cursor {
+    cursor: pointer
+}
+
+.textarea {
+    resize: none
+}
+
+/* sidebar */
+
+/* The sidebar menu */
+.sidebar {
+  height: 100vh; /* 100% Full-height */
+  z-index: 1; /* Stay on top */
+  display: flex;
+ 
+  background-color: #e0e0e0;
+  overflow: hidden; /* Disable horizontal scroll */
+  padding-top: 20px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+.sidebar div {
+  flex-direction: column;
+}
+
+
+/* The sidebar links */
+.sidebar a {
+  color: #818181;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #444;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s; /* If you want a transition effect */
+  padding: 20px;
+  position: absolute;
+  z-index: 1;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+
+@media only screen and (max-device-width: 480px) {
+  #cardList{
+    width: 100%;
+    overflow-x: scroll;
+    position: absolute;
+    top: 400px;
+    scroll-snap-type: mandatory;
+    scroll-padding: 50%;
+  }
+
+  #map {
+    min-height: 100vh;
+    min-width: 100vh;
+  }
+
+  .card {
+    margin-top: 30px;
+    height: 100px;
+    padding: 2px;
+  }
+  }
+
+
+  

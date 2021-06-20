@@ -1,0 +1,97 @@
+{% extends 'testingland/index2.html' %}
+{% load static %}
+
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Add a Venue</title>
+  </head>
+
+  <body>
+    {% block content %}
+
+    <div class="container-fluid">
+      <h2 class="subheader">Add a new venue</h2>
+      <div class="row">
+        <div class="inputList">
+        <form method="post"> {% csrf_token %}
+          <li>
+            <input id="venueName" class="newVenueAdd form-control-dark ml-4 mr-2" type="text" placeholder="Name..." aria-label="Search">
+            </li>
+            <li>
+              <input id="venueAddress" class="newVenueAdd form-control-dark ml-4 mr-2" type="text" placeholder="Address..." aria-label="Search"> 
+            </li>
+            <li>
+              <div id=latitude class = "ml-5 mr-2"></div><div id=longitude class = "ml-5 mr-2"></div>
+            </li>
+            <li>
+              <input id="venueType" class="newVenueAdd form-control-dark ml-4 mr-2" type="text" placeholder="Category..." aria-label="Search">
+            </li>
+            <li>
+              <input id="venueSource" class="newVenueAdd form-control-dark ml-4 mr-2" type="text" placeholder="Source..." aria-label="Search">
+            </li>
+            <li>
+              <input id="create" class="btn btn-primary" type="button" value="Create" /> 
+              <input id="save" class="btn btn-primary" type="button" value="Save" /> 
+            </li>
+             <div id="addMap" class="border"></div> 
+      </form>
+    </div>
+    
+  
+
+
+
+
+        
+            <div class="modal" id="database-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content rounded-0">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="ModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="added-venue-info">
+                      <h5 id="added-venue-name"></h5>
+                      <h5 id="added-venue-type"></h5>
+                      <h5 id="added-venue-address"></h5>
+                      <h5 id="added-venue-latitude"></h5>
+                      <h5 id="added-venue-longitude"></h5>
+
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Commit</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                    
+
+
+        
+        </div>
+    </div>
+
+    
+
+
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="{% static "/testingland/js/addVenues.js" %}"> </script> 
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,65 @@
+{% extends 'testingland/index2.html' %}
+{% load static %}
+
+<!--Bootsrap-->
+
+<!--Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+<!--Bootstrap responsive meta tag -->
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="{% static "testingland/css/electra2.css" %}">
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Write Image</title>
+  </head>
+    <body>
+      {% block content %}
+      <div class="container-fluid">
+        
+
+        <div class="row">
+                <form method="post"> {% csrf_token %}
+                  <div class="input-group m-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Add Embed Code</span>
+                    </div>
+                    <textarea id="embed-box" class="form-control" aria-label="With textarea" style="width: 400px; height: 250px;"></textarea>
+                    <div class="input-group mt-4 mr-4 ml-4">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Search</span>
+                      </div>
+                      <textarea id="search-box" class="form-control" aria-label="With textarea"></textarea>
+                      
+                    <ul>
+                      <input id="search_cafe" class="btn btn-primary ml-4 mr-1" type="button" value="Search Cafe" /> 
+                      <input id="get_cafe" class="btn btn-primary ml-4 mr-1" type="button" value="Random Cafe" /> 
+                      <input id="show-image" class="btn btn-primary ml-1 mr-1" type="button" value="View" /> 
+                      <input id="save" class="btn btn-primary ml-1 mr-1" type="button" value="Save Image" /> 
+                    </ul>
+                  </div>
+                  <div id="image"></div>
+                </form>  
+                <div class="row col-6">
+                  <div id="search-results" class="border"></div>
+                </div>
+          </div>
+          <div class="row m-4">
+            <div id="cafe-name-div" class="ml-4 mr-2"></div>
+            <div id="cafe-address-div" class="ml-4 mr-2"></div>
+          </div>
+        
+      </div>
+      
+  
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+      <script src="{% static "/testingland/js/writeImage.js" %}"> </script> 
+      {% endblock %}
+    </body>  
+</html>

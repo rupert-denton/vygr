@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
+# Create your models here.
 class listCafes(models.Model):
     id = models.BigAutoField(primary_key=True)
     list_cafe_name = models.CharField(max_length=200)
@@ -20,7 +20,6 @@ class AuthGroup(models.Model):
     class Meta:
         managed = False
         db_table = 'auth_group'
-
 
 class AuthGroupPermissions(models.Model):
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
@@ -43,25 +42,25 @@ class AuthPermission(models.Model):
         unique_together = (('content_type', 'codename'),)
 
 
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.BooleanField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.BooleanField()
-    is_active = models.BooleanField()
-    date_joined = models.DateTimeField()
+# class AuthUser(models.Model):
+#     password = models.CharField(max_length=128)
+#     last_login = models.DateTimeField(blank=True, null=True)
+#     is_superuser = models.BooleanField()
+#     username = models.CharField(unique=True, max_length=150)
+#     first_name = models.CharField(max_length=150)
+#     last_name = models.CharField(max_length=150)
+#     email = models.CharField(max_length=254)
+#     is_staff = models.BooleanField()
+#     is_active = models.BooleanField()
+#     date_joined = models.DateTimeField()
 
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
+#     class Meta:
+#         managed = False
+#         db_table = 'auth_user'
 
 
 class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
     group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
 
     class Meta:
@@ -71,7 +70,7 @@ class AuthUserGroups(models.Model):
 
 
 class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
     permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
 
     class Meta:
@@ -87,7 +86,7 @@ class DjangoAdminLog(models.Model):
     action_flag = models.SmallIntegerField()
     change_message = models.TextField()
     content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    user = models.ForeignKey(User, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -133,18 +132,21 @@ class ShopsCafe(models.Model):
         managed = False
         db_table = 'shops_cafe'
 
-class mapCafes(models.Model): #make this more
+class mapCafes(models.Model): 
     id = models.BigAutoField(primary_key=True)
     cafe_name = models.CharField(max_length=200)
     cafe_address = models.CharField(max_length=200)
     cafe_long = models.FloatField()
     cafe_lat = models.FloatField()
     geolocation = models.PointField(geography=True, blank=True, null=True)
+    venue_type = models.CharField(max_length=200)
+    source = models.CharField(max_length=200)
+    description = models.CharField(max_length=1000)
+    image_embed = models.CharField(max_length=10000)
 
     class Meta:
         managed = False
         db_table = 'a_cafes'
-
 
     def __str__(self):
         return self.cafe_name
@@ -153,26 +155,20 @@ class mapCafes(models.Model): #make this more
 #Create an intermediary class that references the mapCafes class (with a ForeignKey), when someone hits an "add-to-list"
 #the two keys needed are what is the venue/cafe and what is the list.
 
-# class VenueOnList(models.Model):
 
 class UserList(models.Model):
     list_name = models.CharField(max_length=255)
-    user = models.ForeignKey(User, on_delete=models.CASCADE) #is this okay?
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE) 
+    
     def __str__(self):
         return self.list_name
 
 class UserVenue(models.Model):
     venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
-    # this a manytomany relationships (1 user can have multiple lists, and 1 list
-    # can have many venues)
-    #user = models.ForeignKey(User, on_delete=models.PROTECT)
-    list = models.ForeignKey(UserList, on_delete=models.PROTECT)
-    #venue variable grabs the cafe details from mapCafes, the
-    #.PROTECT constraint stops the database mapCafes being wiped when someone deletes
+    user_list = models.ForeignKey(UserList, on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = ['list','venue']
+        unique_together = ['user_list','venue']
 
 #this is here because removing it made it a headache
 
@@ -189,3 +185,34 @@ class VenueList(models.Model):
     title = models.CharField(max_length=100)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     venue_name = models.CharField(max_length=255)
+
+class UserConnections(models.Model):
+    follower = models.ForeignKey(User, related_name="following", on_delete=models.CASCADE)
+    followed = models.ForeignKey(User, related_name="followers", on_delete=models.CASCADE)
+
+class PromotionCampaign(models.Model):
+    promo_venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
+    promo_title = models.CharField(max_length=255)
+    promo_quantity =  models.IntegerField()
+
+class VenueComments(models.Model):
+    venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    comment =  models.CharField(max_length=10000)
+
+class ReplyComments(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    original_comment = models.ForeignKey(VenueComments, on_delete=models.PROTECT)
+    reply_comment = models.CharField(max_length=10000)
+
+class feedback (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    feedback_type = models.CharField(max_length=500)
+    feedback_content = models.CharField(max_length=10000)
+    # location = models.CharField(max_length=1000)
+
+class suggestion (models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    venue_name = models.CharField(max_length=500)
+    venue_address = models.CharField(max_length=1000)
+    venue_type = models.CharField(max_length=500)

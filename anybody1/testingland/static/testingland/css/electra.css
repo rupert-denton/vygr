@@ -1,228 +1,855 @@
+@media (min-width: 375px){
+  ul {
+    list-style-type: none;
+    padding: 0;
+    }
+  
+  .container-fluid{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 
-body {
-  background-color: white;
-  color: #1c1c1c;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
+  .row{
+    margin-right: 0px;
+  }
+  
+  html, body {
+    height: 100%;
+  }
+  
+  /* type */
+  
+  /* layout */
+  /* nav */
+  #nav-title {
+    font-family: 'Inter', sans-serif;
+    color:black;
+    font-size: 55px;
+    margin: auto;
+    width: 50%;
+  }
+  
+  /* components */
+  .btn{
+    background-color: black;
+    color: white;
+    border: none;
+  }
+
+  .nav-buttons{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 60px
+  }
+  
+  .nav-username{
+    color: black;
+    margin-right: 10px;
+  }
+  
+  .nav-username:hover{ 
+    color: grey;
+    cursor: pointer;
+  }
+  
+  /* profile */
+  
+  .profile-stat-name {
+    font-size: 10px;
+    color: black;
+  }
+  
+  .profile-stat {
+    font-weight: 500;
+    color: black;
+  }
+  
+  /* sidebar */
+  .open-sidebar{
+    background:#F5F5F5;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: gainsboro;
+    height: 100%; /* 100% Full-height */
+    width: 187px;
+    position: absolute; /* Stay in place */
+    z-index: 1; 
+    left: 0;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 30px; /* Place content 60px from the top */
+    transition: 0.1s;
+    /* padding-right:20px */
+    }
+  
+  .closed-sidebar{
+    background:#F5F5F5;
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-right-color: gainsboro;
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: absolute; /* Stay in place */
+    z-index: 1; 
+    left: 0;
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 30px; /* Place content 60px from the top */
+    transition: 0.1s;
+    /* padding-right:20px */
+    }
+  
+  .sidebar-lists {
+    padding: 10px
+  }
+  .openbtn {
+    margin-left: 20px;
+    top: 20px;
+    z-index: 1;
+    font-size: 20px;
+    position: absolute;
+    background-color: grey;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    transition: 0.1s;
+  }
+  
+  .openbtn:hover {
+    background-color: #444;
+  }
+  
+  .pushedbtn {
+    margin-left: 207px;
+    transition: 0.1s;
+  }
+  
+  .pushedcards {
+    margin-left: 190px;
+    transition: 0.1s;
+  }
+  
+  .btn-group-vertical{
+    border-radius: 0px;
+  }
+  
+  .sidebar-group{
+    overflow: hidden; /* Disable horizontal scroll */
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .sidebar-group button{
+      background-color: #F5F5F5;
+      color: black;
+  }
+  
+  .sidebar-group a{
+    color: black;
+    text-decoration: none;
+  }
+  
+  .sidebar-group button:hover, a:hover{
+    color: white;
+    text-decoration: none;
+    background-color:  grey;;
+  }
+  
+  .badge{
+    color: black;
+  }
+  
+  /* refine */
+  
+  #filter-results {
+    position: fixed;
+    width: 192px;
+    background-color: white;
+  }
+  
+  .sidebar-lists{
+    overflow: scroll; /* Disable horizontal scroll */
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+  }
+  
+  .list-options{
+    color: gray;
+  }
+  
+  .list-options:hover{
+    cursor: pointer;
+    color:black
+  }
+  
+    /* the individual user's lists */
+  .userlist {
+    cursor: default;
+    list-style-type: none;
+    margin-top: 8px;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .userlist:hover{
+    color: grey;
+    cursor: pointer;
+  }
+  
+  /* modal for adding object to list*/
+  .userlistModal {
+    cursor: default;
+    list-style-type: none;
+    margin-top: 8px;
+    margin-left: 20px;
+  }
+  
+  .userlistModal:hover {
+    color: grey;
+    cursor: pointer;
+  }
+  
+  /* map */
+  #main {
+    position: relative;
+  }
+  
+  #map {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+  }
+  
+  .map-venue-cards{
+    width: 100%;
+    overflow-x: scroll;
+    position: absolute;
+    top: 500px;
+    left: 20px;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 75%;
+  }
+  
+  .filter-cards{
+    width: 100%;
+    overflow-x: scroll;
+    position: absolute;
+    top: 70px;
+    left: 255px;
+    right: 50px;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 75%;
+  }
+  
+  .filter-card{
+    height: 50px;
+    cursor: pointer;
+  }
+  
+  .venue-card {
+    height: 150px;
+    cursor: pointer;
+  }
+  
+  .selected-card {
+    border: solid;
+    border-color: #e4324c;
+  }
+  
+  /* snackbars */
+  /* validation snackbar after user adds to list */
+  #snackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: grey; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+  }
+  
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #snackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  /* Animations to fade the snackbar in and out */
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+  
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+  
+  #deleteSuccessSnackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: grey; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+  }
+  
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #deleteSuccessSnackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  #venueRemovedSuccessSnackbar {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin-left: -125px; /* Divide value of min-width by 2 */
+    background-color: grey; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the snackbar */
+    bottom: 30px; /* 30px from the bottom */
+  }
+  
+  /* Show the snackbar when clicking on a button (class added with JavaScript) */
+  #venueRemovedSuccessSnackbar.show {
+    visibility: visible; /* Show the snackbar */
+    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+    However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  
+  /* media queries */
+  
+  
+  
+  /* venue-pages */
+  .info-section{
+    display: flex;
+    justify-content: center;
+  }
+  
+  
+  /* write venue dashboard */
+  .newVenueAdd{
+    margin: 10px;
+    min-height: 41px;
+    box-shadow: none;
+    border-color: #e6e6e6;
+    width: 500px;
+  }
+  
+  #addMap {
+    height:400px;
+    width: 400px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+  
+  #description-box {
+    height: 150px;
+    width: 200px;
+  }
+  
+  /* search functionality */
+  
+  #search-results {
+    position: absolute;
+    margin-left: 10px;
+    width: 500px;
+    background-color: white;
+  }
+  
+  .searchBar{
+    margin-left: 10px;
+    min-height: 41px;
+    box-shadow: none;
+    border-color: #e6e6e6;
+    width: 500px;
+  }
+  
+  .search-list-item {
+    border: grey;
+    border-style: solid;
+    border-width: thin;
+    border-top: black;
+    padding: 7px;
+  }
+  
+  .search-list-item:hover {
+    cursor:pointer;
+    color: white;
+    background-color: grey;
+  }
+  
+  /* venue page */
+  
+  .venue-details{
+    margin-left: 20px;
+  }
+  
+  .venue-website{
+    font-size: 12px;
+  }
+  
 }
 
-#address-search {
-  line-height: 25px;
+
+
+@media (min-width: 992px) {
+
+/* global */
+
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  }
+
+.container-fluid{
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
-.big-div{
-  position: relative;
+html, body {
+  height: 100%;
 }
 
-.info{
-  right: 1000px;
-  padding-top: 10px;
-  position: absolute;
-  background-color: white;
+/* type */
+
+/* layout */
+/* nav */
+#nav-title {
+  font-family: 'Inter', sans-serif;
+  color:black;
+  font-size: 35px;
+}
+
+/* components */
+.btn{
+  background-color: black;
+  color: white;
+  border: none;
+}
+
+.nav-username{
+  color: black;
+  margin-right: 10px;
+}
+
+.nav-username:hover{ 
+  color: grey;
+
+  cursor: pointer;
+ 
+}
+
+/* profile */
+
+.profile-stat-name {
+  font-size: 10px;
+  color: black;
+}
+
+.profile-stat {
+  font-weight: 500;
+  color: black;
+}
+
+/* sidebar */
+.open-sidebar{
+  background:#F5F5F5;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: gainsboro;
+  height: 100%; /* 100% Full-height */
+  width: 250px;
+  position: absolute; /* Stay in place */
+  z-index: 1; 
+  left: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 30px; /* Place content 60px from the top */
+  transition: 0.1s;
+  /* padding-right:20px */
+  }
+
+.closed-sidebar{
+  background:#F5F5F5;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: gainsboro;
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: absolute; /* Stay in place */
+  z-index: 1; 
+  left: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 30px; /* Place content 60px from the top */
+  transition: 0.1s;
+  /* padding-right:20px */
+  }
+
+.sidebar-lists {
+  padding: 10px
+}
+.openbtn {
+  margin-left: 20px;
+  top: 20px;
   z-index: 1;
-  overflow: auto;
-  height: 800px;
-  /* width: 100px; */
-}
-
-#info{
-  right: 500px;
-  padding-top: 10px;
+  font-size: 20px;
   position: absolute;
-  background-color: white;
-  z-index: 1;
-  overflow: auto;
-  height: 800px;
-  /* width: 100px; */
+  background-color: grey;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  transition: 0.1s;
 }
 
-#newlist{
-  height:40px;
-  width:30px;
-}
-#map {
-  height: 800px;
-  width: 1470px;
+.openbtn:hover {
+  background-color: #444;
 }
 
-.header {
-  font-family: 'Satisfy', cursive;
-  font-size: 40px;
-  color: #ff1d58;
-  display: block;
+.pushedbtn {
+  margin-left: 270px;
+  transition: 0.1s;
+}
+
+.pushedcards {
+  margin-left: 230px;
+  width: 100px;
+  transition: 0.1s;
+}
+
+.btn-group-vertical{
+  border-radius: 0px;
+}
+
+.sidebar-group{
+  overflow: hidden; /* Disable horizontal scroll */
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.sidebar-group button{
+    background-color: #F5F5F5;
+    color: black;
+}
+
+.sidebar-group a{
+  color: black;
   text-decoration: none;
 }
 
-.top-nav {
-  background-color: #1CB2FF;
-}
-
-.registration-template{
-  font-family: 'Roboto', sans-serif;
-  font-size:14px;
-  background: #fafafa;
-  color: #7d7d7d;
-}
-
-.registration-header {
-  font-family:"Roboto", "sans-serif";
-  font-size:40px;
-  color: #ff1d58;
-  padding-bottom: 20px;
-  text-align: center;
-  margin-bottom: 10px:
-}
-
-.form-group {
-  top: 120px;
-  right: 30%;
-  z-index: 5;
-  text-align: left;
-  font-family: "Roboto", "sans-serif";
-  line-height: 30px;
-  padding: 15px;
-}
-
-#submit {
-  background-color: #ff1d58; /* Green */
-  border: none;
+.sidebar-group button:hover, a:hover{
   color: white;
-  margin: 10px;
-  padding: 4px 15px;
-  text-align: center;
-  font-family: "Roboto", "sans-serif";
-  display: inline-block;
+  text-decoration: none;
+  background-color:  grey;;
 }
 
-.btn-primary {
-  background-color: #ff1d58;
-  border: none;
-  color: white;
-  margin: 10px;
-  padding: 4px 15px;
-  text-align: center;
-  font-family: "Roboto", "sans-serif";
-  display: inline-block;
+.badge{
+  color: black;
 }
 
-.form-control {
+/* refine */
+
+#filter-results {
+  position: fixed;
+  width: 192px;
+  background-color: white;
+}
+
+.sidebar-lists{
+  overflow: scroll; /* Disable horizontal scroll */
+  padding-top: 15px;
+  padding-bottom: 15px;
+  
+}
+
+.list-options{
+  color: gray;
+}
+
+.list-options:hover{
+  cursor: pointer;
+  color:black
+}
+
+  /* the individual user's lists */
+.userlist {
+  cursor: default;
+  list-style-type: none;
+  margin-top: 8px;
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userlist:hover{
+  color: grey;
+  cursor: pointer;
+}
+
+/* modal for adding object to list*/
+.userlistModal {
+  cursor: default;
+  list-style-type: none;
+  margin-top: 8px;
+  margin-left: 20px;
+}
+
+.userlistModal:hover {
+  color: grey;
+  cursor: pointer;
+}
+
+/* map */
+#main {
+  position: relative;
+}
+
+#map {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+}
+
+.map-venue-cards{
+  width: 100%;
+  overflow-x: scroll;
+  position: absolute;
+  top: 500px;
+  left: 20px;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 75%;
+}
+
+.venue-card {
+  height: 150px;
+  cursor: pointer;
+}
+
+.selected-card {
+  border: solid;
+  border-color: #e4324c;
+}
+
+/* snackbars */
+/* validation snackbar after user adds to list */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: grey; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+#deleteSuccessSnackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: grey; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#deleteSuccessSnackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+#venueRemovedSuccessSnackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: grey; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#venueRemovedSuccessSnackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* media queries */
+
+
+
+/* venue-pages */
+.info-section{
+  display: flex;
+  justify-content: center;
+}
+
+
+/* write venue dashboard */
+.newVenueAdd{
+  margin: 10px;
   min-height: 41px;
   box-shadow: none;
   border-color: #e6e6e6;
-}
-.form-control:focus {
-  border-color: #00c1c0;
+  width: 500px;
 }
 
-.form-control, .btn {
-      border-radius: 3px;
-}
-
-.signup-form {
-  width: 425px;
-  margin: 0 auto;
-  padding: 30px 0;
-}
-.signup-form h2 {
-  color: #333;
-  font-weight: bold;
-  margin: 0 0 25px;
-}
-
-.signup-form form {
+#addMap {
+  height:400px;
+  width: 400px;
+  margin-top: 10px;
   margin-bottom: 15px;
-  background: #fff;
-  border: 1px solid #f4f4f4;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  padding: 50px;
 }
 
-.login-form form {
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: auto;
-  margin-right: auto;
-  background: #fff;
-  border: 1px solid #f4f4f4;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  padding: 70px;
+#description-box {
+  height: 150px;
+  width: 200px;
 }
 
-.login-form .form-group {
-  margin-bottom: 20px;
-  text-align: center;
+/* search functionality */
+
+#search-results {
+  position: absolute;
+  margin-left: 10px;
+  width: 500px;
+  background-color: white;
 }
 
-.signup-form .form-group {
-  margin-bottom: 20px;
+.searchBar{
+  margin-left: 10px;
+  min-height: 41px;
+  box-shadow: none;
+  border-color: #e6e6e6;
+  width: 500px;
 }
 
-.signup-form label {
-  font-weight: normal;
+.search-list-item {
+  border: grey;
+  border-style: solid;
+  border-width: thin;
+  border-top: black;
+  padding: 7px;
+}
+
+.search-list-item:hover {
+  cursor:pointer;
+  color: white;
+  background-color: grey;
+}
+
+/* venue page */
+
+.venue-details{
+  margin-left: 20px;
+}
+
+.venue-website{
   font-size: 12px;
 }
 
-.signup-form input[type="checkbox"] {
-  margin: 2px;
-}
-.signup-form .btn {
-    font-size: 16px;
-    font-weight: bold;
-    background: #ff1d58;
-    border: none;
-    min-width: 140px;
-    outline: none !important;
-}
-.signup-form .btn:hover, .signup-form .btn:focus {
-  background: #E51A4F;
-}
-.signup-form a {
-  color: #00c1c0;
-  text-decoration: none;
-}
-.signup-form a:hover {
-  text-decoration: underline;
 }
 
-.spinner {
-  width: 50px;
-  height: 50px;
-  background-color: #ff1d58;
-  position: relative;
-  top: 200px;
+@media only screen and (max-width: 420px) {
 
-  margin: 100px auto;
-  -webkit-animation: sk-rotateplane 1s infinite ease-in-out;
-  animation: sk-rotateplane 1s infinite ease-in-out;
-}
-
-@-webkit-keyframes sk-rotateplane {
-  0% { -webkit-transform: perspective(120px) }
-  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
-  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
-}
-
-@keyframes sk-rotateplane {
-  0% {
-    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-  } 50% {
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-  } 100% {
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+  .map-venue-cards{
+    width: 100%;
+    overflow-x: scroll;
+    position: absolute;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 70%;
+    top: 775px;
   }
-}
-
-.card {
-   position: absolute;
-   width: 100px;
-   border: 1px;
-   top: 75px;
-   bottom: 10px;
-   left: 25px;
-   z-index: 10040;
-   overflow: auto;
-   overflow-y: auto;
-}
+  
+  }
