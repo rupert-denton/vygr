@@ -36,9 +36,65 @@
   </head>
 
   <body>
-    <div id="nav-bar" class="container-fluid">
-    <div class="row">
-      <nav class="col-12 navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <a class="navbar-brand page-title" href="#">VYGR</a>
+          <form class="d-flex">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button id="submit" class="btn btn-outline-secondary" type="button">Search</button>
+              </div>
+            </div>
+           
+          </form>
+          <div class="d-flex">
+          <div class="nav-buttons">
+          
+            {% if user.is_authenticated%}
+            <a id="username" class="nav-username"> {{ user.get_username }} </a>
+            <a class="btn" href="{% url 'logout' %}">Logout</a>
+            
+                  {% else %}
+                  <a id="login" class="btn" href="{% url 'login' %}"> Login </a>
+                  {% endif %}
+                  {% if user.is_authenticated == False %}
+                  <a id="signup" class="btn" href="{% url 'signup' %}"> Sign Up </a>
+                  {% endif %}
+                  <input id="feedback" class="btn" type="button" value="Feedback" />
+          </div>
+        </div>
+        </div>
+      </div>
+    </nav>
+           
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+       
+    <div class="container-fluid">
+    <div id="nav-bar" class="row">
+      <nav class="col-12 navbar sticky-top">
         <a id="nav-title" class="col-lg-1 header" href="/">VYGR</a>
         <div class="col-md-8 input-group">
           <input type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -62,7 +118,7 @@
         </div>
       </nav>
     </div>
-    </div>
+    </div> -->
 
     {% block content %}
      

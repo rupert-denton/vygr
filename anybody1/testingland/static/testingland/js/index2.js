@@ -299,16 +299,6 @@ const deleteList = function(clickedListId, clickedList){
   });
 }
 
-$(window).resize(function() {
-  // This will fire each time the window is resized:
-  if($(window).width() >= 1024) {
-      // if larger or equal
-      $('#mySidebar').show();
-  } else {
-      // if smaller
-      $('#mySidebar').hide();
-  }
-})
 //shows clicked list's venues on map
 $("#userLists").on('click', "li", function(e) {
   var listName = e.target.getAttribute('data-name');
