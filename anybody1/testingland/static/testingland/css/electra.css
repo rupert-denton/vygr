@@ -6,41 +6,41 @@
 
 /* ------ global ------ */
 
-html,body
-{
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    /* overflow-x: hidden;  */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  /* overflow-x: hidden;  */
 }
 
 ul {
   list-style-type: none;
   padding: 0;
-  }
+}
 
-.btn{
+.btn {
   background-color: black;
   color: white;
   border: none;
 }
-  
-.container-fluid{
+
+.container-fluid {
   padding-left: 0px;
   padding-right: 0px;
 }
 
-.row{
+.row {
   margin-right: 0px;
 }
 
 .page-title {
   font-family: 'Inter', sans-serif;
-  color:black;
+  color: black;
 }
 
-.navbar{
+.navbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -50,17 +50,17 @@ ul {
   border-bottom: 1px solid gainsboro;
 }
 
-.nav-buttons{
+.nav-buttons {
   margin-top: 20px;
   margin-bottom: 20px;
 }
 
-.nav-username{
+.nav-username {
   color: black;
   margin-right: 10px;
 }
 
-.nav-username:hover{ 
+.nav-username:hover {
   color: grey;
   cursor: pointer;
 }
@@ -99,83 +99,85 @@ ul {
 }
 
 /* sidebar */
-.open-sidebar{
-  background:#F5F5F5;
+.open-sidebar {
+  background: #F5F5F5;
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: gainsboro;
-  height: 100%; /* 100% Full-height */
+  height: 100%;
+  /* 100% Full-height */
   width: 250px;
-  position: absolute; /* Stay in place */
-  z-index: 1; 
+  position: absolute;
+  /* Stay in place */
+  z-index: 1;
   left: 0;
   /* overflow-x: hidden; Disable horizontal scroll */
-  padding-top: 30px; /* Place content 60px from the top */
+  padding-top: 30px;
+  /* Place content 60px from the top */
   transition: 0.1s;
   /* padding-right:20px */
-  }
+}
 
-.closed-sidebar{
-  background:#F5F5F5;
+.closed-sidebar {
+  background: #F5F5F5;
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: gainsboro;
-  height: 100%; /* 100% Full-height */
-  width: 0; /* 0 width - change this with JavaScript */
-  position: absolute; /* Stay in place */
-  z-index: 1; 
+  height: 100%;
+  width: 0;
+  position: absolute;
+  z-index: 1;
   left: 0;
-  /* overflow-x: hidden; Disable horizontal scroll */
-  padding-top: 30px; /* Place content 60px from the top */
+  padding-top: 30px;
   transition: 0.1s;
-  /* padding-right:20px */
-  }
+}
 
 .sidebar-options-list {
-  overflow: hidden; /* Disable horizontal scroll */
+  overflow: hidden;
   padding-top: 15px;
   padding-bottom: 15px;
   display: flex;
   justify-content: center;
 }
 
-.sidebar-options-list button{
+.sidebar-options-list button {
   background-color: #F5F5F5;
   color: black;
 }
 
-.sidebar-options-list button:hover{
-color: white;
-text-decoration: none;
-background-color:  grey;;
+.sidebar-options-list button:hover {
+  color: white;
+  text-decoration: none;
+  background-color: grey;
+  ;
 }
 
-.sidebar-lists{
-  overflow: scroll; /* Disable horizontal scroll */
+.sidebar-lists {
+  overflow: scroll;
   padding-left: 15px;
   padding-top: 15px;
   padding-bottom: 15px;
 }
 
-.list-options{
+.list-options {
   color: gray;
 }
 
-.list-options:hover{
+.list-options:hover {
   cursor: pointer;
-  color:black
+  color: black
 }
 
 /* the individual user's lists */
 .userlist {
-margin-top: 8px;
-margin-left: 5px;
-white-space: nowrap;
-overflow: hidden;
-text-overflow: ellipsis;
+  margin-top: 8px;
+  margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.userlist:hover{
+.userlist:hover {
   color: grey;
   cursor: pointer;
 }
@@ -187,7 +189,7 @@ text-overflow: ellipsis;
 }
 
 /* venue cards */
-.map-venue-cards{ /* this is the set of cards */
+.map-venue-cards {   /* this is the set of cards */
   width: 100%;
   overflow-x: scroll;
   position: absolute;
@@ -210,121 +212,155 @@ text-overflow: ellipsis;
 }
 
 /* validation  */
-/* snackbars */
+/* validation snackbar after user adds to list */
+#snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: grey;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
 
-  /* snackbars */
-  /* validation snackbar after user adds to list */
-  #snackbar {
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: grey; /* Black background color */
-    color: #fff; /* White text color */
-    text-align: center; /* Centered text */
-    border-radius: 2px; /* Rounded borders */
-    padding: 16px; /* Padding */
-    position: fixed; /* Sit on top of the screen */
-    z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
-    bottom: 30px; /* 30px from the bottom */
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
   }
-  
-  /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #snackbar.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+#deleteSuccessSnackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: grey;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+}
+
+#deleteSuccessSnackbar.show {
+  visibility: visible;
+
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+#venueRemovedSuccessSnackbar {
+  visibility: hidden;
+  /* Hidden by default. Visible on click */
+  min-width: 250px;
+  /* Set a default minimum width */
+  margin-left: -125px;
+  /* Divide value of min-width by 2 */
+  background-color: grey;
+  /* Black background color */
+  color: #fff;
+  /* White text color */
+  text-align: center;
+  /* Centered text */
+  border-radius: 2px;
+  /* Rounded borders */
+  padding: 16px;
+  /* Padding */
+  position: fixed;
+  /* Sit on top of the screen */
+  z-index: 1;
+  /* Add a z-index if needed */
+  left: 50%;
+  /* Center the snackbar */
+  bottom: 30px;
+  /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#venueRemovedSuccessSnackbar.show {
+  visibility: visible;
+  /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
     However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  }
-  
-  /* Animations to fade the snackbar in and out */
-  @-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-  }
-  
-  @keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-  }
-  
-  @-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-  }
-  
-  @keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-  }
-  
-  #deleteSuccessSnackbar {
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: grey; /* Black background color */
-    color: #fff; /* White text color */
-    text-align: center; /* Centered text */
-    border-radius: 2px; /* Rounded borders */
-    padding: 16px; /* Padding */
-    position: fixed; /* Sit on top of the screen */
-    z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
-    bottom: 30px; /* 30px from the bottom */
-  }
-  
-  /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #deleteSuccessSnackbar.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-    However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  }
-  
-  #venueRemovedSuccessSnackbar {
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: grey; /* Black background color */
-    color: #fff; /* White text color */
-    text-align: center; /* Centered text */
-    border-radius: 2px; /* Rounded borders */
-    padding: 16px; /* Padding */
-    position: fixed; /* Sit on top of the screen */
-    z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
-    bottom: 30px; /* 30px from the bottom */
-  }
-  
-  /* Show the snackbar when clicking on a button (class added with JavaScript) */
-  #venueRemovedSuccessSnackbar.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
-    However, delay the fade out process for 2.5 seconds */
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
-  }
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
 
 /* ***** VENUE PAGE ***** */
- /* venue-pages */
- .info-section{
+/* venue-pages */
+.info-section {
   display: flex;
   justify-content: center;
 }
 
-.venue-details{
+.venue-details {
   margin-left: 20px;
 }
 
-.venue-website{
+.venue-website {
   font-size: 12px;
 }
 
 /* ***** ADD VENUE PAGE ***** */
 
-.newVenueAdd{
+.newVenueAdd {
   margin: 10px;
   min-height: 41px;
   box-shadow: none;
@@ -333,7 +369,7 @@ text-overflow: ellipsis;
 }
 
 #addMap {
-  height:400px;
+  height: 400px;
   width: 400px;
   margin-top: 10px;
   margin-bottom: 15px;
@@ -353,7 +389,7 @@ text-overflow: ellipsis;
   background-color: white;
 }
 
-.searchBar{
+.searchBar {
   margin-left: 10px;
   min-height: 41px;
   box-shadow: none;
@@ -370,100 +406,101 @@ text-overflow: ellipsis;
 }
 
 .search-list-item:hover {
-  cursor:pointer;
+  cursor: pointer;
   color: white;
   background-color: grey;
 }
 
 /* ------ phone portrait ------ */
 
-@media (min-width: 0px) and (max-width: 675px){
+@media (min-width: 0px) and (max-width: 675px) {
 
   /* nav */
   .page-title {
     font-size: 50px;
   }
 
-  .navbar{
+  .navbar {
     flex-direction: column
   }
-  
-  .search-bar{
+
+  .search-bar {
     width: 20rem;
   }
 
   /* sidebar */
-  .open-sidebar{
+  .open-sidebar {
     width: 187px;
   }
-  
+
   .pushedbtn {
     margin-left: 207px;
   }
-  
+
   .pushedcards {
     margin-left: 190px;
   }
-  
-  .map-venue-cards{
+
+  .map-venue-cards {
     top: 800px;
     left: 20px;
   }
-  
+
 }
 
-@media (min-width: 380px) and (max-width: 675px){
-  .navbar{
+@media (min-width: 380px) and (max-width: 675px) {
+  .navbar {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     padding: .5rem 1rem;
     flex-direction: column
-
   }
-  .search-bar{
+
+  .search-bar {
     width: 30rem;
   }
 }
 
 /* tablet */
-@media (min-width: 676px) and (max-width: 1374px){
+@media (min-width: 676px) and (max-width: 1374px) {
+
   /* layout */
   /* nav */
-  .page-title {   
+  .page-title {
     font-size: 60px;
   }
 
-  .navbar{
+  .navbar {
     flex-direction: column
   }
 
-  .search-bar{
+  .search-bar {
     width: 40rem;
   }
 
-  
 
 
-  
+
+
   /* sidebar */
-  .open-sidebar{
+  .open-sidebar {
 
     width: 187px;
-  
-    }
-  
+
+  }
+
   .pushedbtn {
     margin-left: 207px;
   }
-  
+
   .pushedcards {
     margin-left: 190px;
   }
-  
-  
-  .map-venue-cards{
+
+
+  .map-venue-cards {
     top: 800px;
     left: 20px;
   }
@@ -473,33 +510,32 @@ text-overflow: ellipsis;
 /* desktop */
 @media (min-width: 1375px) {
 
-.page-title {
-  font-size: 60px;
-}
+  .page-title {
+    font-size: 60px;
+  }
 
-/* components */
-.search-bar{
-  width: 55rem;
-}
+  /* components */
+  .search-bar {
+    width: 55rem;
+  }
 
 
-/* sidebar */
-.open-sidebar{
-  width: 270px;
-}
+  /* sidebar */
+  .open-sidebar {
+    width: 270px;
+  }
 
-.pushedbtn {
-  margin-left: 285px;
-}
+  .pushedbtn {
+    margin-left: 285px;
+  }
 
-.pushedcards {
-  margin-left: 230px;
-  width: 83%;
-}
+  .pushedcards {
+    margin-left: 230px;
+    width: 83%;
+  }
 
-.map-venue-cards{
-  top: 575px;
-  left: 20px;
+  .map-venue-cards {
+    top: 575px;
+    left: 20px;
+  }
 }
-}
-

@@ -299,6 +299,7 @@ const deleteList = function(clickedListId, clickedList){
   });
 }
 
+
 //shows clicked list's venues on map
 $("#userLists").on('click', "li", function(e) {
   var listName = e.target.getAttribute('data-name');
