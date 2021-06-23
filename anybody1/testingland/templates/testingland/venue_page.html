@@ -31,40 +31,36 @@
 </head>
 
 <body>
-  <div id="nav-bar" class="container-fluid">
-    <nav class="navbar navbar-dark sticky-top bg-white border-bottom flex-md-nowrap">
-      <a id="nav-title" class="header" class="navbar-brand col-sm-3 col-md-2" href="/">VYGR</a>
-      <div class="input-group w-100 ml-4 mr-2">
-      </div>
-      <!-- <input id="submit" class="btn btn-primary" type="button" value="Search" /> -->
-      <input id="feedback" class="btn btn-primary ml-2" type="button" value="Feedback" />
-
-      {% if user.is_authenticated%}
-      <a id="username" class="ml-4 mr-4" class="navbar-brand col-sm-3 col-md-2"> {{ user.get_username }} </a>
-      <a class="ml-4 mr-4" href="{% url 'logout' %}">Logout</a>
-      <!-- <i class="fas fa-bell ml-3" type="button" data-toggle="dropdown"></i> -->
-
-      <!-- <ul class="navbar-nav px-3 ml-2 mr-3 mb-4">
-        <div class="dropdown">
-          <i class="fas fa-caret-down" type="button" data-toggle="dropdown"></i>
-          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" id="profile">Profile</a>
-            <a class="dropdown-item" id="dashboard">Dashboard</a>
-            <a class="dropdown-item" href="/users">Users</a>
-            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a> -->
-
-            {% else %}
-            <a id="login" class="ml-3" class="navbar-brand col-sm-3 col-md-2" href="{% url 'login' %}"> Login </a>
-            {% endif %}
-            {% if user.is_authenticated == False %}
-            <a id="signup" class="ml-3" class="navbar-brand col-sm-3 col-md-2" href="{% url 'signup' %}"> Sign Up </a>
-            {% endif %}
-          </div>
+  <nav class="navbar">
+    <!-- <div class="container-fluid"> -->
+      <a class="navbar-brand page-title" href="#">VYGR</a>
+        <form>
+          <!-- <div class="search-bar input-group">
+            <input type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button id="submit" class="btn btn-outline-secondary" type="button">Search</button>
+            </div>
+          </div> -->
+         
+        </form>
+      
+        <div class="nav-buttons">
+        
+          {% if user.is_authenticated%}
+          <a id="username" class="nav-username"> {{ user.get_username }} </a>
+          <a class="btn" href="{% url 'logout' %}">Logout</a>
+          
+                {% else %}
+                <a id="login" class="btn" href="{% url 'login' %}"> Login </a>
+                {% endif %}
+                {% if user.is_authenticated == False %}
+                <a id="signup" class="btn" href="{% url 'signup' %}"> Sign Up </a>
+                {% endif %}
+                <input id="feedback" class="btn" type="button" value="Feedback" />
         </div>
-      </ul>
-    </nav>
-  </div>
-
+      </div>
+    </div>
+  </nav>
 <div class="container-fluid">
   <div id="snackbar">Added To List</div>
 
