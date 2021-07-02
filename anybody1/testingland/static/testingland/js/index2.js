@@ -1,13 +1,16 @@
 var markers = new Set(); //empty array
 var marker, i;
+var service;
+
+
 //homepage map
 $(document).ready(function() {
   var currentVenue = "";
   //Google Maps API setup
   var script = document.createElement('script');
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaMciXfNXBzO_lPINmrspp4_fZ17RA_Jk&callback=initMap&map_ids=33df39eac4360b95';
+  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaMciXfNXBzO_lPINmrspp4_fZ17RA_Jk&libraries=places&callback=initMap&map_ids=33df39eac4360b95';
   script.defer = true;
- 
+
 
   window.initMap = function() {
 
@@ -51,7 +54,8 @@ $(document).ready(function() {
           center: userMapCentre,
           zoom: 15,
           mapId: '33df39eac4360b95',
-          disableDefaultUI: true
+          disableDefaultUI: true,
+          gestureHandling: 'greedy'
         });
         console.log("Map Done. User location is " + [userLat + userLong]);
         showUserLists()
@@ -61,9 +65,34 @@ $(document).ready(function() {
     //create geocoder
     const geocoder = new google.maps.Geocoder();
 
-    //search address 
+    $("#place").click(function() {
+      switchSearchType()
+    });
+
+    $("#address").click(function() {
+      switchSearchType()
+    });
+
+
+    const switchSearchType = function() {
+      let searchType = $("#search-type-icon")
+      if (searchType.hasClass("bi bi-geo-alt-fill")) {
+        searchType.removeClass("bi bi-geo-alt-fill")
+        searchType.addClass("bi bi-shop")
+      } else if (searchType.hasClass("bi bi-shop")) {
+        searchType.removeClass("bi bi-shop")
+        searchType.addClass("bi bi-geo-alt-fill")
+      }
+    };
+
+    //search address or venue 
     document.getElementById("submit").addEventListener("click", () => {
-      addressLookup(geocoder, map);
+      let searchType = $("#search-type-icon")
+      if (searchType.hasClass("bi bi-geo-alt-fill")) {
+        addressLookup(geocoder, map);
+      } else if (searchType.hasClass("bi bi-shop")) {
+        venueLookup()
+      }
     });
 
     //search area
@@ -99,16 +128,16 @@ $(document).ready(function() {
     });
   }
   document.head.appendChild(script);
-  
-
-document.getElementById("createList").addEventListener("click", () => {
-  console.log("Create list clicked on")
-  createNewList()
-});
 
 
+  document.getElementById("createList").addEventListener("click", () => {
+    console.log("Create list clicked on")
+    createNewList()
+  });
 
-const filter = function(geocoder, marker, map) {
+
+
+  const filter = function(geocoder, marker, map) {
     $("#filter-results").empty()
     let searchTerm = $("#search-filter").val();
     $.ajax({
@@ -149,29 +178,28 @@ const filter = function(geocoder, marker, map) {
             filterPanel.appendTo(filterCol);
             filterCol.appendTo('#filterCardList');
 
-          // getVenueDetails(selectedVenue, geocoder, marker, map)
-        });
-      })
-    }
-  });
-};
+            // getVenueDetails(selectedVenue, geocoder, marker, map)
+          });
+        })
+      }
+    });
+  };
 
 
-
-//userlists functionality
-//displays lists in sidebar
-const showUserLists = function(map) {
-  $.ajax({
-    type: 'GET',
-    url: '/api/userlist/',
-    data: {},
-    success: function(data) {
-      data.forEach(item => {
-        var listName = item.list_name;
-        var listId = item.id;
-        console.log(`Loaded ${listName}:${listId}`)
-        $("#userLists").append(
-          `<li class="userlist" id="${listName}" data-name="${listName}" data-pk="${listId}">
+  //userlists functionality
+  //displays lists in sidebar
+  const showUserLists = function(map) {
+    $.ajax({
+      type: 'GET',
+      url: '/api/userlist/',
+      data: {},
+      success: function(data) {
+        data.forEach(item => {
+          var listName = item.list_name;
+          var listId = item.id;
+          console.log(`Loaded ${listName}:${listId}`)
+          $("#userLists").append(
+            `<li class="userlist" id="${listName}" data-name="${listName}" data-pk="${listId}">
             ${listName}
               <i id="dropdown" class="ml-4 dropdown fas fa-ellipsis-h" type="button" data-toggle="dropdown"></i>
               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuButton">
@@ -183,13 +211,13 @@ const showUserLists = function(map) {
           // edits list
           document.getElementById(listName + "-edit").addEventListener('click', function(e) {
             if (e.target && e.target.matches("a.dropdown-item")) {
-              e.stopPropagation();             
+              e.stopPropagation();
               clickedList = e.target.getAttribute('data-name')
               clickedListId = e.target.getAttribute('data-pk')
               console.log(clickedList, clickedListId)
 
-              editList(clickedListId, clickedList)            
-            }   
+              editList(clickedListId, clickedList)
+            }
           });
           // deletes list
           document.getElementById(listName + "-delete").addEventListener('click', function(e) {
@@ -200,37 +228,37 @@ const showUserLists = function(map) {
               clickedListId = e.target.getAttribute('data-pk')
               deleteList(clickedListId, clickedList)
             }
-          }); 
-                
-      })
-    }
+          });
+
+        })
+      }
+    });
+  };
+
+  //create new list
+  const createNewList = function() {
+    console.log("creating a new list")
+    $("#newlistmodal").modal('show');
+  }
+
+  $("#createListModal").click(function() {
+    createNewList()
   });
-};
 
-//create new list
-const createNewList = function(){
-  console.log("creating a new list")
-  $("#newlistmodal").modal('show');
-}
-
-$("#createListModal").click(function() {
-  createNewList()
-});
-
-$("#save-list").click(function() {
-  var listName = $("#newListName").val();
-  console.log(listName)
-  $.ajax({
-    type: 'POST',
-    url: '/api/userlist/',
-    data: {
-    csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
-    'list_name' : listName
-    },
-    success: function(data) {
-      console.log(data.instance_id)
-      var listId = data.instance_id;
-      $("#newlistmodal").modal('hide');
+  $("#save-list").click(function() {
+    var listName = $("#newListName").val();
+    console.log(listName)
+    $.ajax({
+      type: 'POST',
+      url: '/api/userlist/',
+      data: {
+        csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+        'list_name': listName
+      },
+      success: function(data) {
+        console.log(data.instance_id)
+        var listId = data.instance_id;
+        $("#newlistmodal").modal('hide');
         $("#userLists").append(
           `<li class="userlist" id="${listName}" data-name="${listName}" data-pk="${listId}">
             ${listName}
@@ -241,11 +269,11 @@ $("#save-list").click(function() {
                 <a class="dropdown-item" id="${listName}-delete" data-name="${listName}" data-pk="${listId}">Delete</a>    
           </li>
           `)
-      $("#userLists").html("");
-      showUserLists();
-    }
+        $("#userLists").html("");
+        showUserLists();
+      }
+    });
   });
-});
 
   document.getElementById("save-edited-list").addEventListener('click', function() {
     let listName = document.getElementById("editListName").value;
@@ -258,9 +286,9 @@ $("#save-list").click(function() {
       type: 'POST',
       url: '/electra/update_list_name/',
       data: {
-      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
-      'id' : clickedListId,
-      'list_name' : listName
+        csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+        'id': clickedListId,
+        'list_name': listName
       },
       success: function(data) {
         console.log(data)
@@ -268,210 +296,283 @@ $("#save-list").click(function() {
         var listId = data.instance_id;
 
         $("#newlistmodal").modal('hide');
-          $("#userLists").html("");
-          showUserLists();
+        $("#userLists").html("");
+        showUserLists();
       }
     });
   }
 
-//edit list
-const editList = function(clickedListId, clickedList){
-  $("#editListModal").modal('show');
-  $("#editListLabel").text(`Edit ${clickedList}`)
-  // $('#editListName').val(clickedList);
-}
+  //edit list
+  const editList = function(clickedListId, clickedList) {
+    $("#editListModal").modal('show');
+    $("#editListLabel").text(`Edit ${clickedList}`)
+    // $('#editListName').val(clickedList);
+  }
 
-//deletelist
-const deleteList = function(clickedListId, clickedList){
-  let trashedList = [clickedListId, clickedList]
-  console.log(trashedList)
-  $.ajax({
-    type: 'DELETE',
-    url: `/api/deletelist/${clickedListId}`,
-    data: {
-      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value
-    },
-    success: function(data) {
+  //deletelist
+  const deleteList = function(clickedListId, clickedList) {
+    let trashedList = [clickedListId, clickedList]
+    console.log(trashedList)
+    $.ajax({
+      type: 'DELETE',
+      url: `/api/deletelist/${clickedListId}`,
+      data: {
+        csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value
+      },
+      success: function(data) {
         $("#userLists").html("");
         showUserLists();
         showDeleteSuccessSnackBar();
-    }  
+      }
+    });
+  }
+
+  //shows clicked list's venues on map
+  $("#userLists").on('click', "li", function(e) {
+    var listName = e.target.getAttribute('data-name');
+    var listId = e.target.getAttribute('data-pk');
+    console.log(`Clicked ${listName}:${listId}`);
+    getClickedListVenues(listId)
+    toggleNav()
+    e.preventDefault();
   });
-}
 
-
-//shows clicked list's venues on map
-$("#userLists").on('click', "li", function(e) {
-  var listName = e.target.getAttribute('data-name');
-  var listId = e.target.getAttribute('data-pk');
-  console.log(`Clicked ${listName}:${listId}`);
-  getClickedListVenues(listId)
-  toggleNav()
-  e.preventDefault();
-});
-
-const getClickedListVenues = function(listId) {
-  console.log(`Getting Data from ${listId}`);
-  $.ajax({
-    type: 'GET',
-    url: '/api/savedvenues/',
-    data: {
-      'list_id': listId
-    },
-    success: function(data) {
-      addClickedListMarkersToMap(data, map,listId)
-    }
-  });
-};
-
-//search address feature
-//searches address
-function addressLookup(geocoder, resultsMap) {
-  let bounds = resultsMap.getBounds();
-  let address = document.getElementById("search").value; //gets user entry in address box
-  geocoder.geocode({
-    bounds: bounds,
-    address: address
-  }, (results, status) => {
-    if (status === "OK") {
-      resultsMap.setCenter(results[0].geometry.location);
-      getVenues(map) //also used for search area
-    }
-  })
-}
-
-//gets venues from DB based on geographic bounds for search
-function getVenues(map) {
-  const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
-  const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
-  const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
-  const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
-
-  $.ajax({
-    type: 'GET',
-    url: '/electra/marker_info/',
-    data: {
-      'neLat': lat0,
-      'neLng': lng0,
-      'swLat': lat1,
-      'swLng': lng1
-    },
-    success: function(data) {
-      console.log(data)
-      addSearchedMarkersToMap(data, map)
-    }
-  });
-};
-
-function getFriends(map) {
-  const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
-  const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
-  const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
-  const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
-
-  $.ajax({
-    type: 'GET',
-    url: '/electra/get_friends/',
-    data: {
-      'neLat': lat0,
-      'neLng': lng0,
-      'swLat': lat1,
-      'swLng': lng1
-    },
-    success: function(data) {
-      console.log(data)
-      addSearchedMarkersToMap(data, map)
-    }
-  });
-};
-
-var searchedCafeNamesList = []
-var clickedListCafeNamesList = []
-var markers = []
-
-const addSearchedMarkersToMap = function(data, map) {
-  searchedCafeNamesList = []
-  clearMarkers()
-  $("#indexCardList").empty()
-  for (i = 0; i < data.length; i++) { //puts markers in the markers set
-    searchedCafeNamesList.push(data[i][0]);
+  const getClickedListVenues = function(listId) {
+    console.log(`Getting Data from ${listId}`);
+    $.ajax({
+      type: 'GET',
+      url: '/api/savedvenues/',
+      data: {
+        'list_id': listId
+      },
+      success: function(data) {
+        addClickedListMarkersToMap(data, map, listId)
+      }
+    });
   };
-  console.log(searchedCafeNamesList)
-  gatherSearchedMarkerData(searchedCafeNamesList, map)
-};
 
-    const gatherSearchedMarkerData = function(listOfCafes, map, listId) {
-      for (i = 0; i < listOfCafes.length; i++) {
-        cafeName = listOfCafes[i];
-        $.ajax({
-          type: 'GET',
-          url: '/electra/getUserMarkers/',
-          data: {
-            'cafeName': cafeName,
-          },
-          success: function(data) {
-            console.log(data)
-            putSearchedMarkersOnMap(data, map, listId)
-          }
+  //search address feature
+  //searches address
+  function addressLookup(geocoder, resultsMap) {
+    let bounds = resultsMap.getBounds();
+    let address = document.getElementById("search-box").value; //gets user entry in address box
+    geocoder.geocode({
+      bounds: bounds,
+      address: address
+    }, (results, status) => {
+      if (status === "OK") {
+        resultsMap.setCenter(results[0].geometry.location);
+        getVenues(map) //also used for search area
+      }
+    })
+  }
+
+  //gets venues from DB based on geographic bounds for search
+  function getVenues(map) {
+    const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
+    const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
+    const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
+    const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
+
+    $.ajax({
+      type: 'GET',
+      url: '/electra/marker_info/',
+      data: {
+        'neLat': lat0,
+        'neLng': lng0,
+        'swLat': lat1,
+        'swLng': lng1
+      },
+      success: function(data) {
+        console.log(data)
+        addSearchedMarkersToMap(data, map)
+      }
+    });
+  };
+
+  $("#search-box").keyup(function(map) {
+    if ($("#search-type-icon").hasClass("bi bi-shop")) {
+
+      const searchTerm = document.getElementById("search-box").value;
+      console.log(searchTerm)
+
+      // Don't want to search if only a few characters
+      if (searchTerm.length < 2) {
+        if (searchTerm.length === 0) {
+          // Deleted search term so remove everything
+          $("#search-results").empty()
+        }
+        return // don't need to do anything else
+      }
+      search()
+    }
+  });
+
+
+
+
+  const search = function() {
+    $("#search-results").empty()
+    let searchTerm = document.getElementById("search-box").value;
+    $.ajax({
+      type: 'GET',
+      url: '/electra/search/',
+      data: {
+        'search_term': searchTerm
+      },
+      success: function(data) {
+        console.log(data)
+        data.forEach(([cafeName, cafeAddress]) => {
+          var cafeName = cafeName;
+          var cafeAddress = cafeAddress;
+          var searchList = $(
+            `<div>
+              <li class="search-list-item ml-2" data-idtext="${cafeName}" id="${cafeName}">
+              ${cafeName}
+              <span class="text-muted ml-2">${cafeAddress}</span>
+              </li>
+          </div>`
+          );
+          searchList.appendTo('#search-results');
+        });
+
+        $("#search-results").click(function(event) {
+
+          var selectedVenue = event.target.id;
+          $("#search-results").empty()
+          console.log("Clicked" + " " + selectedVenue);
+          $("#search-box").val(selectedVenue)
+
+          $.ajax({
+            type: 'GET',
+            url: 'electra/place_search/',
+            data: {
+              'venuename': selectedVenue
+            },
+            success: function(data) {
+              console.log(data)
+              addSearchedMarkersToMap(data, map)
+            }
+          });
         });
       }
+    });
+  };
+
+  // const changeMarkerPosition = function(data) {
+  //   const svgMarker = {
+  //     path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
+  //     fillColor: "grey",
+  //     fillOpacity: 1,
+  //     strokeWeight: 1.2,
+  //     rotation: 0,
+  //     scale: 1.8,
+  //     anchor: new google.maps.Point(15, 30),
+  //   };
+
+  //   let x = data[0][4]
+  //   let y = data[0][5]
+
+  //   const marker = new google.maps.Marker({
+  //     position: {
+  //       lat: x,
+  //       lng: y
+  //     },
+  //     map: map,
+  //     animation: google.maps.Animation.DROP,
+  //     title: data[0][1],
+  //     icon: svgMarker
+  //   })
+  //   map.setCenter(marker.getPosition());
+  //   map.setZoom(15)
+  // };
+
+  var searchedCafeNamesList = []
+  var clickedListCafeNamesList = []
+  var markers = []
+
+  const addSearchedMarkersToMap = function(data, map) {
+    searchedCafeNamesList = []
+    console.log(searchedCafeNamesList)
+    clearMarkers()
+    $("#indexCardList").empty()
+    for (i = 0; i < data.length; i++) { //puts markers in the markers set
+      searchedCafeNamesList.push(data[i][0]);
     };
-    
-    const putSearchedMarkersOnMap = function(data, map, listId) {
-      const svgMarker = {
-        path:
-        "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
-        fillColor: "grey",
-        fillOpacity: 1,
-        strokeWeight: 1.2,
-        rotation: 0,
-        scale: 1.8,
-        anchor: new google.maps.Point(15, 30),
-      };
-    
-      const selectedSvgMarker = {
-        path:
-        "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
-        fillColor: "#e4324c",
-        fillOpacity: 1,
-        strokeWeight: 1.2,
-        rotation: 0,
-        scale: 1.8,
-        anchor: new google.maps.Point(15, 30),
-      };
-    
-    
-      for (let i = 0; i < data.length; i++) {
-        console.log(data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
-        const marker = new google.maps.Marker({
-          position: new google.maps.LatLng(data[i][2], data[i][3]),
-          map: map,
-          animation: google.maps.Animation.DROP,
-          title:data[i][0],
-          icon:svgMarker
-        });
-        
-        markers.push(marker)
-        
-        $.ajax({
-          type: 'GET',
-          url: '/electra/info_box/',
-          data: {
-            'venuename': data[i][0]
-          },
-          success: function(data) {
-            
-            data.forEach(([cafeId, cafeName, cafeAddress]) => {
-              var myCol = $('<div id="col"></div>');
-              var myPanel = $(
-                `
+    console.log(searchedCafeNamesList)
+    gatherSearchedMarkerData(searchedCafeNamesList, map)
+  };
+
+  const gatherSearchedMarkerData = function(listOfCafes, map, listId) {
+    for (i = 0; i < listOfCafes.length; i++) {
+      cafeName = listOfCafes[i];
+      $.ajax({
+        type: 'GET',
+        url: '/electra/getUserMarkers/',
+        data: {
+          'cafeName': cafeName,
+        },
+        success: function(data) {
+          console.log(data)
+          putSearchedMarkersOnMap(data, map, listId)
+        }
+      });
+    }
+  };
+
+  const putSearchedMarkersOnMap = function(data, map, listId) {
+    const svgMarker = {
+      path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
+      fillColor: "grey",
+      fillOpacity: 1,
+      strokeWeight: 1.2,
+      rotation: 0,
+      scale: 1.8,
+      anchor: new google.maps.Point(15, 30),
+    };
+
+    const selectedSvgMarker = {
+      path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
+      fillColor: "#e4324c",
+      fillOpacity: 1,
+      strokeWeight: 1.2,
+      rotation: 0,
+      scale: 1.8,
+      anchor: new google.maps.Point(15, 30),
+    };
+
+
+    for (let i = 0; i < data.length; i++) {
+      console.log("hey" + " " + data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
+      const marker = new google.maps.Marker({
+        position: new google.maps.LatLng(data[i][2], data[i][3]),
+        map: map,
+        animation: google.maps.Animation.DROP,
+        title: data[i][0],
+        icon: svgMarker
+      });
+
+      markers.push(marker)
+
+      $.ajax({
+        type: 'GET',
+        url: '/electra/info_box/',
+        data: {
+          'venuename': data[i][0]
+        },
+        success: function(data) {
+
+          data.forEach(([cafeId, cafeName, cafeAddress]) => {
+            var myCol = $('<div id="col"></div>');
+            var myPanel = $(
+              `
                 <div class="card-group">
                 <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
                   <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">
-                    <h5 class="card-title venue-name" id="${cafeName}-card">
-                      <a href="venue/${cafeId}" id="${cafeName}-link" data-idtext="${cafeName}" class="card-link" target="_blank" rel="noreferrer noopener">${cafeName}</a>
+                    <h5 class="card-title venue-name" id="${cafeName}-card" data-idtext="${cafeName}">
+                      ${cafeName}
                     </h5>
-                    <h6 class="card-subtitle mb-2 text-muted venue-address"></h6>
+                    <h6 class="venue-address card-subtitle mb-2 text-muted"></h6>
                     <div class="dropdown">
                       <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
                       <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -482,178 +583,256 @@ const addSearchedMarkersToMap = function(data, map) {
                 </div>
               </div>
               `
-              );
-              $(".venue-address", myPanel).html(cafeAddress);
-              $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
-              myPanel.appendTo(myCol);
-              myCol.appendTo('#indexCardList');
-    
-              document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-                if (e.target && e.target.matches("a.add")) {
-                  console.log(e.target.id)
-                  currentVenue = e.target.getAttribute('data-idtext')
-                  addToListModal(currentVenue)
-                };
-              });
-    
-              document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-                if (e.target && e.target.matches("a.remove")) {
-                  console.log(e.target.id)
-                  currentVenue = e.target.getAttribute('data-idtext')
-                  removeFromListModal(currentVenue, listId)
-                };
-              });
-    
-        marker.addListener("click", () => {
-          let cards = document.getElementsByClassName('venue-card card card-body');
-          console.log(cards)
-          for (i = 0; i < cards.length; i++) {
-            console.log(cards[i])
-            if (cards[i].classList.contains('selected-card')){
-              cards[i].classList.remove("selected-card");
-            }
-          };
-          
-          for (i = 0; i < markers.length; i++) { 
-            markers[i].setIcon(svgMarker);
-            };
-          scrollToCard()
-        });
-    
-        const scrollToCard = function(){
-          
-          map.panTo(marker.getPosition())
-          map.setZoom(15);
-          let clickedMarker = marker.title
-          console.log(clickedMarker);
-          let venues = document.getElementsByClassName('card-title venue-name');
-            for (i = 0; i < venues.length; i++) {
-              if (venues[i].innerText == clickedMarker) {
-                
-                marker.setIcon(selectedSvgMarker);
-                let matchedMarker = venues[i].innerText
-                console.log('Found match: ' + matchedMarker)
+            );
+            $(".venue-address", myPanel).html(cafeAddress);
+            $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
+            myPanel.appendTo(myCol);
+            myCol.appendTo('#indexCardList');
 
-                markersCard = document.getElementById(`${matchedMarker}-cardbody`);
-                
-                markersCard.classList.add("selected-card")
-                markersCard.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-              };   
-            }
-        }
-    
-        const panToMarker = function(clickedCard, markers){
-          console.log(clickedCard);
-          console.log(markers)
-            for (i = 0; i < markers.length; i++) {
-              if (markers[i].title == clickedCard) {
-                let matchedMarker = markers[i];
-                marker.setIcon(selectedSvgMarker);
-                map.panTo(matchedMarker.getPosition())
-                map.setZoom(15);
-              };   
-            }
-        };
-              //user clicks card, pan to marker
-              document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
-                  clickedCard = e.target.getAttribute('data-idtext')
-                  console.log(clickedCard)
-    
-                  for (i = 0; i < markers.length; i++) { 
-                    markers[i].setIcon(svgMarker);
-                    };
-                  panToMarker(clickedCard, markers, data)
+            document.getElementById(cafeName + "-card").addEventListener('click', function() {
+              console.log(cafeName)
+              $('#venue-modal').modal('show');
+              $.ajax({
+                type: 'GET',
+                url: '/electra/info_box/',
+                data: {
+                  'venuename': cafeName
+                },
+
+                success: function(data) {
+                  console.log(data)
+                  var results = JSON.stringify(data).split('"');
+                  console.log(results);
+                  var cafeId = results[0];
+                  // var cafeName = results[1].replace(/[^a-zA-Z0-9éè ]/g, "");
+                  var cafeDescription = results[5].replace(/\n/g, "<br>")
+                  $("#modal-venue-title").html(cafeName);
+                  $("#modal-venue-address").html(cafeAddress);
+                  $("#modal-venue-description").html(cafeDescription);
+                  console.log(results);
+                }
               });
+
+              var request = {
+                query: cafeName,
+                fields: ['place_id'],
+              };
+              console.log(request)
+
+              let testNode = $("#hidden").get(0)
+              console.log(testNode)
+
+              var service = new google.maps.places.PlacesService(testNode);
+              service.findPlaceFromQuery(request, function(results, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                  for (var i = 0; i < results.length; i++) {
+                    let placeId = results[i].place_id
+                    console.log(placeId)
+                    getPlaceDetails(placeId)
+                  }
+                }
+              })
+
+              const getPlaceDetails = function(placeId) {
+                console.log(`The venue's ID is ${placeId}`)
+                let testNode = $("#hidden").get(0)
+                let request = {
+                  placeId: placeId,
+                  fields: [
+                    'rating',
+                    'opening_hours',
+                    'website',
+                    'price_level',
+                    'review',
+                    'photos'
+                  ]
+                };
+
+                service = new google.maps.places.PlacesService(testNode);
+                service.getDetails(request, callback);
+
+                function callback(results, status) {
+                  if (status == google.maps.places.PlacesServiceStatus.OK) {
+                    console.log(results);
+                    // $("#website").attr("src", results.website)
+                    // $("#website").html(results.website)
+                    photos = results.photos
+                    console.log(photos)
+                    photo = photos[0].getUrl({
+                      maxWidth: 500,
+                      maxHeight: 500
+                    })
+                    $("#modal-venue-images").attr("src", photo)
+                  }
+                }
+              }
+            })
+
+            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
+              if (e.target && e.target.matches("a.add")) {
+                console.log(e.target.id)
+                currentVenue = e.target.getAttribute('data-idtext')
+                addToListModal(currentVenue)
+              };
             });
-          }
-        });
-        map.setCenter(new google.maps.LatLng(data[0][2], data[0][3]));
-        map.setZoom(14)
-      }
-    };
-    
-    // const clearMarkers = function(map) {
-    //   for (let i = 0; i < markers.length; i++) {
-    //     markers[i].setMap(null);
-    //   };
-    // };
 
-const addClickedListMarkersToMap = function(data, map, listId) {
-  clickedListCafeNamesList = []
+            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
+              if (e.target && e.target.matches("a.remove")) {
+                console.log(e.target.id)
+                currentVenue = e.target.getAttribute('data-idtext')
+                removeFromListModal(currentVenue, listId)
+              };
+            });
+
+            marker.addListener("click", () => {
+              let cards = document.getElementsByClassName('venue-card card card-body');
+              console.log(cards)
+              for (i = 0; i < cards.length; i++) {
+                console.log(cards[i])
+                if (cards[i].classList.contains('selected-card')) {
+                  cards[i].classList.remove("selected-card");
+                }
+              };
+
+              for (i = 0; i < markers.length; i++) {
+                markers[i].setIcon(svgMarker);
+              };
+              console.log("scrolling")
+              scrollToCard()
+            });
+
+            const scrollToCard = function() {
+
+              map.panTo(marker.getPosition())
+              map.setZoom(15);
+              let clickedMarker = marker.title
+              console.log(clickedMarker);
+              let venues = document.getElementsByClassName('card-title venue-name');
+              for (i = 0; i < venues.length; i++) {
+                if (venues[i].innerText == clickedMarker) {
+
+                  marker.setIcon(selectedSvgMarker);
+                  let matchedMarker = venues[i].innerText
+                  console.log('Found match: ' + matchedMarker)
+
+                  markersCard = document.getElementById(`${matchedMarker}-cardbody`);
+
+                  markersCard.classList.add("selected-card")
+                  markersCard.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest"
+                  });
+                };
+              }
+            }
+
+            const panToMarker = function(clickedCard, markers) {
+
+              for (i = 0; i < markers.length; i++) {
+                if (markers[i].title == clickedCard) {
+                  let matchedMarker = markers[i];
+                  marker.setIcon(selectedSvgMarker);
+                  map.panTo(matchedMarker.getPosition())
+                  map.setZoom(15);
+                };
+              }
+            };
+            //user clicks card, pan to marker
+            document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
+              clickedCard = e.target.getAttribute('data-idtext')
+
+
+              for (i = 0; i < markers.length; i++) {
+                markers[i].setIcon(svgMarker);
+              };
+              panToMarker(clickedCard, markers, data)
+            });
+          });
+
+        }
+      });
+      // map.setCenter(new google.maps.LatLng(data[0][2], data[0][3]));
+      // map.setZoom(14)
+    }
+  };
+
+
+
+  const addClickedListMarkersToMap = function(data, map, listId) {
+    clickedListCafeNamesList = []
     clearMarkers()
     $("#indexCardList").empty()
-      for (i = 0; i < data.length; i++) { //puts markers in the markers set
-        clickedListCafeNamesList.push(data[i].venue.cafe_name);
-      };
-      console.log(clickedListCafeNamesList)
-      gatherListMarkerData(clickedListCafeNamesList, map, listId)
+    for (i = 0; i < data.length; i++) { //puts markers in the markers set
+      clickedListCafeNamesList.push(data[i].venue.cafe_name);
     };
-    
-const gatherListMarkerData = function(listOfCafes, map, listId) {
-  for (i = 0; i < listOfCafes.length; i++) {
-    cafeName = listOfCafes[i];
-    $.ajax({
-      type: 'GET',
-      url: '/electra/getUserMarkers/',
-      data: {
-        'cafeName': cafeName,
-      },
-      success: function(data) {
-        console.log(data)
-        putListMarkersOnMap(data, map, listId)
-      }
-    });
-  }
-};
-
-const putListMarkersOnMap = function(data, map, listId) {
-  const svgMarker = {
-    path:
-    "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
-    fillColor: "grey",
-    fillOpacity: 1,
-    strokeWeight: 1.2,
-    rotation: 0,
-    scale: 1.8,
-    anchor: new google.maps.Point(15, 30),
+    console.log(clickedListCafeNamesList)
+    gatherListMarkerData(clickedListCafeNamesList, map, listId)
   };
 
-  const selectedSvgMarker = {
-    path:
-    "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
-    fillColor: "#e4324c",
-    fillOpacity: 1,
-    strokeWeight: 1.2,
-    rotation: 0,
-    scale: 1.8,
-    anchor: new google.maps.Point(15, 30),
+  const gatherListMarkerData = function(listOfCafes, map, listId) {
+    for (i = 0; i < listOfCafes.length; i++) {
+      cafeName = listOfCafes[i];
+      $.ajax({
+        type: 'GET',
+        url: '/electra/getUserMarkers/',
+        data: {
+          'cafeName': cafeName,
+        },
+        success: function(data) {
+          console.log(data)
+          putListMarkersOnMap(data, map, listId)
+        }
+      });
+    }
   };
 
+  const putListMarkersOnMap = function(data, map, listId) {
+    const svgMarker = {
+      path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
+      fillColor: "grey",
+      fillOpacity: 1,
+      strokeWeight: 1.2,
+      rotation: 0,
+      scale: 1.8,
+      anchor: new google.maps.Point(15, 30),
+    };
 
-  for (let i = 0; i < data.length; i++) {
-    console.log(data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
-    const marker = new google.maps.Marker({
-      position: new google.maps.LatLng(data[i][2], data[i][3]),
-      map: map,
-      animation: google.maps.Animation.DROP,
-      title:data[i][0],
-      icon:svgMarker
-    });
-    
-    markers.push(marker)
-    
-    $.ajax({
-      type: 'GET',
-      url: '/electra/info_box/',
-      data: {
-        'venuename': data[i][0]
-      },
-      success: function(data) {
-        
-        data.forEach(([cafeId, cafeName, cafeAddress]) => {
-          var myCol = $('<div id="col"></div>');
-          var myPanel = $(
-            `
+    const selectedSvgMarker = {
+      path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
+      fillColor: "#e4324c",
+      fillOpacity: 1,
+      strokeWeight: 1.2,
+      rotation: 0,
+      scale: 1.8,
+      anchor: new google.maps.Point(15, 30),
+    };
+
+
+    for (let i = 0; i < data.length; i++) {
+      console.log(data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
+      const marker = new google.maps.Marker({
+        position: new google.maps.LatLng(data[i][2], data[i][3]),
+        map: map,
+        animation: google.maps.Animation.DROP,
+        title: data[i][0],
+        icon: svgMarker
+      });
+
+      markers.push(marker)
+
+      $.ajax({
+        type: 'GET',
+        url: '/electra/info_box/',
+        data: {
+          'venuename': data[i][0]
+        },
+        success: function(data) {
+
+          data.forEach(([cafeId, cafeName, cafeAddress]) => {
+            var myCol = $('<div id="col"></div>');
+            var myPanel = $(
+              `
             <div class="card-group">
             <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
               <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">
@@ -672,264 +851,268 @@ const putListMarkersOnMap = function(data, map, listId) {
             </div>
           </div>
           `
-          );
-          $(".venue-address", myPanel).html(cafeAddress);
-          $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
-          myPanel.appendTo(myCol);
-          myCol.appendTo('#indexCardList');
+            );
+            $(".venue-address", myPanel).html(cafeAddress);
+            $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
+            myPanel.appendTo(myCol);
+            myCol.appendTo('#indexCardList');
 
-          document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-            if (e.target && e.target.matches("a.add")) {
-              console.log(e.target.id)
-              currentVenue = e.target.getAttribute('data-idtext')
-              addToListModal(currentVenue)
+            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
+              if (e.target && e.target.matches("a.add")) {
+                console.log(e.target.id)
+                currentVenue = e.target.getAttribute('data-idtext')
+                addToListModal(currentVenue)
+              };
+            });
+
+            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
+              if (e.target && e.target.matches("a.remove")) {
+                console.log(e.target.id)
+                currentVenue = e.target.getAttribute('data-idtext')
+                removeFromListModal(currentVenue, listId)
+              };
+            });
+
+            marker.addListener("click", () => {
+              for (i = 0; i < markers.length; i++) {
+                markers[i].setIcon(svgMarker);
+              };
+              let cards = document.getElementsByClassName('venue-card card card-body');
+              console.log(cards)
+              for (i = 0; i < cards.length; i++) {
+                console.log(cards[i])
+                if (cards[i].classList.contains('selected-card')) {
+                  cards[i].classList.remove("selected-card");
+                }
+              };
+              scrollToCard()
+            });
+
+            const scrollToCard = function() {
+              map.panTo(marker.getPosition())
+              map.setZoom(15);
+              let clickedMarker = marker.title
+              console.log(clickedMarker);
+              let venues = document.getElementsByClassName('card-title venue-name');
+              for (i = 0; i < venues.length; i++) {
+                if (venues[i].innerText == clickedMarker) {
+                  marker.setIcon(selectedSvgMarker);
+                  let matchedMarker = venues[i].innerText
+                  console.log('Found match: ' + matchedMarker)
+                  markersCard = document.getElementById(`${matchedMarker}-cardbody`);
+                  markersCard.classList.add("selected-card")
+                  markersCard.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest"
+                  });
+                };
+              }
+            }
+
+            const panToMarker = function(clickedCard, markers) {
+              console.log(clickedCard);
+              console.log(markers)
+              for (i = 0; i < markers.length; i++) {
+                if (markers[i].title == clickedCard) {
+                  let matchedMarker = markers[i];
+                  marker.setIcon(selectedSvgMarker);
+                  map.panTo(matchedMarker.getPosition())
+                  map.setZoom(15);
+                };
+              }
             };
-          });
-
-          document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-            if (e.target && e.target.matches("a.remove")) {
-              console.log(e.target.id)
-              currentVenue = e.target.getAttribute('data-idtext')
-              removeFromListModal(currentVenue, listId)
-            };
-          });
-
-    marker.addListener("click", () => {
-      for (i = 0; i < markers.length; i++) { 
-        markers[i].setIcon(svgMarker);
-        };
-      let cards = document.getElementsByClassName('venue-card card card-body');
-      console.log(cards)
-      for (i = 0; i < cards.length; i++) {
-        console.log(cards[i])
-        if (cards[i].classList.contains('selected-card')){
-          cards[i].classList.remove("selected-card");
-        }
-      };
-      scrollToCard()
-    });
-
-    const scrollToCard = function(){
-      map.panTo(marker.getPosition())
-      map.setZoom(15);
-      let clickedMarker = marker.title
-      console.log(clickedMarker);
-      let venues = document.getElementsByClassName('card-title venue-name');
-        for (i = 0; i < venues.length; i++) {
-          if (venues[i].innerText == clickedMarker) {
-            marker.setIcon(selectedSvgMarker);
-            let matchedMarker = venues[i].innerText
-            console.log('Found match: ' + matchedMarker)
-            markersCard = document.getElementById(`${matchedMarker}-cardbody`);
-            markersCard.classList.add("selected-card")
-            markersCard.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
-          };   
-        }
-    }
-
-    const panToMarker = function(clickedCard, markers){
-      console.log(clickedCard);
-      console.log(markers)
-        for (i = 0; i < markers.length; i++) {
-          if (markers[i].title == clickedCard) {
-            let matchedMarker = markers[i];
-            marker.setIcon(selectedSvgMarker);
-            map.panTo(matchedMarker.getPosition())
-            map.setZoom(15);
-          };   
-        }
-    };
-          //user clicks card, pan to marker
-          document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
+            //user clicks card, pan to marker
+            document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
               clickedCard = e.target.getAttribute('data-idtext')
               console.log(clickedCard)
 
-              for (i = 0; i < markers.length; i++) { 
+              for (i = 0; i < markers.length; i++) {
                 markers[i].setIcon(svgMarker);
-                };
+              };
               panToMarker(clickedCard, markers, data)
+            });
           });
-        });
-      }
-    });
-    map.setCenter(new google.maps.LatLng(data[0][2], data[0][3]));
-    map.setZoom(14)
-  }
-};
-
-const clearMarkers = function(map) {
-  for (let i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
+        }
+      });
+      map.setCenter(new google.maps.LatLng(data[0][2], data[0][3]));
+      map.setZoom(14)
+    }
   };
-};
 
-const addToListModal = function(venueName) {
-  var userName = document.getElementById("username").innerText;
-  console.log(userName);
-  console.log(venueName);
-  $("#userListsModal").empty();
-  $('#userlist-modal').modal('show');
-  $.ajax({
-    type: 'GET',
-    url: '/api/userlist/',
-    data: {
-      'username': userName
-    },
-    success: function(data) {
-      console.log(data)
-      data.forEach(item => {
-        var listName = item.list_name;
-        var listId = item.id;
-        console.log(listName)
-        console.log(listId)
-        var listItem = $("#userListsModal").append(
-          `<li class="userlistModal" id="${listName}" 
+  const clearMarkers = function(map) {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(null);
+    };
+  };
+
+  const addToListModal = function(venueName) {
+    var userName = document.getElementById("username").innerText;
+    console.log(userName);
+    console.log(venueName);
+    $("#userListsModal").empty();
+    $('#userlist-modal').modal('show');
+    $.ajax({
+      type: 'GET',
+      url: '/api/userlist/',
+      data: {
+        'username': userName
+      },
+      success: function(data) {
+        console.log(data)
+        data.forEach(item => {
+          var listName = item.list_name;
+          var listId = item.id;
+          console.log(listName)
+          console.log(listId)
+          var listItem = $("#userListsModal").append(
+            `<li class="userlistModal" id="${listName}" 
                   data-name="${listName}" data-pk="${listId}">
                     ${listName}
                 </li>`)
-      });
-    }
+        });
+      }
+    });
+  };
+
+  $("#userListsModal").on('click', "li", function(e) {
+    var listname = e.target.getAttribute('data-name');
+    var listId = e.target.getAttribute('data-pk');
+    console.log(`Adding ${currentVenue} to ${listname}:${listId}`);
+    addVenueToList(listId, currentVenue);
+    e.preventDefault();
   });
-};
-
-$("#userListsModal").on('click', "li", function(e) {
-  var listname = e.target.getAttribute('data-name');
-  var listId = e.target.getAttribute('data-pk');
-  console.log(`Adding ${currentVenue} to ${listname}:${listId}`);
-  addVenueToList(listId, currentVenue);
-  e.preventDefault();
-});
 
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      // Does this cookie string begin with the name we want?
-      if (cookie.substring(0, name.length + 1) === (name + '=')) {
-        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-        break;
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
     }
+    return cookieValue;
   }
-  return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
+  const csrftoken = getCookie('csrftoken');
 
-const addVenueToList = function(listId, venue) {
-  console.log(venue);
-  console.log(listId);
+  const addVenueToList = function(listId, venue) {
+    console.log(venue);
+    console.log(listId);
 
-  $.ajax({
-    type: "POST",
-    url: '/api/uservenue/',
-    dataType: 'json',
-    data: {
-      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
-      'user_list': listId,
-      'venue': venue
-    },
-    success: function(data) {
-      $("#userlist-modal").modal('hide');
-      showSnackBar()
-    },
-  });
-};
+    $.ajax({
+      type: "POST",
+      url: '/api/uservenue/',
+      dataType: 'json',
+      data: {
+        csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+        'user_list': listId,
+        'venue': venue
+      },
+      success: function(data) {
+        $("#userlist-modal").modal('hide');
+        showSnackBar()
+      },
+    });
+  };
 
-const removeFromListModal = function(venueName, listId) {
-  var userName = document.getElementById("username").innerText;
-  console.log(userName);
-  console.log(venueName);
-  console.log(listId);
-  $('#remove-venue-from-list-modal').modal('show');
-  $("#remove-text").html(`Are you sure you want to remove ${venueName}?`);
-  $("#remove-venue-button").click(function(){
-    console.log("clicked remove")
-    $('#remove-venue-from-list-modal').modal('hide');
-    removeVenueFromList(venueName, listId);
-  })
-};
+  const removeFromListModal = function(venueName, listId) {
+    var userName = document.getElementById("username").innerText;
+    console.log(userName);
+    console.log(venueName);
+    console.log(listId);
+    $('#remove-venue-from-list-modal').modal('show');
+    $("#remove-text").html(`Are you sure you want to remove ${venueName}?`);
+    $("#remove-venue-button").click(function() {
+      console.log("clicked remove")
+      $('#remove-venue-from-list-modal').modal('hide');
+      removeVenueFromList(venueName, listId);
+    })
+  };
 
-const removeVenueFromList = function(venueName, listId){
-  $.ajax({
-    type: 'GET',
-    url: '/electra/remove_venue_from_list',
-    data: {
-      // csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value
-      'user_list': listId,
-      'venue': venueName
-    },
-    success: function(data) {
+  const removeVenueFromList = function(venueName, listId) {
+    $.ajax({
+      type: 'GET',
+      url: '/electra/remove_venue_from_list',
+      data: {
+        // csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value
+        'user_list': listId,
+        'venue': venueName
+      },
+      success: function(data) {
         console.log("removed")
         getClickedListVenues(listId);
         showRemovedSuccessSnackBar();
-    }  
+      }
+    });
+
+  }
+
+  const getNearbyPromotions = function(map) {
+    const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
+    const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
+    const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
+    const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
+
+    $.ajax({
+      type: 'GET',
+      url: '/api/promotion/',
+      data: {
+        'neLat': lat0,
+        'neLng': lng0,
+        'swLat': lat1,
+        'swLng': lng1
+      },
+      success: function(data) {
+        console.log(data)
+      }
+    });
+  };
+
+  // document.getElementById("dashboard").addEventListener('click', function() {
+  //   var user = document.getElementById("username").innerText;
+
+  //   viewDashboard(user);
+  // });
+
+  const viewDashboard = function(user) {
+    console.log("Going to the Dashboard of:" + " " + user);
+    userName = "/" + user;
+    window.location.href = userName;
+  };
+
+  // $("#profile").click(function() {
+  //   console.log("clicked profile")
+  //   showProfileModal()
+  // });
+
+  $("#username").click(function() {
+    console.log("clicked profile")
+    showProfileModal()
   });
 
-}
+  const showProfileModal = function() {
+    $("#profile-modal").modal('show');
+  };
 
-const getNearbyPromotions = function(map) {
-  const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
-  const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
-  const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
-  const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
-
-  $.ajax({
-    type: 'GET',
-    url: '/api/promotion/',
-    data: {
-      'neLat': lat0,
-      'neLng': lng0,
-      'swLat': lat1,
-      'swLng': lng1
-    },
-    success: function(data) {
-      console.log(data)
-    }
-  });
-};
-
-// document.getElementById("dashboard").addEventListener('click', function() {
-//   var user = document.getElementById("username").innerText;
-  
-//   viewDashboard(user);
-// });
-
-const viewDashboard = function(user) {
-  console.log("Going to the Dashboard of:" + " " + user);
-  userName = "/" + user;
-  window.location.href = userName;
-};
-
-// $("#profile").click(function() {
-//   console.log("clicked profile")
-//   showProfileModal()
-// });
-
-$("#username").click(function() {
-  console.log("clicked profile")
-  showProfileModal()
-});
-
-const showProfileModal = function() {
-  $("#profile-modal").modal('show');
-};
-
-// document.getElementById("edit-profile").addEventListener('click', function() {
-//   console.log("click")
-//   $("#edit-profile-modal").modal('show');
-// })
+  // document.getElementById("edit-profile").addEventListener('click', function() {
+  //   console.log("click")
+  //   $("#edit-profile-modal").modal('show');
+  // })
 
 });
 
 // feedback modal
-$("#feedback").click(function(){
-  $("#feedback-modal").modal('show'); 
+$("#feedback").click(function() {
+  $("#feedback-modal").modal('show');
 })
 
-$("#submit-feedback").click(function(){
+$("#submit-feedback").click(function() {
   let user = $("#feedback-name").val();
   let typeOfFeedback = $("#feedback-type").val();
   let description = $("#feedback-description").val();
@@ -943,21 +1126,21 @@ const sendFeedback = function(typeOfFeedback, description) {
     type: 'POST',
     url: '/electra/feedback/',
     data: {
-    csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
-    'feedback_type' : typeOfFeedback,
-    'feedback_content' : description
+      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+      'feedback_type': typeOfFeedback,
+      'feedback_content': description
     },
     success: function(data) {
-     console.log("All good, sent")
+      console.log("All good, sent")
     }
   });
 };
 
-$("#suggest-place").click(function(){
-  $("#suggestion-modal").modal('show'); 
+$("#suggest-place").click(function() {
+  $("#suggestion-modal").modal('show');
 })
 
-$("#submit-suggestion").click(function(){
+$("#submit-suggestion").click(function() {
   let user = $("#suggestor").val();
   let venueName = $("#suggestion-name").val();
   let venueType = $("#venue-type").val();
@@ -971,10 +1154,10 @@ const sendSuggestion = function(venueName, venueType, venueAddress) {
     type: 'POST',
     url: '/electra/suggestion/',
     data: {
-    csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
-    'venue_name' : venueName,
-    'venue_type' : venueType,
-    'venue_address' : venueAddress
+      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+      'venue_name': venueName,
+      'venue_type': venueType,
+      'venue_address': venueAddress
     },
     success: function(data) {
       $("#suggestion-modal").modal('show');
@@ -992,7 +1175,9 @@ function showSnackBar() {
   x.className = "show";
 
   // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, 3000);
 }
 
 function showDeleteSuccessSnackBar() {
@@ -1003,7 +1188,9 @@ function showDeleteSuccessSnackBar() {
   x.className = "show";
 
   // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, 3000);
 }
 
 function showRemovedSuccessSnackBar() {
@@ -1014,34 +1201,43 @@ function showRemovedSuccessSnackBar() {
   x.className = "show";
 
   // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  setTimeout(function() {
+    x.className = x.className.replace("show", "");
+  }, 3000);
 }
 
-$("#openbtn").click(function(){
+$("#openbtn").click(function() {
   toggleNav()
 });
 
-const toggleNav = function(){
+const toggleNav = function() {
   let sideBar = $("#mySidebar")
   let openBtn = $(".openbtn")
   let mapCards = $(".map-venue-cards")
-    if (sideBar.hasClass("closed-sidebar"))
-    {
-      sideBar.removeClass("closed-sidebar")
-      sideBar.addClass("open-sidebar")
-      openBtn.addClass("pushedbtn")
-      mapCards.addClass("pushedcards")
-     
-    }
-    else {
-      sideBar.removeClass("open-sidebar")
-      sideBar.addClass("closed-sidebar")
-      openBtn.removeClass("pushedbtn")
-      mapCards.removeClass("pushedcards")
+  if (sideBar.hasClass("closed-sidebar")) {
+    sideBar.removeClass("closed-sidebar")
+    sideBar.addClass("open-sidebar")
+    openBtn.addClass("pushedbtn")
+    mapCards.addClass("pushedcards")
 
-    };
+  } else {
+    sideBar.removeClass("open-sidebar")
+    sideBar.addClass("closed-sidebar")
+    openBtn.removeClass("pushedbtn")
+    mapCards.removeClass("pushedcards")
+  };
 }
 
+function resetHeight() {
+  console.log(`${window.innerHeight}px`)
+  // reset the body height to that of the inner browser
+  document.body.style.height = `${window.innerHeight}px`;
+  // document.getElementsByClassName("open-sidebar").style.height = `${window.innerHeight}px`;  
+}
+// reset the height whenever the window's resized
+window.addEventListener("resize", resetHeight);
+// called to initially set the height.
+resetHeight();
 
 // /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
 // function closeNav() {
@@ -1049,3 +1245,26 @@ const toggleNav = function(){
 //   document.getElementById("main").style.marginLeft = "0";
 // }
 
+
+
+// function getFriends(map) {
+//   const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
+//   const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
+//   const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
+//   const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
+
+//   $.ajax({
+//     type: 'GET',
+//     url: '/electra/get_friends/',
+//     data: {
+//       'neLat': lat0,
+//       'neLng': lng0,
+//       'swLat': lat1,
+//       'swLng': lng1
+//     },
+//     success: function(data) {
+//       console.log(data)
+//       addSearchedMarkersToMap(data, map)
+//     }
+//   });
+// };

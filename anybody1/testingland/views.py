@@ -110,7 +110,7 @@ def search(request):
     print(search_term)
     qs = mapCafes.objects.filter(cafe_name__istartswith = search_term)[0:5]
     return JsonResponse([
-            [cafe.cafe_name]
+            [cafe.cafe_name, cafe.cafe_address]
             for cafe in qs
     ], safe=False)
 
@@ -204,6 +204,15 @@ def marker_info(request):
 
     qs = mapCafes.objects.filter(geolocation__coveredby=geom)
 
+    return JsonResponse([
+            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x]
+            for cafe in qs
+    ], safe=False)
+
+def place_search(request):
+    template_name = 'testingland/index2.html'
+    name = request.GET.get('venuename', None)
+    qs = mapCafes.objects.filter(cafe_name = name) 
     return JsonResponse([
             [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x]
             for cafe in qs

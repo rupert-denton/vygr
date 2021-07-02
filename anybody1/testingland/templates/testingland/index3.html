@@ -34,18 +34,22 @@
     <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
   </head>
-
   <body>
     <nav class="navbar">
       <a class="navbar-brand page-title" href="#">VYGR</a>
-      <form>
         <div class="search-bar input-group">
-          <input type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <button id="search-type" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
+            <ul class="dropdown-menu">
+              <li><i id="address" class="bi bi-geo-alt-fill dropdown-item"> Address</i></li>
+              <li><i id="place" class="bi bi-shop dropdown-item"> Place</i></li>
+            </ul>
+          <input id="search-box" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <ul id="search-results" class="search-results"></ul>
           <div class="input-group-append">
-            <button id="submit" class="btn btn-outline-secondary" type="button">Search</button>
+            <button id="submit" class="btn" type="button"><i class="bi bi-search"></i>
+            </button>
           </div>
         </div>
-      </form>
       <div class="nav-buttons">
         {% if user.is_authenticated%}
         <a id="username" class="nav-username"> {{ user.get_username }} </a>
@@ -77,10 +81,11 @@
             </ul>
           </div>
         </div>
-
+        <p id="hidden" hidden>Testing</p>
         <div class="main col-12">
           <button class="openbtn" onclick="toggleNav()">&#9776;</button>
           <div id="map" class="google-map">
+            
           </div>
         </div>
 
@@ -334,15 +339,48 @@
         </div>
       </div>
     </div>
+    
+    <div class="modal" id="venue-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 id="modal-venue-title" class="modal-title ml-2"></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body bg-white p-2 m-3">
+            <div id="photo-section">
+              <img id="modal-venue-images" class="img-fluid mx-auto d-block" src="">
+            </div>
+            <div class="mt-3 mb-2">
+              <h5 id="modal-venue-address" class="subtitle text-muted"></h5>
+            </div>
+            <div>
+              <p id="modal-venue-description" class="body-text"></p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="modal-readmore" type="button" class="btn">Read More...</button>
+            <button type="button" class="btn " data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
     </div>
+    
 
 
+
+
+
     </div>
     </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="{% static "/testingland/js/index2.js" %}"> </script>
+    
+    
     {% endblock %}
   </body>
 

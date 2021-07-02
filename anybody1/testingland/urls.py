@@ -25,6 +25,7 @@ urlpatterns = [
     url('electra/search/', views.search, name='search'),
     url('electra/filter/', views.venue_filter, name='filter'),
     url('electra/get_searched_venue_details/', views.get_searched_venue_details, name='get_searched_venue_details'),
+    url('electra/place_search/', views.place_search, name='place_search'),
     url('add_cafe', views.add_cafe, name='add_cafe'), 
     url('update_cafe', views.update_cafe, name='update_cafe'), 
     url('add_image', views.add_image, name='add_image'), 
