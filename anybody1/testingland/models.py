@@ -155,7 +155,11 @@ class mapCafes(models.Model):
 #Create an intermediary class that references the mapCafes class (with a ForeignKey), when someone hits an "add-to-list"
 #the two keys needed are what is the venue/cafe and what is the list.
 
-
+class liked(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    liked_venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
+    
+   
 class UserList(models.Model):
     list_name = models.CharField(max_length=255)
     user = models.ForeignKey(User, on_delete=models.CASCADE) 
@@ -164,11 +168,13 @@ class UserList(models.Model):
         return self.list_name
 
 class UserVenue(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
     user_list = models.ForeignKey(UserList, on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ['user_list','venue']
+
 
 #this is here because removing it made it a headache
 

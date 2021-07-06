@@ -1,4 +1,5 @@
 var markers = new Set(); //empty array
+var selectedPlaces = new Set()
 var marker, i;
 var service;
 
@@ -76,12 +77,17 @@ $(document).ready(function() {
 
     const switchSearchType = function() {
       let searchType = $("#search-type-icon")
+      let searchInput = $('#search-box')
       if (searchType.hasClass("bi bi-geo-alt-fill")) {
         searchType.removeClass("bi bi-geo-alt-fill")
         searchType.addClass("bi bi-shop")
+        searchInput.attr('placeholder', 'Search Address...');
+
       } else if (searchType.hasClass("bi bi-shop")) {
         searchType.removeClass("bi bi-shop")
         searchType.addClass("bi bi-geo-alt-fill")
+        searchInput.attr('placeholder', 'Search Place...');
+
       }
     };
 
@@ -97,7 +103,6 @@ $(document).ready(function() {
 
     //search area
     document.getElementById("area-search").addEventListener("click", () => {
-      console.log("Clicked!");
       getVenues(map)
       toggleNav()
     });
@@ -394,7 +399,6 @@ $(document).ready(function() {
     if ($("#search-type-icon").hasClass("bi bi-shop")) {
 
       const searchTerm = document.getElementById("search-box").value;
-      console.log(searchTerm)
 
       // Don't want to search if only a few characters
       if (searchTerm.length < 2) {
@@ -409,8 +413,6 @@ $(document).ready(function() {
   });
 
 
-
-
   const search = function() {
     $("#search-results").empty()
     let searchTerm = document.getElementById("search-box").value;
@@ -421,75 +423,69 @@ $(document).ready(function() {
         'search_term': searchTerm
       },
       success: function(data) {
-        console.log(data)
-        data.forEach(([cafeName, cafeAddress]) => {
+        data.forEach(([cafeId, cafeName, cafeAddress]) => {
+          var cafeId = cafeId;
           var cafeName = cafeName;
           var cafeAddress = cafeAddress;
-          var searchList = $(
-            `<div>
-              <li class="search-list-item ml-2" data-idtext="${cafeName}" id="${cafeName}">
-              ${cafeName}
-              <span class="text-muted ml-2">${cafeAddress}</span>
-              </li>
-          </div>`
-          );
-          searchList.appendTo('#search-results');
-        });
-
-        $("#search-results").click(function(event) {
-
-          var selectedVenue = event.target.id;
-          $("#search-results").empty()
-          console.log("Clicked" + " " + selectedVenue);
-          $("#search-box").val(selectedVenue)
-
-          $.ajax({
-            type: 'GET',
-            url: 'electra/place_search/',
-            data: {
-              'venuename': selectedVenue
-            },
-            success: function(data) {
-              console.log(data)
-              addSearchedMarkersToMap(data, map)
-            }
-          });
+            var searchList = $(
+              `<div>
+                <li class="search-list-item ml-2" data-idtext="${cafeName}" id="${cafeName}">
+                ${cafeName}
+                <span class="text-muted ml-2" data-idtext="${cafeName}">${cafeAddress}</span>
+                </li>
+            </div>`
+            );
+            searchList.appendTo('#search-results');
+          
         });
       }
     });
   };
 
-  // const changeMarkerPosition = function(data) {
-  //   const svgMarker = {
-  //     path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
-  //     fillColor: "grey",
-  //     fillOpacity: 1,
-  //     strokeWeight: 1.2,
-  //     rotation: 0,
-  //     scale: 1.8,
-  //     anchor: new google.maps.Point(15, 30),
-  //   };
+  $("#search-results").click(function(event) {
+    var selectedVenue = $(event.target).data("idtext");
+    $("#search-results").empty()
+    console.log("Clicked" + " " + selectedVenue);
+    $("#search-box").val(selectedVenue)
+    // selectedPlaces.add(selectedVenue);
 
-  //   let x = data[0][4]
-  //   let y = data[0][5]
-
-  //   const marker = new google.maps.Marker({
-  //     position: {
-  //       lat: x,
-  //       lng: y
-  //     },
-  //     map: map,
-  //     animation: google.maps.Animation.DROP,
-  //     title: data[0][1],
-  //     icon: svgMarker
-  //   })
-  //   map.setCenter(marker.getPosition());
-  //   map.setZoom(15)
-  // };
+    $.ajax({
+      type: 'GET',
+      url: 'electra/place_search/',
+      data: {
+        'venuename': selectedVenue
+      },
+      success: function(data) {
+        console.log(data)
+        addSearchedMarkersToMap(data, map)
+        let lat = data[0][2]
+        let lng = data[0][3]
+        let position = {lat, lng}
+        
+        map.setCenter(position);
+        map.setZoom(15)
+      
+      }
+    });
+  });
 
   var searchedCafeNamesList = []
   var clickedListCafeNamesList = []
   var markers = []
+  var likedVenues = new Set(); //empty array 
+
+  $.ajax({
+    type: 'GET',
+    url: '/api/liked/',
+    data: {
+    },
+    success: function(data) {
+      for (i = 0; i < data.length; i++){
+        let likedCafe = data[i].liked_venue.cafe_name;
+        likedVenues.add(likedCafe)
+      }
+    }
+  });
 
   const addSearchedMarkersToMap = function(data, map) {
     searchedCafeNamesList = []
@@ -513,7 +509,6 @@ $(document).ready(function() {
           'cafeName': cafeName,
         },
         success: function(data) {
-          console.log(data)
           putSearchedMarkersOnMap(data, map, listId)
         }
       });
@@ -521,6 +516,9 @@ $(document).ready(function() {
   };
 
   const putSearchedMarkersOnMap = function(data, map, listId) {
+
+  
+
     const svgMarker = {
       path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
       fillColor: "grey",
@@ -543,7 +541,7 @@ $(document).ready(function() {
 
 
     for (let i = 0; i < data.length; i++) {
-      console.log("hey" + " " + data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
+      console.log(data[i][0], parseFloat(data[i][2]), parseFloat(data[i][3]))
       const marker = new google.maps.Marker({
         position: new google.maps.LatLng(data[i][2], data[i][3]),
         map: map,
@@ -573,6 +571,12 @@ $(document).ready(function() {
                       ${cafeName}
                     </h5>
                     <h6 class="venue-address card-subtitle mb-2 text-muted"></h6>
+                    <span>
+                    <i id="${cafeName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${cafeId}"></i>
+                    <i id="${cafeName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${cafeId}"></i>
+                    <i id="share" class="card-icon bi bi-share-fill default-bookmark"></i>
+
+                    </span>
                     <div class="dropdown">
                       <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
                       <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -585,10 +589,19 @@ $(document).ready(function() {
               `
             );
             $(".venue-address", myPanel).html(cafeAddress);
-            $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
+
             myPanel.appendTo(myCol);
             myCol.appendTo('#indexCardList');
 
+            //check if venue has been liked by the user and add css class if so
+                console.log(likedVenues)
+                  if(likedVenues.has(cafeName)){
+                    console.log("Match found" + cafeName)
+                    let venueHeart = document.getElementById(cafeName + "-like")
+                    console.log(venueHeart)
+                    venueHeart.classList.add("liked-venue")
+                  }
+ 
             document.getElementById(cafeName + "-card").addEventListener('click', function() {
               console.log(cafeName)
               $('#venue-modal').modal('show');
@@ -676,6 +689,19 @@ $(document).ready(function() {
               };
             });
 
+            document.getElementById(cafeName + "-bookmark").addEventListener('click', function(e) {
+              let currentVenue = e.target.getAttribute('data-idtext')
+              console.log("Bookmarking " + currentVenue)
+              addToListModal(currentVenue)
+            });
+
+            //liked venu
+            document.getElementById(cafeName + "-like").addEventListener('click', function(e) {
+              let likedPlace = e.target.getAttribute('data-idtext')
+              console.log("Liking " + likedPlace)
+              addVenueToLiked(likedPlace)
+            });
+
             document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
               if (e.target && e.target.matches("a.remove")) {
                 console.log(e.target.id)
@@ -741,23 +767,47 @@ $(document).ready(function() {
             //user clicks card, pan to marker
             document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
               clickedCard = e.target.getAttribute('data-idtext')
-
-
               for (i = 0; i < markers.length; i++) {
                 markers[i].setIcon(svgMarker);
               };
               panToMarker(clickedCard, markers, data)
             });
           });
-
+            
         }
       });
-      // map.setCenter(new google.maps.LatLng(data[0][2], data[0][3]));
-      // map.setZoom(14)
     }
   };
 
+  $("#liked-venues").click(function() {
+    console.log("ClickedLike")
+    getLikedVenues()
+  })
 
+  const getLikedVenues = function(){
+    $.ajax({
+      type: 'GET',
+      url: '/api/liked/',
+      data: {
+      },
+      success: function(data) {
+        console.log(data)
+        addLikedVenuesToMap(data, map)
+      }
+    });
+  };
+  
+  const addLikedVenuesToMap = function(data, map) {
+    console.log(data)
+    likedVenuesList = []
+    clearMarkers()
+    $("#indexCardList").empty()
+    for (i = 0; i < data.length; i++) { //puts markers in the markers set
+      likedVenuesList.push(data[i].liked_venue.cafe_name);
+    };
+    console.log(likedVenuesList)
+    gatherListMarkerData(likedVenuesList, map)
+  };
 
   const addClickedListMarkersToMap = function(data, map, listId) {
     clickedListCafeNamesList = []
@@ -781,7 +831,7 @@ $(document).ready(function() {
         },
         success: function(data) {
           console.log(data)
-          putListMarkersOnMap(data, map, listId)
+          putSearchedMarkersOnMap(data, map, listId)
         }
       });
     }
@@ -833,27 +883,27 @@ $(document).ready(function() {
             var myCol = $('<div id="col"></div>');
             var myPanel = $(
               `
-            <div class="card-group">
-            <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
-              <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">
-                <h5 class="card-title venue-name" id="${cafeName}-card">
-                  <a href="venue/${cafeId}" id="${cafeName}-link" data-idtext="${cafeName}" class="card-link" target="_blank" rel="noreferrer noopener">${cafeName}</a>
-                </h5>
-                <h6 class="card-subtitle mb-2 text-muted venue-address"></h6>
-                <div class="dropdown">
-                  <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
-                  <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a id="share ${cafeName}" data-idtext="share-${cafeName}" class="dropdown-item" href="#">Share</a>
-                    <a id="add ${cafeName}" data-idtext="${cafeId}" class="dropdown-item add" href="#">Add to List</a>
-                    <a id="remove ${cafeName}" data-idtext="${cafeId}" class="dropdown-item remove" href="#">Remove from List</a></div>
+              
+              <div class="card-group">
+              <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
+                <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">
+                  <h5 class="card-title venue-name" id="${cafeName}-card" data-idtext="${cafeName}">
+                    ${cafeName}
+                  </h5>
+                  <h6 class="venue-address card-subtitle mb-2 text-muted"></h6>
+                  <div class="dropdown">
+                    <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+                    <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a id="share ${cafeName}" data-idtext="share-${cafeName}" class="dropdown-item" href="#">Share</a>
+                      <a id="add ${cafeName}" data-idtext="${cafeId}" class="dropdown-item add" href="#">Add to List</a>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           `
             );
             $(".venue-address", myPanel).html(cafeAddress);
-            $(".venue-options", myPanel).html('<i id="test" class="fas fa-ellipsis-h"></i>');
+            $(".venue-options", myPanel).html('<i class="bi bi-three-dots"></i>');
             myPanel.appendTo(myCol);
             myCol.appendTo('#indexCardList');
 
@@ -946,12 +996,13 @@ $(document).ready(function() {
     };
   };
 
-  const addToListModal = function(venueName) {
+  const addToListModal = function(venueToAdd) {
     var userName = document.getElementById("username").innerText;
     console.log(userName);
-    console.log(venueName);
+    console.log("venue ID is " + venueToAdd);
     $("#userListsModal").empty();
     $('#userlist-modal').modal('show');
+    // gets the user's lists and adds them to modal
     $.ajax({
       type: 'GET',
       url: '/api/userlist/',
@@ -973,15 +1024,17 @@ $(document).ready(function() {
         });
       }
     });
-  };
+  
 
   $("#userListsModal").on('click', "li", function(e) {
     var listname = e.target.getAttribute('data-name');
     var listId = e.target.getAttribute('data-pk');
-    console.log(`Adding ${currentVenue} to ${listname}:${listId}`);
-    addVenueToList(listId, currentVenue);
+    console.log(`The selected venue is ${venueToAdd}`)
+    console.log(`Adding ${venueToAdd} to ${listname}:${listId}`);
+    addVenueToList(listId, venueToAdd);
     e.preventDefault();
   });
+};
 
 
   function getCookie(name) {
@@ -1001,21 +1054,38 @@ $(document).ready(function() {
   }
   const csrftoken = getCookie('csrftoken');
 
-  const addVenueToList = function(listId, venue) {
-    console.log(venue);
+  const addVenueToList = function(listId, venueToAdd) {
+    console.log(venueToAdd);
     console.log(listId);
 
     $.ajax({
       type: "POST",
-      url: '/api/uservenue/',
+      url: '/api/userlistvenue/',
       dataType: 'json',
       data: {
         csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
         'user_list': listId,
-        'venue': venue
+        'venue': venueToAdd
       },
       success: function(data) {
         $("#userlist-modal").modal('hide');
+        showSnackBar()
+      },
+    });
+  };
+
+  const addVenueToLiked = function(placeToAdd) {
+    console.log(placeToAdd);
+
+    $.ajax({
+      type: "POST",
+      url: '/api/liked/',
+      dataType: 'json',
+      data: {
+        csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+        'liked_venue': placeToAdd
+      },
+      success: function(data) {
         showSnackBar()
       },
     });
@@ -1074,23 +1144,6 @@ $(document).ready(function() {
     });
   };
 
-  // document.getElementById("dashboard").addEventListener('click', function() {
-  //   var user = document.getElementById("username").innerText;
-
-  //   viewDashboard(user);
-  // });
-
-  const viewDashboard = function(user) {
-    console.log("Going to the Dashboard of:" + " " + user);
-    userName = "/" + user;
-    window.location.href = userName;
-  };
-
-  // $("#profile").click(function() {
-  //   console.log("clicked profile")
-  //   showProfileModal()
-  // });
-
   $("#username").click(function() {
     console.log("clicked profile")
     showProfileModal()
@@ -1099,11 +1152,6 @@ $(document).ready(function() {
   const showProfileModal = function() {
     $("#profile-modal").modal('show');
   };
-
-  // document.getElementById("edit-profile").addEventListener('click', function() {
-  //   console.log("click")
-  //   $("#edit-profile-modal").modal('show');
-  // })
 
 });
 
@@ -1165,6 +1213,9 @@ const sendSuggestion = function(venueName, venueType, venueAddress) {
     }
   });
 };
+
+
+
 
 
 function showSnackBar() {
@@ -1268,3 +1319,6 @@ resetHeight();
 //     }
 //   });
 // };
+
+
+console.log("index2.js 0.01");

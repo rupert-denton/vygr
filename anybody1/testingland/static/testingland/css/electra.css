@@ -59,7 +59,6 @@ ul {
 
 .dropdown-item:hover{
   cursor: pointer;
-
 }
 
 i{
@@ -128,8 +127,6 @@ i{
   z-index: 1;
   left: 0;
   /* overflow-x: hidden; Disable horizontal scroll */
-  padding-top: 30px;
-  /* Place content 60px from the top */
   transition: 0.1s;
   /* padding-right:20px */
 }
@@ -150,8 +147,8 @@ i{
 
 .sidebar-options-list {
   overflow: hidden;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   display: flex;
   justify-content: center;
 }
@@ -186,7 +183,7 @@ i{
 
 /* the individual user's lists */
 .userlist {
-  margin-top: 8px;
+  margin-top: 14px;
   margin-left: 5px;
   white-space: nowrap;
   overflow: hidden;
@@ -225,6 +222,51 @@ i{
 
 .pushedcards {
   transition: 0.1s;
+}
+
+.card-icon{
+  color: lightgrey;
+  font-size: 13px;
+  padding-left: 1px;
+}
+
+
+
+
+.default-like:hover{
+  color: #e4324c;
+  transition: 5ms;
+}
+
+.liked-venue{
+  color: #e4324c;
+}
+/* 
+.liked-venue:hover{
+  color: lightgrey;
+  transition: 5ms;
+} */
+
+.default-bookmark{
+}
+
+.default-bookmark:hover{
+  color: black;
+  transition: 5ms;
+}
+
+.bookmarked-venue{
+  color: black;
+}
+
+.userlistModal{
+  padding: 3px;
+  width: 450px;
+}
+
+.userlistModal:hover{
+  cursor: pointer;
+  color: grey;
 }
 
 /* validation  */
@@ -483,6 +525,15 @@ i{
     height: 535px;
   }
 
+  .sidebar-lists {
+    border-top-style: solid;
+    padding-left: 15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-top-color: lightgrey;
+    border-top-width: .1rem;
+  }
+
   .pushedbtn {
     margin-left: 207px;
   }
@@ -539,13 +590,18 @@ i{
     padding: 6px;
   }
 
+  .google-map{
+    height: 100vh;
+  }
+
   /* sidebar */
   .open-sidebar {
-    width: 187px;
+    width: 250px;
+    height: 100%;
   }
 
   .pushedbtn {
-    margin-left: 207px;
+    margin-left: 265px;
   }
 
   .pushedcards {
@@ -553,8 +609,14 @@ i{
   }
 
   .map-venue-cards {
-    top: 800px;
+    top: 1050px;
     left: 20px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .map-venue-cards{
+    top: 1200px;
   }
 }
 

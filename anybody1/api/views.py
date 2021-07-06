@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework import generics, permissions, mixins, status
 from .serializers import VenueListSerializer, UserListSerializer, UserVenueSerializer, UserConnectionSerializer
 from .serializers import UserConnectionListSerializer, UserInfoSerializer, CreateUserListSerializer, PromotionSerializer
-from .serializers import VenueCommentSerializer, ReplyCommentSerializer
+from .serializers import VenueCommentSerializer, ReplyCommentSerializer, AllBookMarkedSerializer, LikedSerializer
 from api import serializers
-from testingland.models import Venues, VenueList, UserVenue, UserList, UserConnections, User, PromotionCampaign, mapCafes, VenueComments
+from testingland.models import Venues, VenueList, UserVenue, UserList, UserConnections, User, PromotionCampaign, mapCafes, VenueComments, liked
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from django.utils.decorators import method_decorator
@@ -24,7 +24,7 @@ class CsrfExemptSession(SessionAuthentication):
     def enforce_csrf(self, request):
         return
 
-class UserVenueViewSet(viewsets.ModelViewSet):
+class UserListVenueViewSet(viewsets.ModelViewSet):
     serializer_class = UserVenueSerializer
 
     def get_queryset(self):
@@ -41,8 +41,35 @@ class UserVenueViewSet(viewsets.ModelViewSet):
     
             else:
                 return Response({'error' : serializer.errors}, status=400)
-                
+
+class UserLikedViewSet(viewsets.ModelViewSet):
+    serializer_class = LikedSerializer
+
+    def get_queryset(self):
+        return liked.objects.filter(user = self.request.user.id)
+
+    def create(self, request):
+        serializer_class = LikedSerializer
+
+        if self.request.method == "POST":
+            user = self.request.user.id
+            liked_venue = request.data.get('liked_venue')
+            print(user)
+            print(liked_venue)
+            data = {'user': user, 'liked_venue': liked_venue}
+            serializer = serializer_class(data=data)
+            
+            if serializer.is_valid():
+                instance = serializer.save()
+            
+                return Response({'status' : 'ok', 'user' : user, 'instance_id':instance.id}, status=200)
+    
+            else:
+                return Response({'error' : serializer.errors}, status=400)
+
+
 #this shows all lists for a user
+
 class UserListViewSet(viewsets.ModelViewSet):
     serializer_class = UserListSerializer
  
@@ -117,6 +144,18 @@ class SavedVenuesViewSet(viewsets.ModelViewSet):
         print(list_id)
         print(type(list_id))
         return UserVenue.objects.filter(user_list=int(float(list_id)))
+
+
+class AllBookMarkedVenuesViewSet(viewsets.ModelViewSet):
+    serializer_class = AllBookMarkedSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        print(user)
+        return VenueList.objects.filter(venue_name__user=self.request.user)
+
+
+
 
 class CurrentUserInfoViewSet(viewsets.ModelViewSet):
     serializer_class = UserInfoSerializer

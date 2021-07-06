@@ -110,7 +110,7 @@ def search(request):
     print(search_term)
     qs = mapCafes.objects.filter(cafe_name__istartswith = search_term)[0:5]
     return JsonResponse([
-            [cafe.cafe_name, cafe.cafe_address]
+            [cafe.id, cafe.cafe_name, cafe.cafe_address]
             for cafe in qs
     ], safe=False)
 

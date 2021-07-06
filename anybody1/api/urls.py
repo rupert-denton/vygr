@@ -7,8 +7,11 @@ router = DefaultRouter() #need help understanding router register
 
 # venues and lists features
 router.register('userlist', views.UserListViewSet, basename= 'userlist')
-router.register('uservenue', views.UserVenueViewSet, basename= 'uservenue')
+router.register('userlistvenue', views.UserListVenueViewSet, basename= 'userlistvenue')
 router.register('savedvenues', views.SavedVenuesViewSet, basename= 'savedvenues')
+router.register('allbookmarkedvenues', views.AllBookMarkedVenuesViewSet, basename= 'allbookmarkedvenues')
+router.register('liked', views.UserLikedViewSet, basename= 'liked')
+
 router.register('deletelist', views.DeleteListViewSet, basename= 'deletelist')
 router.register('removevenue', views.RemoveVenueViewSet, basename= 'removevenue')
 

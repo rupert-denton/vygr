@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from testingland.models import VenueList, Venues, UserList, UserVenue, mapCafes, UserConnections, User, PromotionCampaign
-from testingland.models import VenueComments, ReplyComments
+from testingland.models import VenueComments, ReplyComments, liked
 
 class mapCafesSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,17 +14,27 @@ class CreateUserListSerializer(serializers.ModelSerializer):
 
 class UserVenueSerializer(serializers.ModelSerializer):
     venue = mapCafesSerializer()
-   
-
+    
     class Meta:
         model = UserVenue
         fields = ['user_list', 'venue']
         depth = 2 
 
+class AllBookMarkedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VenueList
+        fields = ['title', 'user', 'venue_name']
+
 class UserListSerializer(serializers.ModelSerializer): #this is what we worked on on October 1
     class Meta:
         model = UserList
         fields = ['id', 'user', 'list_name']
+
+class LikedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = liked
+        fields = ['id', 'user', 'liked_venue']
+        depth = 2 
 
 class UserConnectionListSerializer(serializers.ModelSerializer):
     class Meta:
