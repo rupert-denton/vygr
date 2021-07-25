@@ -63,7 +63,7 @@ window.initMap = function() {
   })
 
   document.getElementById("update").addEventListener("click", () => {
-    console.log("Clicked Save!")
+    console.log("Clicked Update!")
     updateCafe();
   })
 }

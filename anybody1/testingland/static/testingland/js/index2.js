@@ -56,7 +56,7 @@ $(document).ready(function() {
           zoom: 15,
           mapId: '33df39eac4360b95',
           disableDefaultUI: true,
-          gestureHandling: 'greedy'
+          // gestureHandling: 'greedy'
         });
         console.log("Map Done. User location is " + [userLat + userLong]);
         showUserLists()
@@ -73,6 +73,13 @@ $(document).ready(function() {
     $("#address").click(function() {
       switchSearchType()
     });
+
+    $("#add").click(function() {
+      console.log("Clicked Save!")
+      commitNewCafe(geocoder)
+    });
+    
+
 
 
     const switchSearchType = function() {
@@ -182,14 +189,12 @@ $(document).ready(function() {
 
             filterPanel.appendTo(filterCol);
             filterCol.appendTo('#filterCardList');
-
             // getVenueDetails(selectedVenue, geocoder, marker, map)
           });
         })
       }
     });
   };
-
 
   //userlists functionality
   //displays lists in sidebar
@@ -234,7 +239,6 @@ $(document).ready(function() {
               deleteList(clickedListId, clickedList)
             }
           });
-
         })
       }
     });
@@ -516,9 +520,6 @@ $(document).ready(function() {
   };
 
   const putSearchedMarkersOnMap = function(data, map, listId) {
-
-  
-
     const svgMarker = {
       path: "M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z",
       fillColor: "grey",
@@ -559,30 +560,26 @@ $(document).ready(function() {
           'venuename': data[i][0]
         },
         success: function(data) {
+          console.log(data)
 
-          data.forEach(([cafeId, cafeName, cafeAddress]) => {
+          data.forEach(([cafeId, cafeName, cafeAddress, venueType, source]) => {
             var myCol = $('<div id="col"></div>');
             var myPanel = $(
               `
                 <div class="card-group">
-                <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
+                <div class="venue-card card card-block m-3">
                   <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">
                     <h5 class="card-title venue-name" id="${cafeName}-card" data-idtext="${cafeName}">
                       ${cafeName}
                     </h5>
-                    <h6 class="venue-address card-subtitle mb-2 text-muted"></h6>
+                    <h6 class="venue-address card-subtitle text-muted">${cafeAddress}</h6>
+                    <h6 class="venue-source card-subtitle">Added by ${source}</h6>
+
                     <span>
                     <i id="${cafeName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${cafeId}"></i>
                     <i id="${cafeName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${cafeId}"></i>
                     <i id="share" class="card-icon bi bi-share-fill default-bookmark"></i>
-
                     </span>
-                    <div class="dropdown">
-                      <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
-                      <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a id="share ${cafeName}" data-idtext="share-${cafeName}" class="dropdown-item" href="#">Share</a>
-                        <a id="add ${cafeName}" data-idtext="${cafeId}" class="dropdown-item add" href="#">Add to List</a>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -594,13 +591,29 @@ $(document).ready(function() {
             myCol.appendTo('#indexCardList');
 
             //check if venue has been liked by the user and add css class if so
-                console.log(likedVenues)
-                  if(likedVenues.has(cafeName)){
-                    console.log("Match found" + cafeName)
-                    let venueHeart = document.getElementById(cafeName + "-like")
-                    console.log(venueHeart)
-                    venueHeart.classList.add("liked-venue")
+            const assignHeartsToAnyLikedVenues = function(cafeName){
+              $.ajax({
+                type: 'GET',
+                url: '/api/liked/',
+                data: {
+                },
+                success: function(data) {
+                  console.log(`liked venues are ${data}`)
+                  for (i = 0; i < data.length; i++){
+                    let likedCafe = data[i].liked_venue.cafe_name;
+                    if(likedCafe == cafeName){
+                      console.log("Match found" + cafeName)
+                      let venueHeart = document.getElementById(cafeName + "-like")
+                      console.log(venueHeart)
+                      venueHeart.classList.add("liked-venue")
+                    }                 
                   }
+                }
+              });
+            };
+
+            assignHeartsToAnyLikedVenues(cafeName)
+        
  
             document.getElementById(cafeName + "-card").addEventListener('click', function() {
               console.log(cafeName)
@@ -681,14 +694,6 @@ $(document).ready(function() {
               }
             })
 
-            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-              if (e.target && e.target.matches("a.add")) {
-                console.log(e.target.id)
-                currentVenue = e.target.getAttribute('data-idtext')
-                addToListModal(currentVenue)
-              };
-            });
-
             document.getElementById(cafeName + "-bookmark").addEventListener('click', function(e) {
               let currentVenue = e.target.getAttribute('data-idtext')
               console.log("Bookmarking " + currentVenue)
@@ -698,16 +703,17 @@ $(document).ready(function() {
             //liked venu
             document.getElementById(cafeName + "-like").addEventListener('click', function(e) {
               let likedPlace = e.target.getAttribute('data-idtext')
-              console.log("Liking " + likedPlace)
-              addVenueToLiked(likedPlace)
-            });
+              let venue = document.getElementById(cafeName + "-like")
+              console.log(venue)
 
-            document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
-              if (e.target && e.target.matches("a.remove")) {
-                console.log(e.target.id)
-                currentVenue = e.target.getAttribute('data-idtext')
-                removeFromListModal(currentVenue, listId)
-              };
+              if(venue.classList.contains("liked-venue")) {
+                console.log("Removing " + likedPlace)
+                removeVenueFromliked(likedPlace)
+              } else {
+                console.log("Liking " + likedPlace)
+                addVenueToLiked(likedPlace)
+              }
+                
             });
 
             marker.addListener("click", () => {
@@ -736,13 +742,10 @@ $(document).ready(function() {
               let venues = document.getElementsByClassName('card-title venue-name');
               for (i = 0; i < venues.length; i++) {
                 if (venues[i].innerText == clickedMarker) {
-
                   marker.setIcon(selectedSvgMarker);
                   let matchedMarker = venues[i].innerText
                   console.log('Found match: ' + matchedMarker)
-
                   markersCard = document.getElementById(`${matchedMarker}-cardbody`);
-
                   markersCard.classList.add("selected-card")
                   markersCard.scrollIntoView({
                     behavior: "smooth",
@@ -754,7 +757,6 @@ $(document).ready(function() {
             }
 
             const panToMarker = function(clickedCard, markers) {
-
               for (i = 0; i < markers.length; i++) {
                 if (markers[i].title == clickedCard) {
                   let matchedMarker = markers[i];
@@ -772,8 +774,7 @@ $(document).ready(function() {
               };
               panToMarker(clickedCard, markers, data)
             });
-          });
-            
+          });     
         }
       });
     }
@@ -972,6 +973,7 @@ $(document).ready(function() {
                 };
               }
             };
+
             //user clicks card, pan to marker
             document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
               clickedCard = e.target.getAttribute('data-idtext')
@@ -1043,7 +1045,6 @@ $(document).ready(function() {
       const cookies = document.cookie.split(';');
       for (let i = 0; i < cookies.length; i++) {
         const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
         if (cookie.substring(0, name.length + 1) === (name + '=')) {
           cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
           break;
@@ -1076,21 +1077,38 @@ $(document).ready(function() {
 
   const addVenueToLiked = function(placeToAdd) {
     console.log(placeToAdd);
-
     $.ajax({
       type: "POST",
-      url: '/api/liked/',
-      dataType: 'json',
+      url: '/electra/liked/',
       data: {
         csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
         'liked_venue': placeToAdd
       },
       success: function(data) {
+        let liked = document.querySelectorAll(`[data-idtext="${placeToAdd}"]`);
+        console.log(liked)
+        liked[0].classList.add("liked-venue")
         showSnackBar()
       },
     });
   };
 
+  const removeVenueFromliked = function(venue_name) {
+    $.ajax({
+      type: 'GET',
+      url: '/electra/remove_venue_from_liked',
+      data: {
+        'venue': venue_name
+      },
+      success: function(data) {
+        console.log("removed")
+        $("#indexCardList").empty()
+        showRemovedSuccessSnackBar();
+        getLikedVenues()
+        
+      }
+    });
+  }
   const removeFromListModal = function(venueName, listId) {
     var userName = document.getElementById("username").innerText;
     console.log(userName);
@@ -1110,7 +1128,6 @@ $(document).ready(function() {
       type: 'GET',
       url: '/electra/remove_venue_from_list',
       data: {
-        // csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value
         'user_list': listId,
         'venue': venueName
       },
@@ -1120,7 +1137,6 @@ $(document).ready(function() {
         showRemovedSuccessSnackBar();
       }
     });
-
   }
 
   const getNearbyPromotions = function(map) {
@@ -1184,12 +1200,11 @@ const sendFeedback = function(typeOfFeedback, description) {
   });
 };
 
-$("#suggest-place").click(function() {
-  $("#suggestion-modal").modal('show');
+$("#add-place").click(function() {
+  $("#add-place-modal").modal('show');
 })
 
 $("#submit-suggestion").click(function() {
-  let user = $("#suggestor").val();
   let venueName = $("#suggestion-name").val();
   let venueType = $("#venue-type").val();
   let venueAddress = $("#suggestion-address").val();
@@ -1213,10 +1228,6 @@ const sendSuggestion = function(venueName, venueType, venueAddress) {
     }
   });
 };
-
-
-
-
 
 function showSnackBar() {
   // Get the snackbar DIV
@@ -1290,35 +1301,67 @@ window.addEventListener("resize", resetHeight);
 // called to initially set the height.
 resetHeight();
 
-// /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-// function closeNav() {
-//   document.getElementById("mySidebar").style.width = "0";
-//   document.getElementById("main").style.marginLeft = "0";
-// }
 
 
 
-// function getFriends(map) {
-//   const lat0 = parseFloat(map.getBounds().getNorthEast().lat());
-//   const lng0 = parseFloat(map.getBounds().getNorthEast().lng());
-//   const lat1 = parseFloat(map.getBounds().getSouthWest().lat());
-//   const lng1 = parseFloat(map.getBounds().getSouthWest().lng())
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 
-//   $.ajax({
-//     type: 'GET',
-//     url: '/electra/get_friends/',
-//     data: {
-//       'neLat': lat0,
-//       'neLng': lng0,
-//       'swLat': lat1,
-//       'swLng': lng1
-//     },
-//     success: function(data) {
-//       console.log(data)
-//       addSearchedMarkersToMap(data, map)
-//     }
-//   });
-// };
+const commitNewCafe = function(geocoder, marker, map) {
+
+    let address = document.getElementById("venue-address-box").value;
+    console.log(address)
+    geocoder.geocode({
+      address: address
+    }, (results, status) => {
+      if (status === "OK") {
+        console.log("Successfully geocoded address input");
+        var geolat = parseFloat(results[0].geometry.location.lat());
+        var geolong = parseFloat(results[0].geometry.location.lng());
+        var geoloc = [geolat, geolong];
+        console.log("The geocoordinates of searched address are " + geoloc);
+    
+  
+  let name = $("#venue-name-box").val()
+  console.log(geolat) 
+  console.log(geolong)
+  let type = $("#venue-type-box").val()
+  let description = $("#description-box").val()
+
+  $.ajax({
+    type: 'POST',
+    url: '/add_cafe/',
+    data: {
+      csrfmiddlewaretoken: document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+      'venuename': name,
+      'venueaddress': address,
+      'latitude': geolat,
+      'longitude': geolong,
+      'venuetype': type,
+      'venuedescription': description.replace(/\n/g, "<br>")
+    },
+    success: function(data) {
+      console.log("Data sent");
+      location.reload();
+    }
+  });
+};
+})
+}
 
 
 console.log("index2.js 0.01");

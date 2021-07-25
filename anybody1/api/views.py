@@ -32,8 +32,15 @@ class UserListVenueViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         if self.request.method == "POST":
+            user = self.request.user.id
+            print(user)
+            user_list = request.data.get('user_list')
+            print(user_list)
+            venue = request.data.get('venue')
+            print(venue)
+            data = {'user': user, 'user_list': user_list, 'venue': venue}
 
-            serializer = CreateUserListSerializer(data=request.data)
+            serializer = CreateUserListSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()
             

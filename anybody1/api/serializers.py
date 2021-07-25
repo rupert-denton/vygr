@@ -10,14 +10,14 @@ class mapCafesSerializer(serializers.ModelSerializer):
 class CreateUserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserVenue
-        fields = ['user_list', 'venue']
+        fields = ['user', 'user_list', 'venue']
 
 class UserVenueSerializer(serializers.ModelSerializer):
     venue = mapCafesSerializer()
     
     class Meta:
         model = UserVenue
-        fields = ['user_list', 'venue']
+        fields = ['user', 'user_list', 'venue']
         depth = 2 
 
 class AllBookMarkedSerializer(serializers.ModelSerializer):

@@ -34,33 +34,34 @@
     <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
   </head>
+
   <body>
     <nav class="navbar">
       <a class="navbar-brand page-title" href="#">VYGR</a>
-        <div class="search-bar input-group">
-            <button id="search-type" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
-            <ul class="dropdown-menu">
-              <li><i id="address" class="bi bi-geo-alt-fill dropdown-item"> Address</i></li>
-              <li><i id="place" class="bi bi-shop dropdown-item"> Place</i></li>
-            </ul>
-          <input id="search-box" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <ul id="search-results" class="search-results"></ul>
-          <div class="input-group-append">
-            <button id="submit" class="btn" type="button"><i class="bi bi-search"></i>
-            </button>
-          </div>
+      <div class="search-bar input-group">
+        <button id="search-type" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
+        <ul class="dropdown-menu">
+          <li><i id="address" class="bi bi-geo-alt-fill dropdown-item"> Address</i></li>
+          <li><i id="place" class="bi bi-shop dropdown-item"> Place</i></li>
+        </ul>
+        <input id="search-box" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <ul id="search-results" class="search-results input-group"></ul>
+        <div class="input-group-append">
+          <button id="submit" class="btn" type="button"><i class="bi bi-search"></i>
+          </button>
         </div>
-      <div class="nav-buttons">
+      </div>
+      <div class="nav-button">
         {% if user.is_authenticated%}
-        <a id="username" class="nav-username"> {{ user.get_username }} </a>
+        <a id="username" class="nav-username nav-btn"> {{ user.get_username }} </a>
         <a class="btn" href="{% url 'logout' %}">Logout</a>
         {% else %}
-        <a id="login" class="btn" href="{% url 'login' %}"> Login </a>
+        <a id="login" class="btn nav-btn" href="{% url 'login' %}"> Login </a>
         {% endif %}
         {% if user.is_authenticated == False %}
-        <a id="signup" class="btn" href="{% url 'signup' %}"> Sign Up </a>
+        <a id="signup" class="btn nav-btn" href="{% url 'signup' %}"> Sign Up </a>
         {% endif %}
-        <input id="feedback" class="btn" type="button" value="Feedback" />
+        <input id="feedback" class="btn nav-btn" type="button" value="Feedback" />
       </div>
     </nav>
 
@@ -71,7 +72,7 @@
       <div class="row">
         <div id="mySidebar" class="closed-sidebar justify-content-center">
           <div id="index-buttons" class="btn-group-vertical sidebar-options-list">
-            <button id="suggest-place" type="button" class="btn" data-dismiss="modal"><i class="fas fa-map-marker pr-2"></i><span class="item-label">Suggest</span></button>
+            <button id="add-place" type="button" class="btn" data-dismiss="modal"><i class="fas fa-map-marker pr-2"></i><span class="item-label">Add a Place</span></button>
             <button id="createList" type="button" class="btn" data-dismiss="modal"><i class="far fa-plus-square pr-2"></i><span class="item-label">New List</span></button>
             <button id="area-search" type="button" class="closer-item btn" data-dismiss="modal"><i class="fas fa-search-location pr-2"></i><span class="item-label">Search Area</span></button>
             <button id="liked-venues" type="button" class="btn" data-name="liked-venues" data-pk="1"><i class="bi bi-heart pr-2"></i><span class="item-label">Liked Places</span></button>
@@ -86,7 +87,7 @@
         <div class="main col-12">
           <button class="openbtn" onclick="toggleNav()">&#9776;</button>
           <div id="map" class="google-map">
-            
+
           </div>
         </div>
 
@@ -108,7 +109,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Submit Feedback</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="feedback-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -136,27 +137,81 @@
           </div>
           <div class="modal-footer">
             <button id="submit-feedback" type="button" class="btn">Submit</button>
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" data-dismiss="feedback-modal">Close</button>
           </div>
         </div>
       </div>
+    </div>
+
+
+    <div class="modal" id="add-place-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add a Place</h5>
+            <button type="button" class="close" data-dismiss="add-place-modal"" aria-label=" Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form method="post"> {% csrf_token %}
+              <ul class="inputList">
+                <li>
+                  <div class="input-group">
+                    <input id="venue-name-box" class="newVenueAdd form-control" type="text" placeholder="Name..." aria-label="Search">
+                  </div>
+                </li>
+                <li>
+                  <div class="input-group">
+                    <input id="venue-address-box" type="text" class="newVenueAdd form-control" placeholder="Address..." aria-label="Address..." aria-describedby="basic-addon2">
+                  </div>
+
+                <li>
+                  <div class="input-group">
+                    <div class="form-group newVenueAdd form-control-dark" placeholder="Venue Type...">
+                      <select class="form-control" id="venue-type-box">
+                        <option>Cafe</option>
+                        <option>Restaurant</option>
+                        <option>Bar</option>
+                        <option>Bakery</option>
+                        <option>Retail</option>
+                        <option>Entertainment</opton>
+                      </select>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="input-group">
+
+                    <div class="newVenueAdd input-group">
+                      <textarea id="description-box" class="venue-info-form form-control" placeholder="Description..." aria-label="With textarea"></textarea>
+                    </div>
+                  </div>
+                </li>
+                <input id="add" class="btn btn-primary ml-4 mr-1" type="button" value="Add" />
+
+              </ul>
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn" data-dismiss="add-place-modal">Close</button>
+        </div>
+      </div>
+    </div>
     </div>
 
     <div class="modal" id="suggestion-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Suggest A Place</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <h5 class="modal-title">Add a Place</h5>
+            <button type="button" class="close" data-dismiss="suggestion-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
             <form>
-              <div class="form-group">
-                <label for="exampleInputEmail1">Your Name</label>
-                <input class="form-control" id="suggestor" aria-describedby="emailHelp" placeholder="Enter name">
-              </div>
               <div class="form-group">
                 <label for="exampleInputEmail1">Venue Name</label>
                 <input class="form-control" id="suggestion-name" aria-describedby="emailHelp" placeholder="Venue Name">
@@ -179,7 +234,7 @@
           </div>
           <div class="modal-footer">
             <button id="submit-suggestion" type="button" class="btn">Submit</button>
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" data-dismiss="suggestion-modal">Close</button>
           </div>
         </div>
       </div>
@@ -190,7 +245,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Create a New List</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="newlistmodal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -202,7 +257,7 @@
           </div>
           <div class="modal-footer">
             <button id="save-list" type="button" class="btn">Save</button>
-            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn " data-dismiss="newlistmodal">Close</button>
           </div>
         </div>
       </div>
@@ -213,7 +268,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit List</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="editListModal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -225,7 +280,7 @@
           </div>
           <div class="modal-footer">
             <button id="save-edited-list" type="button" class="btn " data-dismiss="modal">Save</button>
-            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn " data-dismiss="editListModal">Close</button>
           </div>
         </div>
       </div>
@@ -236,7 +291,7 @@
         <div class="modal-content rounded-0">
           <div class="modal-header">
             <h5 class="modal-title" id="ModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="userlist-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -250,7 +305,7 @@
           </div>
           <div class="modal-footer">
             <button id="createListModal" type="button" class="btn " data-dismiss="modal">Create List</button>
-            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn " data-dismiss="userlist-modal">Close</button>
           </div>
         </div>
       </div>
@@ -261,7 +316,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Remove Venue</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="remove-venue-from-list-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -270,7 +325,7 @@
           </div>
           <div class="modal-footer">
             <button id="remove-venue-button" type="button" class="btn">Remove</button>
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" data-dismiss="remove-venue-from-list-modal">Close</button>
           </div>
         </div>
       </div>
@@ -281,7 +336,7 @@
         <div class="modal-content rounded-0">
           <div class="modal-header">
             <h5 class="modal-title" id="ModalLabel"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="profile-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -300,7 +355,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" data-dismiss="profile-modal">Close</button>
           </div>
         </div>
       </div>
@@ -311,7 +366,7 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Edit Profile</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="edit-profile-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -335,18 +390,18 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn">Save changes</button>
-            <button type="button" class="btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn" data-dismiss="edit-profile-modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-    
+
     <div class="modal" id="venue-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h4 id="modal-venue-title" class="modal-title ml-2"></h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="venue-modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -362,13 +417,12 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button id="modal-readmore" type="button" class="btn">Read More...</button>
-            <button type="button" class="btn " data-dismiss="modal">Close</button>
+            <button type="button" class="btn " data-dismiss="venue-modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-    
+
 
 
 
@@ -380,8 +434,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script src="{% static "/testingland/js/index2.js" %}"> </script>
-    
-    
+
+
     {% endblock %}
   </body>
 

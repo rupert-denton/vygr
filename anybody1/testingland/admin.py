@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import VenueList, UserList, UserVenue, mapCafes, VenueComments, ReplyComments, feedback, suggestion
+from .models import VenueList, UserList, UserVenue, mapCafes, VenueComments, ReplyComments, feedback, suggestion, liked
 
 class UserListAdmin(admin.ModelAdmin):
     list_display = ['user', 'list_name']
@@ -44,4 +44,9 @@ class VenueListAdmin(admin.ModelAdmin):
     list_display = ['title', 'user', 'venue_name']
 
 admin.site.register(VenueList, VenueListAdmin)
+
+class likedAdmin(admin.ModelAdmin):
+    list_display = ['user', 'liked_venue']
+
+admin.site.register(liked, likedAdmin)
 

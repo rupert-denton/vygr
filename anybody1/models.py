@@ -8,19 +8,18 @@
 from django.contrib.gis.db import models
 
 
-class ACafes(models.Model):
-    id = models.BigAutoField(primary_key=True)
-    cafe_name = models.CharField(max_length=200)
-    cafe_address = models.CharField(max_length=200)
-    cafe_long = models.FloatField()
-    cafe_lat = models.FloatField()
-    geolocation = models.PointField(geography=True, blank=True, null=True)
-    venue_type = models.CharField(max_length=200)
+# class ACafes(models.Model):
+#     id = models.BigAutoField(primary_key=True)
+#     cafe_name = models.CharField(max_length=200)
+#     cafe_address = models.CharField(max_length=200)
+#     cafe_long = models.FloatField()
+#     cafe_lat = models.FloatField()
+#     geolocation = models.PointField(geography=True, blank=True, null=True)
+#     venue_type = models.CharField(max_length=200)
 
 
-    class Meta:
-        managed = False
-        db_table = 'a_cafes'
+#     class Meta:
+#         managed = False
 
 
 class AuthGroup(models.Model):

@@ -1,19 +1,15 @@
-/* * {
-  background: #000 !important;
-  color: #0f0 !important;
-  outline: solid #f00 1px !important;
-} */
 
 /* ------ global ------ */
 
 html{
-  /* height: -webkit-fill-available; */
+  font-size: 10px;
 }
+
 body {
   width: 100%;
   /* height: 100%; */
-  margin: 0px;
-  padding: 0px;
+  margin: 0rem;
+  padding: 0rem;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
   /* overflow-x: hidden;  */
@@ -30,15 +26,16 @@ ul {
   background-color: black;
   color: white;
   border: none;
+  font-size: 1.5rem;
 }
 
 .container-fluid {
-  padding-left: 0px;
-  padding-right: 0px;
+  padding-left: 0rem;
+  padding-right: 0rem;
 }
 
 .row {
-  margin-right: 0px;
+  margin-right: 0rem;
 }
 
 .page-title {
@@ -46,33 +43,46 @@ ul {
   color: black;
 }
 
-.navbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: .5rem 1rem;
-  background-color: white;
-  border-bottom: 1px solid gainsboro;
-  
+.input-group{
+  flex-grow: 1;
+}
+.dropdown-item{
+  font-size: 1.5rem;
 }
 
 .dropdown-item:hover{
   cursor: pointer;
 }
 
+.navbar {
+  display: flex;
+  padding: 1rem;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  border-bottom: .1rem solid gainsboro;
+}
+
+.nav-btn{
+  margin:.5rem;
+}
 i{
   font-style: normal;
 }
 
-.nav-buttons {
-  margin-top: 20px;
-  margin-bottom: 20px;
+.nav-button {
+  display: flex;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  align-items: center;
 }
 
 .nav-username {
   color: black;
-  margin-right: 10px;
+  margin-right: 1rem;
+  font-size: 1.5rem;
 }
 
 .nav-username:hover {
@@ -80,27 +90,28 @@ i{
   cursor: pointer;
 }
 
+
 /* profile modal */
 .profile-stat-name {
-  font-size: 10px;
+  font-size: 1rem;
   color: black;
 }
 
 .profile-stat {
-  font-weight: 500;
+  font-weight: 50rem;
   color: black;
 }
 
 /* button to open sidebar */
 .openbtn {
-  margin-left: 20px;
-  top: 20px;
+  margin-left: 2rem;
+  top: 2rem;
   z-index: 1;
-  font-size: 20px;
+  font-size: 2rem;
   position: absolute;
   background-color: grey;
   color: white;
-  padding: 10px 15px;
+  padding: 1rem 1.5rem;
   border: none;
   transition: 0.1s;
 }
@@ -117,38 +128,35 @@ i{
 .open-sidebar {
   background: #F5F5F5;
   border-right-style: solid;
-  border-right-width: 1px;
+  border-right-width: 0.1rem;
   border-right-color: gainsboro;
-  height: 100%;
-  /* 100% Full-height */
-  width: 250px;
+  height: 100vh;
+  width: 25rem;
   position: absolute;
   /* Stay in place */
   z-index: 1;
   left: 0;
-  /* overflow-x: hidden; Disable horizontal scroll */
   transition: 0.1s;
-  /* padding-right:20px */
 }
 
 .closed-sidebar {
   background: #F5F5F5;
   border-right-style: solid;
-  border-right-width: 1px;
+  border-right-width: 0.1rem;
   border-right-color: gainsboro;
-  /* height: 100%; */
+  height: 100%;
   width: 0;
   position: absolute;
   z-index: 1;
   left: 0;
-  padding-top: 30px;
-  transition: 0.1s;
+  padding-top: 3rem;
+  /* transition: 0.1s; */
 }
 
 .sidebar-options-list {
   overflow: hidden;
-  padding-top: 25px;
-  padding-bottom: 25px;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
   display: flex;
   justify-content: center;
 }
@@ -167,9 +175,9 @@ i{
 
 .sidebar-lists {
   overflow: scroll;
-  padding-left: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-left: 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .list-options {
@@ -183,8 +191,9 @@ i{
 
 /* the individual user's lists */
 .userlist {
-  margin-top: 14px;
-  margin-left: 5px;
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  margin-left: .5rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -211,7 +220,7 @@ i{
 }
 
 .venue-card {
-  height: 150px;
+  height: 15rem;
   cursor: pointer;
 }
 
@@ -226,12 +235,9 @@ i{
 
 .card-icon{
   color: lightgrey;
-  font-size: 13px;
-  padding-left: 1px;
+  font-size: 1.3rem;
+  padding-left: .1rem;
 }
-
-
-
 
 .default-like:hover{
   color: #e4324c;
@@ -241,11 +247,7 @@ i{
 .liked-venue{
   color: #e4324c;
 }
-/* 
-.liked-venue:hover{
-  color: lightgrey;
-  transition: 5ms;
-} */
+
 
 .default-bookmark{
 }
@@ -260,8 +262,8 @@ i{
 }
 
 .userlistModal{
-  padding: 3px;
-  width: 450px;
+  padding: .3rem;
+  width: 45rem;
 }
 
 .userlistModal:hover{
@@ -273,17 +275,17 @@ i{
 /* validation snackbar after user adds to list */
 #snackbar {
   visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
+  min-width: 25rem;
+  margin-left: -12.5rem;
   background-color: grey;
   color: #fff;
   text-align: center;
-  border-radius: 2px;
-  padding: 16px;
+  border-radius: .2rem;
+  padding: 1.6rem;
   position: fixed;
   z-index: 1;
   left: 50%;
-  bottom: 30px;
+  bottom: 3rem;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -301,7 +303,7 @@ i{
   }
 
   to {
-    bottom: 30px;
+    bottom: 3rem;
     opacity: 1;
   }
 }
@@ -313,14 +315,14 @@ i{
   }
 
   to {
-    bottom: 30px;
+    bottom: 3rem;
     opacity: 1;
   }
 }
 
 @-webkit-keyframes fadeout {
   from {
-    bottom: 30px;
+    bottom: 3rem;
     opacity: 1;
   }
 
@@ -332,7 +334,7 @@ i{
 
 @keyframes fadeout {
   from {
-    bottom: 30px;
+    bottom: 3rem;
     opacity: 1;
   }
 
@@ -344,17 +346,17 @@ i{
 
 #deleteSuccessSnackbar {
   visibility: hidden;
-  min-width: 250px;
-  margin-left: -125px;
+  min-width: 25rem;
+  margin-left: -1.25rem;
   background-color: grey;
   color: #fff;
   text-align: center;
-  border-radius: 2px;
-  padding: 16px;
+  border-radius: .2rem;
+  padding: 1.6rem;
   position: fixed;
   z-index: 1;
   left: 50%;
-  bottom: 30px;
+  bottom: 3rem;
 }
 
 #deleteSuccessSnackbar.show {
@@ -367,9 +369,9 @@ i{
 #venueRemovedSuccessSnackbar {
   visibility: hidden;
   /* Hidden by default. Visible on click */
-  min-width: 250px;
+  min-width: 25rem;
   /* Set a default minimum width */
-  margin-left: -125px;
+  margin-left: -12.5rem;
   /* Divide value of min-width by 2 */
   background-color: grey;
   /* Black background color */
@@ -377,9 +379,9 @@ i{
   /* White text color */
   text-align: center;
   /* Centered text */
-  border-radius: 2px;
+  border-radius: .2rem;
   /* Rounded borders */
-  padding: 16px;
+  padding: 1.6rem;
   /* Padding */
   position: fixed;
   /* Sit on top of the screen */
@@ -387,8 +389,7 @@ i{
   /* Add a z-index if needed */
   left: 50%;
   /* Center the snackbar */
-  bottom: 30px;
-  /* 30px from the bottom */
+  bottom: 3rem;
 }
 
 /* Show the snackbar when clicking on a button (class added with JavaScript) */
@@ -409,79 +410,85 @@ i{
 }
 
 .venue-details {
-  margin-left: 20px;
+  margin-left: 2rem;
 }
 
 .venue-website {
-  font-size: 12px;
+  font-size: 1.2rem;
 }
 
 .modal-title{
-  font-size: 20px;
+  font-size: 2rem;
 }
 
 .subtitle{
-  font-size: 15px;
+  font-size: 1.5rem;
 }
 .body-text {
-  font-size: 14px;
+  font-size: 1.4rem;
 }
 
 /* ***** ADD VENUE PAGE ***** */
 
 .newVenueAdd {
-  margin: 10px;
-  min-height: 41px;
+  margin: 1rem;
+  min-height: 4.1rem;
   box-shadow: none;
   border-color: #e6e6e6;
-  width: 500px;
+  width: 50rem;
 }
 
 #addMap {
-  height: 400px;
-  width: 400px;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  height: 40rem;
+  width: 40rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 #description-box {
-  height: 150px;
-  width: 200px;
+  height: 15rem;
+  width: 20rem;
 }
 
 /* search functionality */
 
+.form-control{
+  font-size: 1.5rem;
+  display: flex;
+}
+
 .search-results {
+ margin-top: 3.1rem;
+  z-index: 1;
   position: absolute;
   background-color: white;
   border-left: lightgrey;
   border-left-style: solid;
-  border-left-width: .25px;
+  border-left-width: .025rem;
   border-right: lightgrey;
   border-right-style: solid;
-  border-right-width: .25px;
+  border-right-width: .025rem;
   border-bottom: lightgrey;
   border-bottom-style: solid;
-  border-bottom-width: .25px;
-  z-index: 1;
+  border-bottom-width: .025rem;
+  
 }
 
 .searchBar {
-  margin-left: 10px;
-  min-height: 41px;
+  margin-left: 1rem;
+  min-height: 4.1rem;
   box-shadow: none;
   border-color: #e6e6e6;
-  width: 500px;
+  width: 50rem;
 }
 
-.search-list-item {
-  
+.search-list-item{
+  font-size: 1.6rem;
 }
 
 .search-list-item:hover {
   cursor: pointer;
   color: white;
-  background-color: grey;
 }
 
 /* ------ phone portrait ------ */
@@ -490,75 +497,68 @@ i{
 
   /* nav */
   .page-title {
-    font-size: 38px;
+    font-size: 3.8rem;
   }
 
   .navbar {
+    
     flex-direction: column;
-    padding: 0rem 0rem;
-  }
-
-  .search-bar {
-    width: 21rem;
-  }
-
-  .search-results {
-    margin-top: 38px;
-    margin-left: 53px;
-    width: 15rem;
-    z-index: 1;
+ 
   }
 
   .search-list-item {
-    font-size: 14px;
-    padding-left: 5px;
-    padding-top: 3px
-  }
-
-  .google-map{
-    height: 535px;
+    font-size: 1.3rem;
+    padding-left: .5rem;
+    padding-top: .3rem;
   }
 
   /* sidebar */
   .open-sidebar {
-    width: 187px;
-    height: 535px;
+    width: 18.7rem;
   }
 
   .sidebar-lists {
     border-top-style: solid;
-    padding-left: 15px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     border-top-color: lightgrey;
     border-top-width: .1rem;
   }
 
   .pushedbtn {
-    margin-left: 207px;
+    margin-left: 20rem;
   }
 
   .pushedcards {
-    margin-left: 190px;
-    width: 200px;
+    margin-left: 16rem;
+    width: 19.2rem;
   }
 
   .map-venue-cards {
-    top: 540px;
-    left: 20px;
+    top: 77rem;
+    left: 2rem;
   }
 
   .venue-card {
-    height: 130px;
+    width: 26.5rem;
+    height: 13rem;
     cursor: pointer;
   }
 
   .venue-name {
-    font-size: 17px;
+    font-size: 1.7rem;
   }
 
   .venue-address{
-    font-size: 14px
+    font-size: 1.4rem;
+    margin-bottom: .75rem;
+
+  }
+
+  .venue-source{
+    font-size: 1.2rem;
+    color: rgb(167, 168, 171);
   }
 
 }
@@ -566,102 +566,86 @@ i{
 /* tablet */
 @media (min-width: 768px){
 
+  .navbar{
+    flex-direction: row;
+  }
   /* layout */
   /* nav */
   .page-title {
-    font-size: 60px;
-    color: red
-  }
-
-  .navbar {
-    flex-direction: column
-  }
-
-  .search-bar {
-    width: 40rem;
-  }
-
-  .search-results{
-    z-index: 1;
+    font-size: 6rem;
   }
 
   .search-list-item {
-    font-size: 16px;
-    padding: 6px;
+    /* font-size: 1.6rem; */
+    padding: .6rem;
   }
 
-  .google-map{
+  /* .google-map{
     height: 100vh;
-  }
+  } */
 
   /* sidebar */
   .open-sidebar {
-    width: 250px;
-    height: 100%;
+    width: 25rem;
+    /* height: 100%; */
   }
 
   .pushedbtn {
-    margin-left: 265px;
+    margin-left: 26.5rem;
   }
 
   .pushedcards {
-    margin-left: 190px;
+    margin-left: 23rem;
   }
 
   .map-venue-cards {
-    top: 1050px;
-    left: 20px;
+    top: 105rem;
+    left: 2rem;
   }
 }
 
 @media (min-width: 1024px) {
   .map-venue-cards{
-    top: 1200px;
+    top: 120rem;
   }
 }
+
 
 
 /* desktop */
 @media (min-width: 1300px) {
 
   .page-title {
-    font-size: 60px;
-    color: blue
+    font-size: 6rem;
   }
 
-  .navbar {
-    flex-direction: row
-  }
-
+  
   /* components */
-  .search-bar {
-    width: 55rem;
-  }
 
-  .search-results {
-    margin-top: 38px;
-    margin-left: 56px;
+
+  /* .search-results {
+    margin-top: 3.8rem;
+    margin-left: 5.6rem;
     width: 49rem;
     z-index: 1;
-  }
-
+  } */
 
   /* sidebar */
   .open-sidebar {
-    width: 270px;
+    width: 27rem;
   }
 
   .pushedbtn {
-    margin-left: 285px;
+    margin-left: 28.5rem;
   }
 
   .pushedcards {
-    margin-left: 230px;
+    margin-left: 23rem;
     width: 83%;
   }
 
   .map-venue-cards {
-    top: 575px;
-    left: 20px;
+    top: 57.5rem;
+    left: 2rem;
   }
 }

@@ -8,7 +8,7 @@ from django.views import generic
 from django.views.generic import ListView
 from django.contrib.gis.geos import fromstr, Point, Polygon
 from django.contrib.gis.db.models.functions import Distance, Envelope
-from .models import mapCafes, listCafes, UserList, UserVenue, User, UserConnections, feedback, suggestion
+from .models import liked, mapCafes, UserList, UserVenue, User, UserConnections, feedback, suggestion
 from django.urls import reverse_lazy
 from .forms import PlaceForm, UserListForm, addCafesForm
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -52,16 +52,34 @@ def get_cafe(request):
 
 def add_cafe(request):
     if request.method == "POST":        
+        x = float(request.POST.get('longitude'))
+        y = float(request.POST.get('latitude'))
         new_obj = mapCafes()
         new_obj.cafe_name = request.POST.get('venuename')
         new_obj.cafe_address = request.POST.get('venueaddress')
-        new_obj.cafe_long = float(request.POST.get('longitude'))
-        new_obj.cafe_lat = float(request.POST.get('latitude'))
+        new_obj.cafe_long = x
+        new_obj.cafe_lat = y
         new_obj.venue_type = request.POST.get('venuetype')
         new_obj.description = request.POST.get('venuedescription')
+        new_obj.geolocation = Point(x, y)
+        new_obj.source = request.user
         new_obj.save()
     return render(request, 'testingland/addcafe.html')
 
+def like_venue(request):
+     if request.method == "POST":
+        new_obj = liked()
+        new_obj.user = request.user
+       
+        new_obj.liked_venue = mapCafes(id = request.POST.get('liked_venue'))
+        new_obj.save()
+        return render(request, 'testingland/addcafe.html')
+
+def remove_venue_from_liked(request):
+    data = liked.objects.filter(liked_venue=request.GET.get('venue'))
+    print(data)
+    data.delete()
+    return render(request, 'testingland/index3.html')
 
 def update_cafe(request):
     if request.method == "POST":        
@@ -73,6 +91,7 @@ def update_cafe(request):
         cafe_lat = float(request.POST.get('latitude'))
         venue_type = request.POST.get('venuetype')
         description = request.POST.get('venuedescription')
+        
         print(description)
         cafe = mapCafes.objects.get(cafe_name=cafe_name)
 
@@ -82,6 +101,7 @@ def update_cafe(request):
         cafe.cafe_lat = cafe_lat
         cafe.venue_type = venue_type
         cafe.description = description
+        cafe.source = request.user
         cafe.save()
         
     return render(request, 'testingland/write_description.html')
@@ -205,7 +225,7 @@ def marker_info(request):
     qs = mapCafes.objects.filter(geolocation__coveredby=geom)
 
     return JsonResponse([
-            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x]
+            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type]
             for cafe in qs
     ], safe=False)
 
@@ -214,7 +234,7 @@ def place_search(request):
     name = request.GET.get('venuename', None)
     qs = mapCafes.objects.filter(cafe_name = name) 
     return JsonResponse([
-            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x]
+            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type]
             for cafe in qs
     ], safe=False)
 
@@ -246,7 +266,8 @@ def get_friends(request):
     
     friend_list = [[friend.followed.username] for friend in friends]
     print(friend_list)
-    friend_cafe_list = [[cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x] for cafe in cafes]
+    friend_cafe_list = [[cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.venue_type, cafe.source] 
+    for cafe in cafes]
     print(friend_cafe_list)
     
     return JsonResponse([
@@ -277,7 +298,7 @@ def info_box(request):
     name = request.GET.get('venuename', None)
     qs = mapCafes.objects.filter(cafe_name = name) 
     return JsonResponse([
-            [cafe.id, cafe.cafe_name, cafe.cafe_address, cafe.description]
+            [cafe.id, cafe.cafe_name, cafe.cafe_address, cafe.description, cafe.source, cafe.venue_type]
             for cafe in qs
     ], safe=False)
 
@@ -295,9 +316,10 @@ def getUserMarkers(request):
     print(name)
     qs = mapCafes.objects.filter(cafe_name = name)
     return JsonResponse([
-        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.description]
+        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.description, cafe.source, cafe.venue_type]
         for cafe in qs
     ], safe=False)
+
 
 
 @ensure_csrf_cookie
@@ -439,49 +461,18 @@ def user_suggestion(request):
 
 
 
+# class cafe_list(ListView):
+#     template_name = 'testingland/electra.html'
+#     context_object_name = 'cafes'
+#     model = mapCafes
 
+#     def get_queryset(self):
+#         # venue_name = self.request.GET.get('name', None)
+#         lat = self.request.GET.get('geolat', None)
+#         long = self.request.GET.get('geolong', None)
+#         print(lat, long)
+#         if lat and long:
+#             # final_name = string(name)
+#             loc = Point(float(long), float(lat), srid=4326);
 
-
-class NewList(generic.CreateView):
-     model = UserList
-     fields = ['list_name']
-     template_name = 'testingland/newlist.html'
-     success_url = reverse_lazy('cafes_home')
-
-     def form_valid(self, form):
-         form.instance.user = self.request.user
-         super(NewList, self).form_valid(form)
-         return redirect('cafes_home')
-
-class DetailList(generic.DetailView):
-    model = UserList
-    template_name = 'testingland/cafe.html'
-
-class UpdateList(generic.UpdateView):
-    model = UserList
-    template_name = 'testingland/update_list.html'
-    fields = ['list_name']
-    success_url = reverse_lazy('dashboard')
-
-class DeleteList(generic.DeleteView):
-    model = UserList
-    template_name = 'testingland/delete_list.html'
-    fields = ['list_name']
-    success_url = reverse_lazy('dashboard')
-
-
-class cafe_list(ListView):
-    template_name = 'testingland/electra.html'
-    context_object_name = 'cafes'
-    model = mapCafes
-
-    def get_queryset(self):
-        # venue_name = self.request.GET.get('name', None)
-        lat = self.request.GET.get('geolat', None)
-        long = self.request.GET.get('geolong', None)
-        print(lat, long)
-        if lat and long:
-            # final_name = string(name)
-            loc = Point(float(long), float(lat), srid=4326);
-
-        return mapCafes.objects.annotate(distance=Distance('geolocation', loc)).order_by('distance')[0:20]
+#         return mapCafes.objects.annotate(distance=Distance('geolocation', loc)).order_by('distance')[0:20]
