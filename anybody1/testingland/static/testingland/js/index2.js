@@ -12,6 +12,8 @@ $(document).ready(function() {
   script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaMciXfNXBzO_lPINmrspp4_fZ17RA_Jk&libraries=places&callback=initMap&map_ids=33df39eac4360b95';
   script.defer = true;
 
+  
+
 
   window.initMap = function() {
 
@@ -56,13 +58,23 @@ $(document).ready(function() {
           zoom: 15,
           mapId: '33df39eac4360b95',
           disableDefaultUI: true,
-          // gestureHandling: 'greedy'
+          gestureHandling: 'greedy'
         });
         console.log("Map Done. User location is " + [userLat + userLong]);
         showUserLists()
       }
     }
 
+
+
+
+    $(".close").click(function() {
+      $(".modal").modal('hide')
+    })
+
+    $(".closer").click(function() {
+      $(".modal").modal('hide')
+    })
     //create geocoder
     const geocoder = new google.maps.Geocoder();
 
@@ -78,9 +90,7 @@ $(document).ready(function() {
       console.log("Clicked Save!")
       commitNewCafe(geocoder)
     });
-    
-
-
+  
 
     const switchSearchType = function() {
       let searchType = $("#search-type-icon")
@@ -97,6 +107,13 @@ $(document).ready(function() {
 
       }
     };
+
+    window.addEventListener('resize', () => {
+      let vh = window.innerHeight * 0.01;
+      document.getElementsByClassName('google-map').style.setProperty('--vh', `${vh}px`);
+    })
+
+  
 
     //search address or venue 
     document.getElementById("submit").addEventListener("click", () => {
@@ -572,13 +589,12 @@ $(document).ready(function() {
                     <h5 class="card-title venue-name" id="${cafeName}-card" data-idtext="${cafeName}">
                       ${cafeName}
                     </h5>
-                    <h6 class="venue-address card-subtitle text-muted">${cafeAddress}</h6>
+                    <h6 class="venue-address card-subtitle">${cafeAddress}</h6>
                     <h6 class="venue-source card-subtitle">Added by ${source}</h6>
 
-                    <span>
+                    <span class="card-info">
                     <i id="${cafeName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${cafeId}"></i>
                     <i id="${cafeName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${cafeId}"></i>
-                    <i id="share" class="card-icon bi bi-share-fill default-bookmark"></i>
                     </span>
                   </div>
                 </div>
@@ -768,6 +784,7 @@ $(document).ready(function() {
             };
             //user clicks card, pan to marker
             document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
+              console.log("Pan")
               clickedCard = e.target.getAttribute('data-idtext')
               for (i = 0; i < markers.length; i++) {
                 markers[i].setIcon(svgMarker);
@@ -1268,6 +1285,23 @@ function showRemovedSuccessSnackBar() {
   }, 3000);
 }
 
+// $("#modern-search").click(function() {
+//   toggleSearch()
+// })
+
+// const toggleSearch = function(){
+//   let activeSearch = $("#modern-search")
+//   let searchField = $("#search-field")
+  
+//   if (!activeSearch.hasClass("pushedsearchbtn")){
+//     activeSearch.addClass("pushedsearchbtn")
+//     searchField.addClass("open-search")
+//   } else {
+//     activeSearch.removeClass("pushedsearchbtn")
+//     searchField.removeClass("open-search")
+//   }
+// }
+
 $("#openbtn").click(function() {
   toggleNav()
 });
@@ -1290,16 +1324,7 @@ const toggleNav = function() {
   };
 }
 
-function resetHeight() {
-  console.log(`${window.innerHeight}px`)
-  // reset the body height to that of the inner browser
-  document.body.style.height = `${window.innerHeight}px`;
-  // document.getElementsByClassName("open-sidebar").style.height = `${window.innerHeight}px`;  
-}
-// reset the height whenever the window's resized
-window.addEventListener("resize", resetHeight);
-// called to initially set the height.
-resetHeight();
+
 
 
 

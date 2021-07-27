@@ -36,7 +36,8 @@
   </head>
 
   <body>
-    <nav class="navbar">
+    <div class="container-fluid">
+    <nav class="navbar col-12">
       <a class="navbar-brand page-title" href="#">VYGR</a>
       <div class="search-bar input-group">
         <button id="search-type" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
@@ -44,7 +45,7 @@
           <li><i id="address" class="bi bi-geo-alt-fill dropdown-item"> Address</i></li>
           <li><i id="place" class="bi bi-shop dropdown-item"> Place</i></li>
         </ul>
-        <input id="search-box" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <input id="search-box" autocomplete="off" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
         <ul id="search-results" class="search-results input-group"></ul>
         <div class="input-group-append">
           <button id="submit" class="btn" type="button"><i class="bi bi-search"></i>
@@ -64,12 +65,14 @@
         <input id="feedback" class="btn nav-btn" type="button" value="Feedback" />
       </div>
     </nav>
+  </div>
 
 
     {% block content %}
 
     <div class="container-fluid">
       <div class="row">
+        
         <div id="mySidebar" class="closed-sidebar justify-content-center">
           <div id="index-buttons" class="btn-group-vertical sidebar-options-list">
             <button id="add-place" type="button" class="btn" data-dismiss="modal"><i class="fas fa-map-marker pr-2"></i><span class="item-label">Add a Place</span></button>
@@ -77,15 +80,28 @@
             <button id="area-search" type="button" class="closer-item btn" data-dismiss="modal"><i class="fas fa-search-location pr-2"></i><span class="item-label">Search Area</span></button>
             <button id="liked-venues" type="button" class="btn" data-name="liked-venues" data-pk="1"><i class="bi bi-heart pr-2"></i><span class="item-label">Liked Places</span></button>
           </div>
-
           <div class="sidebar-lists">
             <ul id="userLists" class="list-group-flush">
             </ul>
           </div>
         </div>
         <p id="hidden" hidden>Testing</p>
+        
+      </div>
+
+
         <div class="main col-12">
+          <div id="sideNav">
+            <button id="add-place" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-geo-alt-fill"></i></button>
+            <button id="user-lists" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-heart-fill"></i></button>
+            <button id="createList" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-plus-circle-fill"></i></button>
+            <button id="area-search" type="button" class="side-tab" data-dismiss="modal"><i class="fas fa-search-location"></i></button>
+            <button id="liked-venues" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-bookmarks-fill"></i></button>
+        </div>
+    
           <button class="openbtn" onclick="toggleNav()">&#9776;</button>
+          </button>
+
           <div id="map" class="google-map">
 
           </div>
@@ -104,7 +120,7 @@
       </div>
     </div>
 
-    <div class="modal" id="feedback-modal" tabindex="-1" role="dialog">
+    <div class="modal feedback" id="feedback-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -137,7 +153,7 @@
           </div>
           <div class="modal-footer">
             <button id="submit-feedback" type="button" class="btn">Submit</button>
-            <button type="button" class="btn" data-dismiss="feedback-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="feedback-modal">Close</button>
           </div>
         </div>
       </div>
@@ -189,14 +205,12 @@
                   </div>
                 </li>
                 <input id="add" class="btn btn-primary ml-4 mr-1" type="button" value="Add" />
-
+                <button type="button" class="btn closer" data-dismiss="add-place-modal">Close</button>
               </ul>
             </form>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn" data-dismiss="add-place-modal">Close</button>
-        </div>
+       
       </div>
     </div>
     </div>
@@ -213,7 +227,7 @@
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="exampleInputEmail1">Venue Name</label>
+                <label class="modal-text" for="exampleInputEmail1">Venue Name</label>
                 <input class="form-control" id="suggestion-name" aria-describedby="emailHelp" placeholder="Venue Name">
               </div>
               <div class="form-group">
@@ -234,7 +248,7 @@
           </div>
           <div class="modal-footer">
             <button id="submit-suggestion" type="button" class="btn">Submit</button>
-            <button type="button" class="btn" data-dismiss="suggestion-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="suggestion-modal">Close</button>
           </div>
         </div>
       </div>
@@ -251,13 +265,12 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <label for="exampleFormControlInput1">Create a New List</label>
               <input type="email" class="form-control" id="newListName" placeholder="New List Name...">
             </div>
           </div>
           <div class="modal-footer">
             <button id="save-list" type="button" class="btn">Save</button>
-            <button type="button" class="btn " data-dismiss="newlistmodal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="newlistmodal">Close</button>
           </div>
         </div>
       </div>
@@ -280,7 +293,7 @@
           </div>
           <div class="modal-footer">
             <button id="save-edited-list" type="button" class="btn " data-dismiss="modal">Save</button>
-            <button type="button" class="btn " data-dismiss="editListModal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="editListModal">Close</button>
           </div>
         </div>
       </div>
@@ -305,7 +318,7 @@
           </div>
           <div class="modal-footer">
             <button id="createListModal" type="button" class="btn " data-dismiss="modal">Create List</button>
-            <button type="button" class="btn " data-dismiss="userlist-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="userlist-modal">Close</button>
           </div>
         </div>
       </div>
@@ -325,7 +338,7 @@
           </div>
           <div class="modal-footer">
             <button id="remove-venue-button" type="button" class="btn">Remove</button>
-            <button type="button" class="btn" data-dismiss="remove-venue-from-list-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="remove-venue-from-list-modal">Close</button>
           </div>
         </div>
       </div>
@@ -355,7 +368,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn" data-dismiss="profile-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="profile-modal">Close</button>
           </div>
         </div>
       </div>
@@ -390,7 +403,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn">Save changes</button>
-            <button type="button" class="btn" data-dismiss="edit-profile-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="edit-profile-modal">Close</button>
           </div>
         </div>
       </div>
@@ -417,7 +430,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn " data-dismiss="venue-modal">Close</button>
+            <button type="button" class="btn closer" data-dismiss="venue-modal">Close</button>
           </div>
         </div>
       </div>
