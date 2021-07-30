@@ -41,14 +41,23 @@ ul {
   margin-right: 0rem;
 }
 
+.modal-content{
+  border-radius: 30px;
+}
 .page-title {
   font-family: 'Inter', sans-serif;
   color: black;
 }
 
-.input-group{
-  flex-grow: 1;
+.search-bar{
+  display: flex;
+  height: 4rem;
 }
+
+.dropdown-toggle{
+  border-radius: 3rem 0rem 0rem 3rem;
+}
+
 .dropdown-item{
   font-size: 1.5rem;
 }
@@ -57,6 +66,13 @@ ul {
   cursor: pointer;
 }
 
+.submit-btn{
+  display: flex;
+  border-radius: 0rem 3rem 3rem 0rem;
+  width: 4rem;
+  align-items: center;
+  justify-content: center;  
+}
 
 .navbar {
   position: absolute;
@@ -99,26 +115,31 @@ i{
     z-index: 1;
     position: absolute;
     top: 15rem;
+    transition: 0.05s;
 }
+
 #sideNav button {
   display: flex;
-    align-items: center;
-    transition: 0.3s;
-    height: 5rem;
-    left: -80px;
-    padding: .1rem;
-    width: 5rem;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    margin-left: 2rem;
-    border-radius: 30px;
-    justify-content: center;
-    background-color: white;
+  align-items: center;
+  transition: 0.3s;
+  height: 5rem;
+  left: -80px;
+  padding: .1rem;
+  width: 5rem;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  margin-left: 2rem;
+  border-radius: 30px;
+  justify-content: center;
+  background-color: white;
+  color: black;
+  border-style: none;
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
 #sideNav button:hover{
   cursor: pointer;
-  background-color: #444;
+  background-color: black;
   color: white;
 }
 
@@ -162,6 +183,10 @@ i{
 }
 
 /* sidebar */
+
+.sidebar-flex{
+  display: flex;
+}
 .open-sidebar {
   background: #F5F5F5;
   border-right-style: solid;
@@ -190,26 +215,6 @@ i{
   /* transition: 0.1s; */
 }
 
-.sidebar-options-list {
-  overflow: hidden;
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
-  display: flex;
-  justify-content: center;
-}
-
-.sidebar-options-list button {
-  background-color: #F5F5F5;
-  color: black;
-}
-
-.sidebar-options-list button:hover {
-  color: white;
-  text-decoration: none;
-  background-color: grey;
-  ;
-}
-
 .sidebar-lists {
   overflow:  hidden;
   padding-left: 1.5rem;
@@ -227,7 +232,13 @@ i{
 }
 
 .close{
-  font-size: 2.1rem;
+  font-size: 2.5rem;
+  color: white;
+  opacity: 1;
+}
+
+.form-control{
+  font-size: 1.75rem;
 }
 
 .modal-text{
@@ -236,6 +247,9 @@ i{
 
 .modal-header{
   border-bottom: 0px;
+  background-color: black;
+  border-radius: 3rem 3rem 0rem 0rem;
+  color: white;
 }
 
 .modal-footer{
@@ -474,7 +488,7 @@ i{
 
 .modal-title{
   font-size: 2.5rem;
-  margin-top: 2rem
+  margin: 1.5rem;
 }
 
 .subtitle{
@@ -511,35 +525,34 @@ i{
 
 /* search functionality */
 
-.form-control{
+.search-input{
   font-size: 1.5rem;
   display: flex;
+  height: 4rem;
 }
 
+
 .search-results {
- margin-top: 3.1rem;
+  --searchBorder: lightgrey solid .025rem;
+  border-radius: 0rem 0rem 1rem 1rem;
+  margin-top: 4rem;
   z-index: 1;
   position: absolute;
   background-color: white;
-  border-left: lightgrey;
-  border-left-style: solid;
-  border-left-width: .025rem;
-  border-right: lightgrey;
-  border-right-style: solid;
-  border-right-width: .025rem;
-  border-bottom: lightgrey;
-  border-bottom-style: solid;
-  border-bottom-width: .025rem;
+  border-left: var(--searchBorder);
+  border-right: var(--searchBorder);
+  border-bottom: var(--searchBorder);
+  
   
 }
 
-.searchBar {
+/* .searchBar {
   margin-left: 1rem;
   min-height: 4.1rem;
   box-shadow: none;
   border-color: #e6e6e6;
   width: 50rem;
-}
+} */
 
 .search-list-item{
   font-size: 1.6rem;
@@ -568,6 +581,7 @@ i{
 
   .navbar {
     flex-direction: column;
+    transition: 0.05s;
   }
 
   .search-list-item {
@@ -600,7 +614,7 @@ i{
   }
 
   .map-venue-cards {
-    top: 80rem;
+    top: 60rem;
     left: 2rem;
   }
 
@@ -663,14 +677,14 @@ i{
   }
 
   .map-venue-cards {
-    top: 105rem;
+    top: 60rem;
     left: 2rem;
   }
 }
 
 @media (min-width: 1024px) {
   .map-venue-cards{
-    top: 120rem;
+    top: 60rem;
   }
 }
 
@@ -700,7 +714,101 @@ i{
   }
 
   .map-venue-cards {
-    top: 85rem;
+    top: 60rem;
     left: 3rem;
   }
+}
+
+/* registration */
+
+.signup{
+  margin: 2.5rem;
+}
+
+.registration-header{
+  margin-bottom: 3rem;
+}
+
+.registration-font-div{
+  font-size: 1.2rem;
+}
+
+.login-page{
+  background-color: #EAEAEA;
+  display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.login-navbar{
+  position: relative;
+  flex-grow: 1;
+}
+
+.vygr-login{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  height: 80vh;
+}
+
+.user_card {
+  height: 50rem;
+  width: 75rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  background: white;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 30px;
+}
+
+.form_container{
+  display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+
+.login-card-image{
+  background-image: url("/static/testingland/img/iso-city.jpg");
+  background-size: 50rem;
+  border-radius: 0px 30px 30px 0px;
+  background-position: center;
+}
+
+.login_btn {
+  width: 100%;
+  background: #c0392b !important;
+  color: white !important;
+}
+.login_btn:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+.login_container {
+  padding: 0 2rem;
+}
+.input-group-text {
+  background: #c0392b !important;
+  color: white !important;
+  border: 0 !important;
+  border-radius: 0.25rem 0 0 0.25rem !important;
+}
+.input_user,
+.input_pass:focus {
+  box-shadow: none !important;
+  outline: 0px !important;
+}
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+  background-color: #c0392b !important;
 }

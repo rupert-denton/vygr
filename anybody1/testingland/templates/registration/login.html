@@ -1,4 +1,6 @@
 {% extends 'testingland/index3.html' %}
+{% load static %}
+
 
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
@@ -28,34 +30,51 @@
 
   {% block content %}
 
-  <body class="registration-template">
+  <body class="login-page container-fluid">
+      <div class="row vygr-login">
+        <div class="user_card">
+          <div class="container-fluid h-100">
+            <div class="row h-100">
+              <div class="form_container col">
+                <form method="post">
+                  <div>
+                    <h1 class="registration-header">Login</h1>
+                  </div>
+                  <div id="login-div" class="registration-font-div">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div>
+                      <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                    <div>
+                      Don't have an account? <a href="/signup">Signup Here</a>
+                    </div>
+                    <div class="mt-4">
+                      <div class="links">
+                        Don't have an account? <a href="#" class="ml-2">Sign Up</a>
+                      </div>
+                      <div class="links">
+                        <a href="#">Forgot your password?</a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              
+              <div class="col login-card-image">
+              </div>
+            </div>
 
-    <div class="login-form">
-      <div class="form-group d-flex justify-content-center">
-        <form method="post">
-          <div>
-            <h1 class="registration-header">Login</h1>
-          </div>
-          <div id="login-div">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <div>
-              <button type="submit" class="btn btn-primary btn-lg">Login</button>
+
             </div>
-            <div>
-              Don't have an account? <a href="/signup">Signup Here</a>
-            </div>
-          </div>
-        </form>
+          
+        </div>
       </div>
-    </div>
-
-
   </body>
 
-</html>
 
-{% endblock %}
-</body>
+
+  {% endblock %}
+
 
 </html>

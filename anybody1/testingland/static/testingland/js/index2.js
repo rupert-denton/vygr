@@ -12,8 +12,6 @@ $(document).ready(function() {
   script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCaMciXfNXBzO_lPINmrspp4_fZ17RA_Jk&libraries=places&callback=initMap&map_ids=33df39eac4360b95';
   script.defer = true;
 
-  
-
 
   window.initMap = function() {
 
@@ -62,11 +60,28 @@ $(document).ready(function() {
         });
         console.log("Map Done. User location is " + [userLat + userLong]);
         showUserLists()
+
+        const hideUI = function(){
+          console.log("Bounds Changed")
+          $("#sideNav").css("left", "-7rem")
+          $("#vygr-nav").css("top", "-20rem")
+        }
+
+        const showUI = function(){
+          console.log("Idling")
+          $("#sideNav").css("left", "0rem")
+          $("#vygr-nav").css("top", "0rem")
+
+        }
+
+        map.addListener("center_changed", hideUI)
+        map.addListener("idle", showUI)
+
+
+
+        
       }
     }
-
-
-
 
     $(".close").click(function() {
       $(".modal").modal('hide')
@@ -125,10 +140,14 @@ $(document).ready(function() {
       }
     });
 
+    $("#user-lists").click(function() {
+      toggleNav()
+    })
+
     //search area
     document.getElementById("area-search").addEventListener("click", () => {
       getVenues(map)
-      toggleNav()
+      // toggleNav()
     });
 
     $("#friends").click(function() {
@@ -155,6 +174,8 @@ $(document).ready(function() {
       }
       filter(geocoder, marker, map)
     });
+
+
   }
   document.head.appendChild(script);
 
@@ -1307,7 +1328,7 @@ $("#openbtn").click(function() {
 });
 
 const toggleNav = function() {
-  let sideBar = $("#mySidebar")
+  let sideBar = $("#vygr-sidebar")
   let openBtn = $(".openbtn")
   let mapCards = $(".map-venue-cards")
   if (sideBar.hasClass("closed-sidebar")) {

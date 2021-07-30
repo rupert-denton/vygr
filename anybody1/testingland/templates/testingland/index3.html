@@ -35,9 +35,11 @@
 
   </head>
 
+  {% block content %}
+
   <body>
     <div class="container-fluid">
-    <nav class="navbar col-12">
+    <nav id="vygr-nav" class="navbar col-12">
       <a class="navbar-brand page-title" href="#">VYGR</a>
       <div class="search-bar input-group">
         <button id="search-type" class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
@@ -45,10 +47,10 @@
           <li><i id="address" class="bi bi-geo-alt-fill dropdown-item"> Address</i></li>
           <li><i id="place" class="bi bi-shop dropdown-item"> Place</i></li>
         </ul>
-        <input id="search-box" autocomplete="off" type="text" class="form-control" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <input id="search-box" autocomplete="off" type="text" class="form-control search-input" placeholder="Search Address..." aria-label="Recipient's username" aria-describedby="basic-addon2">
         <ul id="search-results" class="search-results input-group"></ul>
         <div class="input-group-append">
-          <button id="submit" class="btn" type="button"><i class="bi bi-search"></i>
+          <button id="submit" class="submit-btn btn" type="button"><i class="bi bi-search"></i>
           </button>
         </div>
       </div>
@@ -68,22 +70,17 @@
   </div>
 
 
-    {% block content %}
+    
 
     <div class="container-fluid">
       <div class="row">
         
-        <div id="mySidebar" class="closed-sidebar justify-content-center">
-          <div id="index-buttons" class="btn-group-vertical sidebar-options-list">
-            <button id="add-place" type="button" class="btn" data-dismiss="modal"><i class="fas fa-map-marker pr-2"></i><span class="item-label">Add a Place</span></button>
-            <button id="createList" type="button" class="btn" data-dismiss="modal"><i class="far fa-plus-square pr-2"></i><span class="item-label">New List</span></button>
-            <button id="area-search" type="button" class="closer-item btn" data-dismiss="modal"><i class="fas fa-search-location pr-2"></i><span class="item-label">Search Area</span></button>
-            <button id="liked-venues" type="button" class="btn" data-name="liked-venues" data-pk="1"><i class="bi bi-heart pr-2"></i><span class="item-label">Liked Places</span></button>
-          </div>
-          <div class="sidebar-lists">
-            <ul id="userLists" class="list-group-flush">
-            </ul>
-          </div>
+        <div id="vygr-sidebar" class="closed-sidebar sidebar-flex justify-content-center">
+            <div class="sidebar-lists">
+              <ul id="userLists" class="">
+              </ul>
+            </div>
+          
         </div>
         <p id="hidden" hidden>Testing</p>
         
@@ -93,14 +90,13 @@
         <div class="main col-12">
           <div id="sideNav">
             <button id="add-place" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-geo-alt-fill"></i></button>
-            <button id="user-lists" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-heart-fill"></i></button>
+            <button id="liked-venues" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-heart-fill"></i></button>
             <button id="createList" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-plus-circle-fill"></i></button>
             <button id="area-search" type="button" class="side-tab" data-dismiss="modal"><i class="fas fa-search-location"></i></button>
-            <button id="liked-venues" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-bookmarks-fill"></i></button>
+            <button id="user-lists" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-bookmarks-fill"></i></button>
         </div>
     
-          <button class="openbtn" onclick="toggleNav()">&#9776;</button>
-          </button>
+          <!-- <button class="openbtn" onclick="toggleNav()">&#9776;</button> -->
 
           <div id="map" class="google-map">
 
