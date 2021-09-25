@@ -24,11 +24,19 @@ class CsrfExemptSession(SessionAuthentication):
     def enforce_csrf(self, request):
         return
 
+class OtherUserListVenueViewSet(viewsets.ModelViewSet):
+    serializer_class = UserVenueSerializer
+    def get_queryset(request):
+        user = request.data.get('userName')
+        
+        return UserVenue.objects.filter(user_list__user=user)
+
 class UserListVenueViewSet(viewsets.ModelViewSet):
     serializer_class = UserVenueSerializer
 
     def get_queryset(self):
-        return UserVenue.objects.filter(user_list__user=self.request.user)
+        user = self.request.user
+        return UserVenue.objects.filter(user_list__user=user)
 
     def create(self, request):
         if self.request.method == "POST":
@@ -81,8 +89,10 @@ class UserListViewSet(viewsets.ModelViewSet):
     serializer_class = UserListSerializer
  
     def get_queryset(self):
-        return UserList.objects.filter(user__username=self.request.user).order_by('-pk')
-    
+        qs = UserList.objects.filter(user__username=self.request.user).order_by('-pk')
+        print(qs)
+        return qs
+
     def create(self, request):
         serializer_class = UserListSerializer
 

@@ -8,8 +8,9 @@ from django.views import generic
 from django.views.generic import ListView
 from django.contrib.gis.geos import fromstr, Point, Polygon
 from django.contrib.gis.db.models.functions import Distance, Envelope
-from .models import liked, mapCafes, UserList, UserVenue, User, UserConnections, feedback, suggestion
-from django.urls import reverse_lazy
+from .models import liked, mapCafes, UserList, UserVenue, User, UserConnections,\
+     feedback, suggestion, SharedLink, SharedListLink
+from django.urls import reverse_lazy, reverse
 from .forms import PlaceForm, UserListForm, addCafesForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 from bootstrap_modal_forms.generic import BSModalCreateView
@@ -64,7 +65,10 @@ def add_cafe(request):
         new_obj.geolocation = Point(x, y)
         new_obj.source = request.user
         new_obj.save()
-    return render(request, 'testingland/addcafe.html')
+        
+    return JsonResponse([
+            new_obj.id, new_obj.cafe_name     
+    ], safe=False)
 
 def like_venue(request):
      if request.method == "POST":
@@ -105,6 +109,15 @@ def update_cafe(request):
         cafe.save()
         
     return render(request, 'testingland/write_description.html')
+
+def getUserlists(request):
+    print(request.user)
+    qs = UserList.objects.filter(user=request.user)
+    print(qs)
+    return JsonResponse([
+           [item.id, item.list_name]
+            for item in qs
+    ], safe=False)
 
 def update_list_name(request):
     if request.method == "POST":
@@ -204,6 +217,45 @@ def get_cafe_image(request):
 def connections(request):
     return render(request, 'testingland/connections.html')
 
+def build_link(request, pk):
+    try:
+        # /electra/4bc09c1e-323b-4682-b9d3-6d6b5e086db5/
+        cafe = mapCafes.objects.get(pk=pk)
+        print(cafe)
+        link, _ = SharedLink.objects.get_or_create(cafe=cafe, defaults={
+            'cafe': cafe
+        })
+        
+        return JsonResponse({'link': reverse(visit_link, kwargs={'uu': link.uuid}) } )
+    except mapCafes.DoesNotExist:
+        return JsonResponse({'link': '' } )
+
+def visit_link(request, uu):
+    link = SharedLink.objects.get(uuid=uu)
+    cafe = mapCafes.objects.get(pk=link.cafe.pk)
+    return render(request, 'testingland/index3.html',
+        {'cafe': cafe}
+    )
+
+def build_list_link(request, pk):
+    try:
+        list = UserList.objects.get(pk=pk)
+        print(list)
+        link, _ = SharedListLink.objects.get_or_create(list=list, defaults={
+            'list': list
+        })
+        
+        return JsonResponse({'link': reverse(visit_list_link, kwargs={'uu': link.uuid}) } )
+    except mapCafes.DoesNotExist:
+        return JsonResponse({'link': '' } )
+
+def visit_list_link(request, uu):
+    link = SharedListLink.objects.get(uuid=uu)
+    list = UserList.objects.get(pk=link.list.pk)
+    return render(request, 'testingland/index3.html',
+        {'list': list}
+    )
+
 def marker_info(request):
     template_name = 'testingland/electra.html'
     neLat = request.GET.get('neLat', None)
@@ -225,18 +277,26 @@ def marker_info(request):
     qs = mapCafes.objects.filter(geolocation__coveredby=geom)
 
     return JsonResponse([
-            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type]
+            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type, cafe.id]
             for cafe in qs
     ], safe=False)
 
 def place_search(request):
     template_name = 'testingland/index2.html'
     name = request.GET.get('venuename', None)
-    qs = mapCafes.objects.filter(cafe_name = name) 
+    if name:
+        print(name)
+        qs = mapCafes.objects.filter(cafe_name = name) 
+        
+    else: 
+        pk = request.GET.get('pk', None)
+        print(pk)
+        qs = mapCafes.objects.filter(pk=pk)
+
     return JsonResponse([
-            [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type]
-            for cafe in qs
-    ], safe=False)
+                [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type, cafe.id]
+                for cafe in qs
+        ], safe=False)
 
 def get_friends(request):
     template_name = 'testingland/electra.html'
@@ -292,11 +352,19 @@ def new_marker(request):
                 for cafe in qs
         ], safe=False)
 
+def all_venues(request):
+
+    qs = mapCafes.objects.all()
+    print(qs)
+    return JsonResponse([
+        [venue.cafe_name, venue.cafe_address]
+        for venue in qs
+    ], safe=False)
 
 def info_box(request):
-    template_name = 'testingland/index2.html'
-    name = request.GET.get('venuename', None)
-    qs = mapCafes.objects.filter(cafe_name = name) 
+    # template_name = 'testingland/index2.html'
+    pk = request.GET.get('pk', None)
+    qs = mapCafes.objects.filter(pk = pk) 
     return JsonResponse([
             [cafe.id, cafe.cafe_name, cafe.cafe_address, cafe.description, cafe.source, cafe.venue_type]
             for cafe in qs
@@ -311,15 +379,44 @@ def get_users(request):
     ], safe=False)
 
 def getUserMarkers(request):
-    template_name = 'testingland/dashboard.html'
-    name = request.GET.get('cafeName', None)
-    print(name)
-    qs = mapCafes.objects.filter(cafe_name = name)
+    pk = request.GET.get('pk', None)
+    print(pk)
+    qs = mapCafes.objects.filter(pk=pk)
+    print(qs)
     return JsonResponse([
-        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.description, cafe.source, cafe.venue_type]
+        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.description, cafe.source, cafe.venue_type, cafe.id]
         for cafe in qs
     ], safe=False)
 
+def getUserVenues(request):
+    userName = request.GET.get('userName', None)
+    print(userName)
+    qs = mapCafes.objects.filter(source = userName)
+    print(qs)
+    return JsonResponse([
+        [venue.cafe_name]
+        for venue in qs
+    ], safe=False)
+
+def getUserLiked(request):
+    userName = request.GET.get('userName', None)
+    print(userName)
+    qs = liked.objects.filter(user__username = userName)
+    print(qs)
+    return JsonResponse([
+        [venue.liked_venue.cafe_name]
+        for venue in qs
+    ], safe=False)
+
+
+def otherUserList(request):
+    userName = request.GET.get('userName', None)
+    print(userName)
+    qs = UserList.objects.filter(user__username=userName)
+    return JsonResponse([
+        [list.id, list.list_name] 
+        for list in qs
+    ], safe=False)
 
 
 @ensure_csrf_cookie

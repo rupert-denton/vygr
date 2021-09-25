@@ -614,7 +614,7 @@ $(document).ready(function() {
                     <h6 class="venue-source card-subtitle">Added by ${source}</h6>
 
                     <span class="card-info">
-                    <i id="${cafeName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${cafeId}"></i>
+                    <i id="-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${cafeId}"></i>
                     <i id="${cafeName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${cafeId}"></i>
                     </span>
                   </div>
@@ -754,44 +754,48 @@ $(document).ready(function() {
             });
 
             marker.addListener("click", () => {
-              let cards = document.getElementsByClassName('venue-card card card-body');
-              console.log(cards)
-              for (i = 0; i < cards.length; i++) {
-                console.log(cards[i])
-                if (cards[i].classList.contains('selected-card')) {
-                  cards[i].classList.remove("selected-card");
-                }
-              };
+              console.log(marker.title)
+              venueName = (marker.title)
 
-              for (i = 0; i < markers.length; i++) {
-                markers[i].setIcon(svgMarker);
-              };
+              // let cards = document.getElementsByClassName('venue-card card card-body');
+              // console.log(cards)
+              // for (i = 0; i < cards.length; i++) {
+              //   console.log(cards[i])
+              //   if (cards[i].classList.contains('selected-card')) {
+              //     cards[i].classList.remove("selected-card");
+              //   }
+              // };
+
+              // for (i = 0; i < markers.length; i++) {
+              //   markers[i].setIcon(svgMarker);
+              // };
               console.log("scrolling")
-              scrollToCard()
+              // scrollToCard()
+              showVenueCard(venueName)
             });
 
-            const scrollToCard = function() {
 
-              map.panTo(marker.getPosition())
-              map.setZoom(15);
-              let clickedMarker = marker.title
-              console.log(clickedMarker);
-              let venues = document.getElementsByClassName('card-title venue-name');
-              for (i = 0; i < venues.length; i++) {
-                if (venues[i].innerText == clickedMarker) {
-                  marker.setIcon(selectedSvgMarker);
-                  let matchedMarker = venues[i].innerText
-                  console.log('Found match: ' + matchedMarker)
-                  markersCard = document.getElementById(`${matchedMarker}-cardbody`);
-                  markersCard.classList.add("selected-card")
-                  markersCard.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                    inline: "nearest"
-                  });
-                };
-              }
-            }
+            // const scrollToCard = function() {
+            //   map.panTo(marker.getPosition())
+            //   map.setZoom(15);
+            //   let clickedMarker = marker.title
+            //   console.log(clickedMarker);
+            //   let venues = document.getElementsByClassName('card-title venue-name');
+            //   for (i = 0; i < venues.length; i++) {
+            //     if (venues[i].innerText == clickedMarker) {
+            //       marker.setIcon(selectedSvgMarker);
+            //       let matchedMarker = venues[i].innerText
+            //       console.log('Found match: ' + matchedMarker)
+            //       markersCard = document.getElementById(`${matchedMarker}-cardbody`);
+            //       markersCard.classList.add("selected-card")
+            //       markersCard.scrollIntoView({
+            //         behavior: "smooth",
+            //         block: "center",
+            //         inline: "nearest"
+            //       });
+            //     };
+            //   }
+            // }
 
             const panToMarker = function(clickedCard, markers) {
               for (i = 0; i < markers.length; i++) {
@@ -803,20 +807,86 @@ $(document).ready(function() {
                 };
               }
             };
+
             //user clicks card, pan to marker
-            document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
-              console.log("Pan")
-              clickedCard = e.target.getAttribute('data-idtext')
-              for (i = 0; i < markers.length; i++) {
-                markers[i].setIcon(svgMarker);
-              };
-              panToMarker(clickedCard, markers, data)
-            });
+            // document.getElementById(`${cafeName}-cardbody`).addEventListener('click', function(e) {
+            //   console.log("Pan")
+            //   clickedCard = e.target.getAttribute('data-idtext')
+            //   for (i = 0; i < markers.length; i++) {
+            //     markers[i].setIcon(svgMarker);
+            //   };
+            //   panToMarker(clickedCard, markers, data)
+            // });
           });     
         }
       });
     }
   };
+
+
+  const showVenueCard = function(venueName) {
+
+    const assignHeartIfVenueLiked = function(venueName){
+      $.ajax({
+        type: 'GET',
+        url: '/api/liked/',
+        data: {
+        },
+        success: function(data) {
+          console.log(`liked venues are ${data}`)
+          for (i = 0; i < data.length; i++){
+            let likedCafe = data[i].liked_venue.cafe_name;
+            if(likedCafe == venueName){
+              console.log("Match found" + venueName)
+              let venueHeart = document.getElementById(venueName + "-like")
+              console.log(venueHeart)
+              venueHeart.classList.add("liked-venue")
+            }                 
+          }
+        }
+      });
+    }
+
+    $.ajax({
+      type: 'GET',
+      url: '/electra/info_box/',
+      data: {
+        'venuename': venueName
+      },
+      success: function(data) {
+        console.log(data)
+        let venueId = data[0][0]
+        let venueName = data[0][1]
+        let venueAddress = data[0][2]
+        let venueDescription = data[0][3]
+        let source = data[0][4]
+        let category = data[0][5]
+
+        assignHeartIfVenueLiked(venueName)
+   
+    let myCol = $('<div id="col"></div>');
+    let venueCard  = $(
+    `
+      <div class="card venue-card"">
+      <div class="card-body" id="${venueName}-cardbody" data-idtext="${venueName}">
+        <h5 class="card-title" id="${venueName}-card" data-idtext="${venueName}">${venueName}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">${venueAddress}</h6>
+        <h6 class="venue-source card-subtitle">Added by ${source}</h6>
+        <span class="card-info">
+          <i id="${venueName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${venueId}"></i>
+          <i id="${venueName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${venueId}"></i>
+        <p class="card-text">${venueDescription}</p>
+        <a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>
+      </div>
+    </div>
+      `
+        );
+      venueCard.appendTo(myCol);
+      myCol.appendTo('#venueCard');
+    }
+  });
+}
 
   $("#liked-venues").click(function() {
     console.log("ClickedLike")
@@ -839,7 +909,7 @@ $(document).ready(function() {
   const addLikedVenuesToMap = function(data, map) {
     console.log(data)
     likedVenuesList = []
-    clearMarkers()
+    clearMarkers()∂
     $("#indexCardList").empty()
     for (i = 0; i < data.length; i++) { //puts markers in the markers set
       likedVenuesList.push(data[i].liked_venue.cafe_name);
@@ -908,6 +978,7 @@ $(document).ready(function() {
         icon: svgMarker
       });
 
+
       markers.push(marker)
 
       $.ajax({
@@ -922,7 +993,6 @@ $(document).ready(function() {
             var myCol = $('<div id="col"></div>');
             var myPanel = $(
               `
-              
               <div class="card-group">
               <div class="venue-card card card-block m-3 overflow-auto" style="width: 18rem;">
                 <div class="venue-card card card-body" id="${cafeName}-cardbody" data-idtext="${cafeName}">

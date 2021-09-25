@@ -124,3 +124,19 @@ const saveCafeList = function (cafeNamesList, cafeAddressList, cafeLatitudeList,
     });
   
 }
+
+
+// <div class="venue-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></div>
+//                     <div id="${cafeName}-dropdown" class="venue-card-dropdown dropdown-menu" aria-labelledby="dropdownMenuButton">
+//                       <a id="share ${cafeName}" data-idtext="share-${cafeName}" class="dropdown-item" href="#">Share</a>
+//                       <a id="add ${cafeName}" data-idtext="${cafeId}" class="dropdown-item add" href="#">Add to List</a>
+//                   </div>
+
+
+// document.getElementById(cafeName + "-dropdown").addEventListener('click', function(e) {
+//   if (e.target && e.target.matches("a.add")) {
+//     console.log(e.target.id)
+//     currentVenue = e.target.getAttribute('data-idtext')
+//     addToListModal(currentVenue)
+//   };
+// });

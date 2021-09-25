@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import VenueList, UserList, UserVenue, mapCafes, VenueComments, ReplyComments, feedback, suggestion, liked
+from .models import SharedLink, SharedListLink, VenueList, UserList, UserVenue, mapCafes, VenueComments, ReplyComments, feedback, suggestion, liked
 
 class UserListAdmin(admin.ModelAdmin):
     list_display = ['user', 'list_name']
@@ -15,7 +15,7 @@ class UserVenueAdmin(admin.ModelAdmin):
 admin.site.register(UserVenue, UserVenueAdmin)
 
 class mapCafesAdmin(admin.ModelAdmin):
-    list_display = ['cafe_name', 'cafe_address', 'description']
+    list_display = ['cafe_name', 'cafe_address', 'description', 'source']
 
 admin.site.register(mapCafes, mapCafesAdmin)
 
@@ -50,3 +50,12 @@ class likedAdmin(admin.ModelAdmin):
 
 admin.site.register(liked, likedAdmin)
 
+class SharedLinkAdmin(admin.ModelAdmin):
+    list_display = ['uuid', 'cafe']
+
+admin.site.register(SharedLink, SharedLinkAdmin)
+
+class SharedListLinkAdmin(admin.ModelAdmin):
+    list_display = ['uuid', 'list']
+
+admin.site.register(SharedListLink, SharedListLinkAdmin)

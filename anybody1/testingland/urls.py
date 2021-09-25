@@ -15,6 +15,7 @@ urlpatterns = [
     url('electra/update_list_name/', views.update_list_name, name='/electra/update_list_name/'),
     url('electra/marker_info/', views.marker_info, name='marker_info'),
     url('electra/get_friends', views.get_friends, name='get_friends'),
+    path('electra/all_venues/', views.all_venues, name='all_venues'),
     url('electra/info_box/', views.info_box, name='info_box'),
     url('electra/new_marker/', views.new_marker, name='new_marker'),
     url('electra/broadsheet_scraper/', views.broadsheet_scraper, name='broadsheet_scraper'),
@@ -38,7 +39,11 @@ urlpatterns = [
     path('electra/remove_venue_from_liked/', views.remove_venue_from_liked, name='remove_venue_from_liked'),
 
     url('electra/get_users/', views.get_users, name='get_users'),
-    path('electra/getUserMarkers/', views.getUserMarkers, name='getUserMarkers'),
+    path('electra/get_user_markers/', views.getUserMarkers, name='get_user_markers'),
+    path('electra/getuserlists/', views.getUserlists, name='getUserlists'),
+    path('electra/otheruserlist/', views.otherUserList, name='otheruserlist'),
+    path('electra/get_user_venues/', views.getUserVenues, name='get_user_venues'),
+    path('electra/get_user_liked/', views.getUserLiked, name='get_user_venues'),
 
     #testing
     url('electra/feedback/', views.user_feedback, name='feedback'),
@@ -53,8 +58,11 @@ urlpatterns = [
     path('write_description', views.write_description, name='write_description'),
     path('write_image', views.write_image, name='write_image'),
     path('broadsheet', views.broadsheet, name='broadsheet'),
-    # path('<int:pk>', views.DetailList.as_view(), name='detail_list'),
-    # path('<int:pk>/update', views.UpdateList.as_view(), name='update_list'),
-    # path('<int:pk>/delete', views.DeleteList.as_view(), name='delete_list'),
+
+    path('electra/build_link/<int:pk>/', views.build_link, name='build_link'),
+    path('electra/<uuid:uu>/', views.visit_link, name='visit_link'),
+    path('electra/list/<uuid:uu>/', views.visit_list_link, name='visit_list_link'),
+    path('electra/list/build_list_link/<int:pk>/', views.build_list_link, name='build_list_link'),
+
     path('<username>', views.view_dashboard, name='view_dashboard'),
 ]

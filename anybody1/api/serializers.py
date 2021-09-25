@@ -29,6 +29,7 @@ class UserListSerializer(serializers.ModelSerializer): #this is what we worked o
     class Meta:
         model = UserList
         fields = ['id', 'user', 'list_name']
+       
 
 class LikedSerializer(serializers.ModelSerializer):
     class Meta:

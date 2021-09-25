@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
+import uuid
 
 # Create your models here.
 # class listCafes(models.Model):
@@ -131,6 +132,8 @@ class DjangoSession(models.Model):
 #         managed = False
 #         db_table = 'shops_cafe'
 
+
+
 class mapCafes(models.Model): 
     id = models.BigAutoField(primary_key=True)
     cafe_name = models.CharField(max_length=200)
@@ -148,6 +151,10 @@ class mapCafes(models.Model):
     def __str__(self):
         return self.cafe_name
 
+class SharedLink(models.Model):
+    cafe = models.OneToOneField(mapCafes, on_delete=models.PROTECT)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
+
 
 #Create an intermediary class that references the mapCafes class (with a ForeignKey), when someone hits an "add-to-list"
 #the two keys needed are what is the venue/cafe and what is the list.
@@ -163,6 +170,11 @@ class UserList(models.Model):
     
     def __str__(self):
         return self.list_name
+
+class SharedListLink(models.Model):
+    list = models.OneToOneField(UserList, on_delete=models.CASCADE)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True)
+
 
 class UserVenue(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

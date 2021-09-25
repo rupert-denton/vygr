@@ -11,10 +11,9 @@ body {
   /* height: 100%; */
   margin: 0rem;
   padding: 0rem;
-  overflow-y: auto;
+  overflow: hidden;
   overscroll-behavior-y: none;
   overscroll-behavior-x: none;
-
 }
 
 ul {
@@ -23,9 +22,30 @@ ul {
 }
 
 .btn {
+  border: none;
+  font-size: 1.5rem;
+  background-color: white;
+  color: black;
+  border-radius: .5rem;
+  border-style: none;
+  font-size: 1.5rem;
+  box-shadow:  0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+}
+
+.btn:hover {
+  cursor: pointer;
   background-color: black;
   color: white;
+}
+
+
+.navbtn {
   border: none;
+  font-size: 1.5rem;
+  background-color: white;
+  color: black;
+  border-radius: .5rem;
+  border-style: none;
   font-size: 1.5rem;
 }
 
@@ -50,8 +70,19 @@ ul {
 }
 
 .search-bar{
+  border-radius: 30px;
   display: flex;
   height: 4rem;
+  box-shadow:  0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+}
+
+.search-result-box{
+  width: 100%
+}
+
+.search-result-box:hover{
+  background-color: lightgray;
+  cursor: pointer;
 }
 
 .dropdown-toggle{
@@ -109,14 +140,15 @@ i{
   cursor: pointer;
 }
 
-#sideNav{
-    display: flex;
-    flex-direction: column;
-    z-index: 1;
-    position: absolute;
-    top: 15rem;
-    transition: 0.05s;
+.grey-text{
+  color: lightgray;
 }
+
+.black-text{
+  color: black;
+}
+
+
 
 #sideNav button {
   display: flex;
@@ -187,6 +219,7 @@ i{
 .sidebar-flex{
   display: flex;
 }
+
 .open-sidebar {
   background: #F5F5F5;
   border-right-style: solid;
@@ -288,8 +321,7 @@ i{
 }
 
 .venue-card {
-  height: 15rem;
-  cursor: pointer;
+  height: 100vh;
 }
 
 .selected-card {
@@ -307,23 +339,46 @@ i{
   padding-left: .1rem;
 }
 
+.card-icon:hover{
+  cursor: pointer;
+}
+
 .default-like:hover{
+  cursor: pointer;
   color: #e4324c;
-  transition: 5ms;
+  transition: 0.1s;
 }
 
 .liked-venue{
   color: #e4324c;
 }
 
+.grey{
+  color: lightgrey;
+}
 
-.default-bookmark{
+.venue-info-card{
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 0;
+  top: 60rem;
+  overflow: hidden;
+  transition: 0.1s;
+}
+
+.height{
+  top:0rem;
 }
 
 .default-bookmark:hover{
   color: black;
-  transition: 5ms;
+  transition: 0.1s;
+  cursor: pointer;
 }
+
+.venue-source
 
 .bookmarked-venue{
   color: black;
@@ -343,6 +398,7 @@ i{
 /* validation  */
 /* validation snackbar after user adds to list */
 #snackbar {
+  z-index: ;
   visibility: hidden;
   min-width: 25rem;
   margin-left: -12.5rem;
@@ -509,6 +565,8 @@ i{
   box-shadow: none;
   border-color: #e6e6e6;
   width: 50rem;
+  font-size: 1.75rem;
+
 }
 
 #addMap {
@@ -542,6 +600,7 @@ i{
   border-left: var(--searchBorder);
   border-right: var(--searchBorder);
   border-bottom: var(--searchBorder);
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
   
   
 }
@@ -566,13 +625,36 @@ i{
   margin-top: .75rem;
 }
 
+.card-close:hover{
+  cursor:pointer;
+  color: lightgray
+}
+
 .venue-source{
   margin-top: .1rem;
+  margin-bottom: .1rem;
+}
+
+.venue-source:hover{
+  cursor:pointer;
+  color: black
 }
 
 /* ------ phone portrait ------ */
 
 @media (min-width: 0px) {
+
+  /* registration */
+
+  .login-card-image{
+    background: none;
+  }
+
+  .login-page{
+    background-image: url("/static/testingland/img/vygr-map.png");
+    background-size: 50rem;
+    background-position: center;
+  }
 
   /* nav */
   .page-title {
@@ -590,6 +672,19 @@ i{
     padding-top: .3rem;
   }
 
+  #sideNav{
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    position: absolute;
+    top: 20rem;
+    transition: 0.05s;
+  }
+
+  .pushedbtn {
+    margin-left: 19rem
+  }
+
   /* sidebar */
   .open-sidebar {
     width: 18.7rem;
@@ -603,35 +698,36 @@ i{
     border-top-color: lightgrey;
     border-top-width: .1rem;
   }
-
-  .pushedbtn {
-    margin-left: 20rem;
+  
+  .card-close{
+    font-size: 3rem;
+    color: black;
+    margin-left: 31rem;
   }
 
-  .pushedcards {
-    margin-left: 16rem;
-    width: 19.2rem;
-  }
-
-  .map-venue-cards {
-    top: 60rem;
-    left: 2rem;
+  .hide{
+    display:none
   }
 
   .venue-card {
-    width: 26.5rem;
-    height: 14rem;
-    cursor: pointer;
+    height: 100vh;
+    width: 100vw;
+    overflow-y: scroll;
+    padding: 1rem;
+  }
+  .card-body{
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
-  .venue-name {
-    font-size: 1.7rem;
+  .card-title {
+    margin-bottom: 1rem;
+    font-size: 1.75rem;
   }
 
   .venue-address{
     font-size: 1.4rem;
     margin-bottom: .75rem;
-
   }
 
   .venue-source{
@@ -639,6 +735,92 @@ i{
     color: rgb(167, 168, 171);
   }
 
+  .card-image{
+    display: flex;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .venue-text{
+    font-size: 1.24rem;
+  }
+
+  .venue-text{
+    font-size: 1.24rem;
+  }
+}
+
+@media (min-width: 620px){
+
+
+
+  /* registration */
+  .login-card-image{
+    background-image: url("/static/testingland/img/vygr-map.png");
+    background-size: 50rem;
+    border-radius: 0px 30px 30px 0px;
+    background-position: center;
+  }
+
+  .login-page{
+    background-image: none;
+    background-color: #EAEAEA;
+  }
+
+  .venue-text{
+    margin:1.35rem;
+    margin-bottom: .5rem;
+    font-size: 1.35rem;
+  }
+
+  .venue-source{
+    margin-left:1.35rem;
+    font-size: 1.35rem;
+  }
+
+  .venue-card {
+    height: 100vh;
+    width: 100%;
+  }
+
+  .card-image{
+    display: flex;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-direction: row;
+    justify-content: center ;
+  }
+
+  .card-close{
+    margin-left: 52rem;
+    font-size: 3rem;
+    color: black;
+  }
+
+  #sideNav{
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    position: absolute;
+    top: 20rem;
+    transition: 0.05s;
+}
+
+
+  .sidebar-lists {
+    border-top-style: solid;
+    padding-left: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-top-color: lightgrey;
+    border-top-width: .1rem;
+  }
+
+  .pushedbtn {
+    margin-left: 25rem;
+  }
 }
 
 /* tablet */
@@ -653,13 +835,10 @@ i{
     font-size: 6rem;
   }
 
-
-
   .search-list-item {
     font-size: 1.7rem;
     padding-left: .5rem;
     padding-top: 1rem;
-  
   }
 
   /* sidebar */
@@ -668,9 +847,7 @@ i{
     /* height: 100%; */
   }
 
-  .pushedbtn {
-    margin-left: 26.5rem;
-  }
+  
 
   .pushedcards {
     margin-left: 23rem;
@@ -686,6 +863,24 @@ i{
   .map-venue-cards{
     top: 60rem;
   }
+
+  .venue-info-card{
+    height: 100vh;
+    width: 60rem;
+    position: absolute;
+    z-index: 1;
+    left: 100rem;
+    transition: 0.2s;
+    top: 0rem;
+  }
+
+  .venue-info-card-closed{
+    left: 180rem;
+  }
+
+  .venue-info-card-open{
+    left: 100rem;
+  }
 }
 
 
@@ -696,8 +891,6 @@ i{
   .page-title {
     font-size: 6rem;
   }
-
-
 
   /* sidebar */
   .open-sidebar {
@@ -721,6 +914,17 @@ i{
 
 /* registration */
 
+#id_username{
+  font-size: 1.7rem;
+}
+
+#id_username p{
+  font-size: 1.7rem;
+}
+
+#id_password{
+  font-size: 1.7rem;
+}
 .signup{
   margin: 2.5rem;
 }
@@ -736,11 +940,11 @@ i{
 .login-page{
   background-color: #EAEAEA;
   display: flex;
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    flex-direction: row;
-    flex-wrap: nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
 .login-navbar{
@@ -779,12 +983,6 @@ i{
     align-items: center;
 }
 
-.login-card-image{
-  background-image: url("/static/testingland/img/iso-city.jpg");
-  background-size: 50rem;
-  border-radius: 0px 30px 30px 0px;
-  background-position: center;
-}
 
 .login_btn {
   width: 100%;
