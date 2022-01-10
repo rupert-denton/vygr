@@ -1,0 +1,84 @@
+{% load static %}
+{% load widget_tweaks %}
+
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>VYGR</title>
+    <link rel="icon" type="image/png" href="{% static "testingland/img/favicon_io_vygr/favicon.ico" %}">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap" rel="stylesheet">
+    <!-- icons -->
+    <script src="https://kit.fontawesome.com/343a7efeab.js" crossorigin="anonymous"></script>
+
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <!--Bootsrap-->
+    <!--Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <!--Bootstrap responsive meta tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{% static "testingland/css/electra.css" %}">
+
+    <link href="https://use.typekit.net/zgs1itb.css" rel="stylesheet">
+
+    <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
+
+  </head>
+
+  {% block content %}
+  
+  <body>
+    {% load i18n %}
+    <div class= registration-frame>
+      <div id="art" class="registration-art art-side">
+        <div id="frame" class="key-value-prop-frame art-side">
+          <div id="title" class="key-value-prop-title art-side">
+          <h1>
+            Places Loved By Those You Trust.
+          </h1>
+        </div>
+            <div id="para1" class="key-value-prop-body art-side">
+              <p>Connect with people you trust.</p>
+            </div>
+            <div id="para2" class="key-value-prop-body art-side">
+              <p>Find the places they love to go.</p>
+            </div>
+            <div id="para3" class="key-value-prop-body art-side">
+              <p>Share your favourite spots.</p>
+            </div>
+          </div>
+      </div>
+      
+      <div class="registration-form">
+        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+          <div class="login-page-title page-title" href="#">VYGR</div>
+          <p class="registration-element">{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you don't receive the email please check your junk and spam folders.{% endblocktrans %}</p>
+      </div>
+      </div>
+  </div>
+  </body>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  <script src="{% static "/testingland/js/index3.js" %}"> </script>
+
+
+  {% endblock %}
+
+
+</html>

@@ -2,6 +2,10 @@ from rest_framework import serializers
 from testingland.models import VenueList, Venues, UserList, UserVenue, mapCafes, UserConnections, User, PromotionCampaign
 from testingland.models import VenueComments, ReplyComments, liked
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 class mapCafesSerializer(serializers.ModelSerializer):
     class Meta:
         model = mapCafes
@@ -29,7 +33,7 @@ class UserListSerializer(serializers.ModelSerializer): #this is what we worked o
     class Meta:
         model = UserList
         fields = ['id', 'user', 'list_name']
-       
+        depth = 2
 
 class LikedSerializer(serializers.ModelSerializer):
     class Meta:

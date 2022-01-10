@@ -9,7 +9,7 @@ from django.views.generic import ListView
 from django.contrib.gis.geos import fromstr, Point, Polygon
 from django.contrib.gis.db.models.functions import Distance, Envelope
 from .models import liked, mapCafes, UserList, UserVenue, User, UserConnections,\
-     feedback, suggestion, SharedLink, SharedListLink
+     feedback, suggestion, SharedLink, SharedListLink, VenueComments
 from django.urls import reverse_lazy, reverse
 from .forms import PlaceForm, UserListForm, addCafesForm
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -19,6 +19,9 @@ import requests
 from requests import get
 import pdb
 import re
+from allauth.account.decorators import verified_email_required
+
+
 
 
 #what is the purpose of this function?
@@ -39,6 +42,13 @@ def venue_page(request, venue_id):
 
 def broadsheet(request):
     return render(request, 'testingland/broadsheet.html')
+
+def login_page(request):
+    return render(request, 'testingland/index3.html')
+
+@verified_email_required
+def logged_in_home(request):
+     return render(request, 'testingland/index3.html')
 
 def write_description(request):
     return render(request, 'testingland/write_description.html')
@@ -63,7 +73,7 @@ def add_cafe(request):
         new_obj.venue_type = request.POST.get('venuetype')
         new_obj.description = request.POST.get('venuedescription')
         new_obj.geolocation = Point(x, y)
-        new_obj.source = request.user
+        new_obj.source = request.user.id
         new_obj.save()
         
     return JsonResponse([
@@ -77,7 +87,7 @@ def like_venue(request):
        
         new_obj.liked_venue = mapCafes(id = request.POST.get('liked_venue'))
         new_obj.save()
-        return render(request, 'testingland/addcafe.html')
+        return render(request, 'testingland/index3.html')
 
 def remove_venue_from_liked(request):
     data = liked.objects.filter(liked_venue=request.GET.get('venue'))
@@ -119,6 +129,17 @@ def getUserlists(request):
             for item in qs
     ], safe=False)
 
+def create_new_list(request):
+    if request.method == "POST":
+        new_obj = UserList()
+        user = request.user
+        list_name = request.POST.get('list_name')
+        new_obj.list_name = list_name
+        new_obj.user = user
+        new_obj.save()
+        return JsonResponse([
+            ], safe=False)
+
 def update_list_name(request):
     if request.method == "POST":
         new_obj = UserList()
@@ -126,13 +147,28 @@ def update_list_name(request):
         print(edited_list)
         current_list = UserList.objects.get(id=edited_list)
         new_list_name = request.POST.get('list_name')
-
         current_list.list_name = new_list_name
         current_list.save()
 
     return render(request, 'testingland/index.html')
 
-
+def add_venue_comment(request):
+    if request.method == "POST":
+            comment = request.POST.get('comment')
+            print(comment)
+            venue = request.POST.get('venue_id')
+            print(venue)
+            map_cafes = mapCafes.objects.get(id=venue)
+            new_obj = VenueComments()
+            new_obj.venue = map_cafes
+            new_obj.user = request.user
+            new_obj.comment = comment
+            
+            new_obj.save()
+    
+    return JsonResponse([
+               
+    ], safe=False)
 
 def write_image(request):
     return render(request, 'testingland/write_image.html')
@@ -257,7 +293,7 @@ def visit_list_link(request, uu):
     )
 
 def marker_info(request):
-    template_name = 'testingland/electra.html'
+    # template_name = 'testingland/electra.html'
     neLat = request.GET.get('neLat', None)
     neLng = request.GET.get('neLng', None)
     swLat = request.GET.get('swLat', None)
@@ -274,7 +310,9 @@ def marker_info(request):
 
     geom = Polygon.from_bbox(bbox)
 
+
     qs = mapCafes.objects.filter(geolocation__coveredby=geom)
+    print(qs)
 
     return JsonResponse([
             [cafe.cafe_name, cafe.cafe_address, cafe.geolocation.y, cafe.geolocation.x, cafe.source, cafe.venue_type, cafe.id]
@@ -389,9 +427,8 @@ def getUserMarkers(request):
     ], safe=False)
 
 def getUserVenues(request):
-    userName = request.GET.get('userName', None)
-    print(userName)
-    qs = mapCafes.objects.filter(source = userName)
+    userId = request.user.id
+    qs = mapCafes.objects.filter(source = userId)
     print(qs)
     return JsonResponse([
         [venue.cafe_name]
@@ -414,7 +451,7 @@ def otherUserList(request):
     print(userName)
     qs = UserList.objects.filter(user__username=userName)
     return JsonResponse([
-        [list.id, list.list_name] 
+        [list.id, list.list_name, list.user] 
         for list in qs
     ], safe=False)
 
@@ -517,21 +554,6 @@ def view_dashboard (request, username):
 
     template = 'testingland/dashboard.html'
     return render (request, template)
-
-def join_anybody(request):
-    return render(request, 'testingland/join.html')
-
-class SignUp(generic.CreateView):
-    form_class = UserCreationForm
-    success_url = reverse_lazy('cafes_home')
-    template_name = 'registration/signup.html'
-
-    def form_valid(self, form):
-        view = super(SignUp, self).form_valid(form)
-        username, password = form.cleaned_data.get('username'), form.cleaned_data.get('password1')
-        user = authenticate(username=username, password=password)
-        login(self.request, user)
-        return view
 
 
 def user_feedback(request):

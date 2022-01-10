@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-
+    <!-- google sign in -->
+    
     <!--Bootsrap-->
 
     <!--Bootstrap CSS -->
@@ -36,21 +37,14 @@
           <div class="container-fluid h-100">
             <div class="row h-100">
               <div class="form_container col-sm">
-                <form class="signup" method="post">
-                  <div>
-                    <h1 class="registration-header">Join VYGR</h1>
-                  </div>
-                  <div id="signup-div" class="registration-font-div">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                  </div>
-                  <div class="text-center">
-                    <label class="checkbox-inline"><input type="checkbox" required="required">I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
-                  </div>
-                </form>
+                {% load socialaccount %}
+
+                <h1>Django Allauth Tutorial</h1>
+                {% if user.is_authenticated %}
+                <p>Welcome {{ user.username }} !!!</p>
+                {% else %}
+                <a href="{% provider_login_url 'google' %}">Sign Up</a>
+                {% endif %}
               </div>
               
               <div class="col-sm login-card-image">

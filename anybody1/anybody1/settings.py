@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+from django.contrib.auth import login
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -28,11 +31,40 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'cafes_home'
-LOGOUT_REDIRECT_URL = 'cafes_home'
+LOGIN_URL = '/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 # Application definition
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                # `allauth` needs this from django
+                'django.template.context_processors.request',
+            ],
+        },
+    },
+]
+
+# added this for all-auth
+AUTHENTICATION_BACKENDS = [
+    
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+    
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,11 +74,45 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    
     #'shops',
     'testingland',
     'rest_framework',
     'bootstrap_modal_forms',
+
+    # all auth
+    # The following apps are required:
+    # 'django.contrib.auth',
+    # 'django.contrib.messages',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'widget_tweaks',
+
 ]
+
+#django-allauth registraion settings
+
+ACCOUNT_EMAIL_SUBJECT_PREFIX ='VYGR '
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = False
+ACCOUNT_CONFIRM_EMAIL_ON_GET= True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION= True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+LOGIN_REDIRECT_URL = '/'  
+ACCOUNT_LOGOUT_ON_GET=True
+ACCOUNT_LOGOUT_REDIRECT_URL='/'
+
+# 1 day
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
+  
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,21 +126,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'anybody1.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+
 
 WSGI_APPLICATION = 'anybody1.wsgi.application'
 
@@ -85,6 +137,7 @@ WSGI_APPLICATION = 'anybody1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'vygr',
         'USER': 'rupertdenton',
         'PASSWORD': '41621ra',
@@ -92,6 +145,7 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+
 
 
 # Password validation
@@ -131,3 +185,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'info@vygrapp.com'
+EMAIL_HOST_PASSWORD = '160788#rdE'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+# fix GDAL error being thrown by using M1 Mac
+GDAL_LIBRARY_PATH = '/opt/homebrew/opt/gdal/lib/libgdal.dylib'
+GEOS_LIBRARY_PATH = '/opt/homebrew/opt/geos/lib/libgeos_c.dylib'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+

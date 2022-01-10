@@ -143,7 +143,7 @@ class mapCafes(models.Model):
     geolocation = models.PointField(geography=True, blank=True, null=True)
     venue_type = models.CharField(max_length=200)
     source = models.CharField(max_length=200)
-    description = models.CharField(max_length=15000)
+    description = models.CharField(max_length=15000, null=True)
 
     # class Meta:
     #     # managed = False
@@ -208,7 +208,7 @@ class PromotionCampaign(models.Model):
 
 class VenueComments(models.Model):
     venue = models.ForeignKey(mapCafes, on_delete=models.PROTECT)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment =  models.CharField(max_length=10000)
 
 class ReplyComments(models.Model):

@@ -13,7 +13,9 @@
     <!-- icons -->
     <script src="https://kit.fontawesome.com/343a7efeab.js" crossorigin="anonymous"></script>
 
-
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
     <!--Bootsrap-->
     <!--Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
@@ -24,7 +26,6 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
 
-
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="{% static "testingland/css/electra.css" %}">
@@ -33,12 +34,14 @@
 
     <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@5.0.1/dist/js/shepherd.js"></script>
+
   </head>
 
   {% block content %}
 
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid ">
       {% if cafe %}
          <input id="bookmarked_id" type="hidden" value={{ cafe.id }}>
       {% endif %}
@@ -61,39 +64,34 @@
         </div>
       </div>
       <div class="nav-button">
-        {% if user.is_authenticated%}
+        {% if user.is_authenticated %}
         <a id="username" class="nav-username nav-btn"> {{ user.get_username }} </a>
-        <a class="btn" href="{% url 'logout' %}">Logout</a>
+        <a class="btn" href="{% url 'account_logout' %}">Logout</a>
         {% else %}
-        <a id="login" class="btn nav-btn" href="{% url 'login' %}"> Login </a>
+        <a id="login" class="btn nav-btn" href="{% url 'account_login' %}"> Login </a>
         {% endif %}
         {% if user.is_authenticated == False %}
-        <a id="signup" class="btn nav-btn" href="{% url 'signup' %}"> Sign Up </a>
+        <a id="signup" class="btn nav-btn" href="{% url 'account_signup' %}"> Sign Up </a>
         {% endif %}
         <input id="feedback" class="btn nav-btn" type="button" value="Feedback" />
       </div>
     </nav>
   </div>
 
-    <div class="container-fluid">
-      <div class="row">
-        
-        <div id="vygr-sidebar" class="closed-sidebar sidebar-flex justify-content-center">
-            <div class="sidebar-lists">
-              <ul id="userLists" class="">
-              </ul>
-            </div>
-          
-        </div>
+    
+  <div id="vygr-sidebar" class="closed-sidebar">
+      <div class="sidebar-lists">
+        <ul id="userLists" class=""></ul>
+      </div>
+  </div>
+
         <p id="hidden" hidden>Testing</p>
         
-      </div>
 
 
         <div class="main col-12">
           <div id="sideNav">
             <button id="add-place" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-geo-alt-fill"></i></button>
-            <button id="liked-venues" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-heart-fill"></i></button>
             <button id="createList" type="button" class="side-tab" data-dismiss="modal"><i class="bi bi-plus-circle-fill"></i></button>
             <button id="area-search" type="button" class="side-tab" data-dismiss="modal"><i class="fas fa-search-location"></i></button>
             <button id="user-lists" type="button" class="side-tab" data-name="liked-venues" data-pk="1"><i class="bi bi-bookmarks-fill"></i></button>
@@ -106,13 +104,15 @@
         </div>
 
        
+        <div class="venue-card-container">
+            <!-- map cards -->
+          <div class="venue-info-card venue-info-card-closed row flex-nowrap col-12" id="venueCard"></div>
+          <!-- The snackbars -->
+          <div id="snackbar">Added To List</div>
+          <div id="deleteSuccessSnackbar">List Deleted</div>
+          <div id="venueRemovedSuccessSnackbar">Venue Removed</div>
+        </div>
         
-        <!-- map cards -->
-        <div class="venue-info-card venue-info-card-closed row flex-nowrap col-12" id="venueCard"></div>
-        <!-- The snackbars -->
-        <div id="snackbar">Added To List</div>
-        <div id="deleteSuccessSnackbar">List Deleted</div>
-        <div id="venueRemovedSuccessSnackbar">Venue Removed</div>
 
       
       </div>
@@ -181,8 +181,8 @@
                   </div>
                 <li>
                   <div class="input-group">
-                    <div class="form-group newVenueAdd form-control-dark" placeholder="Venue Type...">
-                      <select class="form-control" id="venue-type-box">
+                    <div class="newVenueAdd form-control" placeholder="Venue Type...">
+                      <select class="form-control venue-type-list" id="venue-type-box">
                         <option>Cafe</option>
                         <option>Restaurant</option>
                         <option>Bar</option>
@@ -197,8 +197,8 @@
                 </li>
                 <li>
                   <div class="input-group">
-                    <div class="newVenueAdd input-group">
-                      <textarea id="description-box" class="venue-info-form form-control" placeholder="Why would you recommend this place?" aria-label="With textarea"></textarea>
+                    <div class=" input-group">
+                      <textarea id="description-box" class="newVenueAdd venue-info-form form-control" placeholder="Why would you recommend this place?" aria-label="With textarea"></textarea>
                     </div>
                   </div>
                 </li>
@@ -231,9 +231,6 @@
         </div>
       </div>
     </div>
-
-
-
 
     <div class="modal" id="suggestion-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
@@ -320,8 +317,8 @@
     </div>
 
     <div class="modal" id="userlist-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content rounded-0">
+      <div class="userlist-modal-dialog modal-dialog" role="document">
+        <div class="userlist-modal-content modal-content rounded-0">
           <div class="modal-header">
             <h5 class="modal-title" id="ModalLabel"></h5>
             <button type="button" class="close" data-dismiss="userlist-modal" aria-label="Close">
@@ -330,9 +327,9 @@
           </div>
           {% csrf_token %}
           {{ form.as_p }}
-          <div class="modal-body">
-            <div id="lists-column" class="mt-1 ml-2 mb-1 col-2" style="height: 367px;">
-              <ul id="userListsModal" class="list-group list-group-flush" style="width: 250px">
+          <div class="modal-body userlist-modal-body">
+            <div id="lists-column">
+              <ul id="userListsModal" class="list-group list-group-flush">
               </ul>
             </div>
           </div>
@@ -456,18 +453,70 @@
       </div>
     </div>
 
-  
 
+    <div class="modal" id="permissionDeniedModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Turn On Location Sharing?</h5>
+            <button type="button" class="close" data-dismiss="newlistmodal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="venueAddedText" class="permission-denied-modal">
+              <p>Looks like location sharing might be switched off on your device.</p>
+              <p>Don't worry, it's easily fixed:</p>
+              <ol>
+                <li>Go to <b>Settings</b></li>
+                <li>Tap <b>Privacy</b></li>
+                <li>Tap <b>Location Services</b></li>
+                <li>Find your browser (eg. Safari or Chrome)</li>
+                <li>Change <b>Allow Location Sharing</b> to <b>Ask Me Next Time</b> or <b>Always</b></li>
+              </ol>
+              <p>Once you're done just click <b>Done</b> below</p>
 
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="permissionDeniedModalDenied" type="button" class="btn">Continue without sharing location</button>
+            <button id="permissionDeniedModalDone" type="button" class="btn">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-
-
-
+    <div class="modal" id="registerModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Sign Up or Login</h5>
+            <button type="button" class="close" data-dismiss="newlistmodal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div id="registerText" class="register-prompt">
+              
+            </div>
+          </div>
+          <div class="modal-footer">
+            <form type="button" action="{% url 'account_signup' %}">   
+              <input class="btn"  type="submit" value="Sign Up">
+            </form>
+            <form  type="button" action="{% url 'account_login' %}">   
+              <input class="btn"  type="submit" value="Login">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     </div>
     </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    <script src="{% static "/testingland/js/intro.js" %}"> </script>
     <script src="{% static "/testingland/js/index3.js" %}"> </script>
 
 

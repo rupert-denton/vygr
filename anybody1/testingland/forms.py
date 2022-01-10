@@ -20,3 +20,5 @@ class UserListForm(BSModalModelForm):
         model = UserList
         fields = ['list_name', 'user']
 
+
+

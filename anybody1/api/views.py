@@ -82,7 +82,6 @@ class UserLikedViewSet(viewsets.ModelViewSet):
             else:
                 return Response({'error' : serializer.errors}, status=400)
 
-
 #this shows all lists for a user
 
 class UserListViewSet(viewsets.ModelViewSet):
@@ -158,10 +157,16 @@ class SavedVenuesViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         list_id = self.request.GET.get('list_id', None)
+        user = self.request.user
+        print(user)
         print(list_id)
         print(type(list_id))
-        return UserVenue.objects.filter(user_list=int(float(list_id)))
+        qs = UserVenue.objects.filter(user_list=int(float(list_id)))
+        if not qs:    
+            print("EMPTY LIST")  
 
+        else:
+            return qs
 
 class AllBookMarkedVenuesViewSet(viewsets.ModelViewSet):
     serializer_class = AllBookMarkedSerializer
@@ -171,16 +176,13 @@ class AllBookMarkedVenuesViewSet(viewsets.ModelViewSet):
         print(user)
         return VenueList.objects.filter(venue_name__user=self.request.user)
 
-
-
-
 class CurrentUserInfoViewSet(viewsets.ModelViewSet):
     serializer_class = UserInfoSerializer
 
     def get_queryset(self):
-        current_user = self.request.GET.get('current_user', None)
-        current_user_qs = User.objects.filter(username=current_user)
-        return current_user_qs
+        current_user = self.request.user
+        qs = User.objects.filter(username=current_user)
+        return qs
 
 class FollowedUserInfoViewSet(viewsets.ModelViewSet):
     serializer_class = UserInfoSerializer
@@ -317,14 +319,15 @@ class VenueCommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         if self.request.method == "POST":
-            venue = request.data.get('venue_id')
-            # user = self.request.user.id
             comment = request.data.get('comment')
-            data = {'comment':comment, 'venue_id':venue }
-
-            print(data)
-            print(type(data))
-
+            print(comment)
+            new_obj = VenueComments()
+            new_obj.comment = comment
+            new_obj.user = self.request.user.id
+            new_obj.venue = request.data.get('venue_id')
+            new_obj.save()
+            data = {'comment':comment, 'user': user, 'venue_id':venue }
+            
             serializer = VenueCommentSerializer(data=data)
             if serializer.is_valid():
                 serializer.save()

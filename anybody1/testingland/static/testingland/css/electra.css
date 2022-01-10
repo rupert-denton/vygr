@@ -1,14 +1,11 @@
-
 /* ------ global ------ */
 
-html{
+html {
   font-size: 10px;
   /* overflow: hidden !important; */
 }
 
 body {
-  width: 100%;
-  /* height: 100%; */
   margin: 0rem;
   padding: 0rem;
   overflow: hidden;
@@ -26,11 +23,29 @@ ul {
   font-size: 1.5rem;
   background-color: white;
   color: black;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   border-style: none;
   font-size: 1.5rem;
-  box-shadow:  0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
+
+.commentSubmitBtn{
+    border: none;
+    font-size: 1.5rem;
+    background-color: white;
+    color: black;
+    padding: .5rem;
+    border-radius: 0.5rem;
+    border-style: none;
+    font-size: 1.5rem;
+  }
+
+  .commentSubmitBtn:hover{
+    cursor: pointer;
+    background-color: black;
+    color: white;
+  }
+
 
 .btn:hover {
   cursor: pointer;
@@ -38,13 +53,23 @@ ul {
   color: white;
 }
 
+.infowindow {
+  background-color: white;
+  color: black;
+  font-weight: 400;
+}
+
+.infowindow:hover {
+  cursor: pointer;
+  color: lightgray
+}
 
 .navbtn {
   border: none;
   font-size: 1.5rem;
   background-color: white;
   color: black;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   border-style: none;
   font-size: 1.5rem;
 }
@@ -54,7 +79,7 @@ ul {
   padding-right: 0rem;
 }
 
-.col-12{
+.col-12 {
   padding: 0rem;
 }
 .row {
@@ -62,47 +87,69 @@ ul {
 }
 
 .modal-content{
-  border-radius: 30px;
+  border-radius: .75rem;
 }
+
+.userlist-modal-dialog{
+  height: 100%
+}
+
+.userlist-modal-content{
+  height: 70%
+}
+
+.userlist-modal-body{
+  padding:0rem;
+  overflow-y: scroll;
+  overflow-x: auto;
+  text-overflow: ellipsis;
+}
+
 .page-title {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   color: black;
 }
 
-.search-bar{
+.login-page-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-bar {
   border-radius: 30px;
   display: flex;
   height: 4rem;
-  box-shadow:  0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
-.search-result-box{
-  width: 100%
+.search-result-box {
+  width: 100%;
 }
 
-.search-result-box:hover{
+.search-result-box:hover {
   background-color: lightgray;
   cursor: pointer;
 }
 
-.dropdown-toggle{
+.dropdown-toggle {
   border-radius: 3rem 0rem 0rem 3rem;
 }
 
-.dropdown-item{
+.dropdown-item {
   font-size: 1.5rem;
 }
 
-.dropdown-item:hover{
+.dropdown-item:hover {
   cursor: pointer;
 }
 
-.submit-btn{
+.submit-btn {
   display: flex;
   border-radius: 0rem 3rem 3rem 0rem;
   width: 4rem;
   align-items: center;
-  justify-content: center;  
+  justify-content: center;
 }
 
 .navbar {
@@ -115,10 +162,10 @@ ul {
   z-index: 1;
 }
 
-.nav-btn{
-  margin:.5rem;
+.nav-btn {
+  margin: 0.5rem;
 }
-i{
+i {
   font-style: normal;
 }
 
@@ -140,15 +187,13 @@ i{
   cursor: pointer;
 }
 
-.grey-text{
+.grey-text {
   color: lightgray;
 }
 
-.black-text{
+.black-text {
   color: black;
 }
-
-
 
 #sideNav button {
   display: flex;
@@ -156,7 +201,7 @@ i{
   transition: 0.3s;
   height: 5rem;
   left: -80px;
-  padding: .1rem;
+  padding: 0.1rem;
   width: 5rem;
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
@@ -169,15 +214,14 @@ i{
   box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
-#sideNav button:hover{
+#sideNav button:hover {
   cursor: pointer;
   background-color: black;
   color: white;
 }
 
-
 #sideNav i {
-  font-size: 1.9rem;  
+  font-size: 1.9rem;
 }
 
 /* profile modal */
@@ -209,50 +253,43 @@ i{
   background-color: #444;
 }
 
-
 .pushedbtn {
   transition: 0.1s;
 }
 
 /* sidebar */
 
-.sidebar-flex{
+.sidebar-flex {
   display: flex;
 }
 
 .open-sidebar {
-  background: #F5F5F5;
+  background: #fff;
   border-right-style: solid;
   border-right-width: 0.1rem;
   border-right-color: gainsboro;
   height: 100vh;
-  width: 25rem;
   position: absolute;
   /* Stay in place */
   z-index: 1;
-  left: 0;
   transition: 0.1s;
 }
 
 .closed-sidebar {
-  background: #F5F5F5;
-  border-right-style: solid;
-  border-right-width: 0.1rem;
-  border-right-color: gainsboro;
-  height: 100%;
-  width: 0;
+  width: 0rem;
   position: absolute;
-  z-index: 1;
-  left: 0;
-  padding-top: 3rem;
-  /* transition: 0.1s; */
+  transition: 0.1s;
 }
 
 .sidebar-lists {
-  overflow:  hidden;
-  padding-left: 1.5rem;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+.list-details{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
 }
 
 .list-options {
@@ -261,42 +298,79 @@ i{
 
 .list-options:hover {
   cursor: pointer;
-  color: black
+  color: black;
 }
 
-.close{
+.close {
   font-size: 2.5rem;
   color: white;
   opacity: 1;
+  text-shadow: 0;
 }
 
-.form-control{
-  font-size: 1.75rem;
+.form-control {
+  font-size: 1.6rem;
+  resize: none;
 }
 
-.modal-text{
+.venue-type-list{
+  border: none;
+  padding: 0rem;
+}
+.modal-text {
   font-size: 1.5rem;
 }
 
-.modal-header{
+.modal-header {
   border-bottom: 0px;
-  background-color: black;
-  border-radius: 3rem 3rem 0rem 0rem;
-  color: white;
+  color: black;
 }
 
-.modal-footer{
+.modal-header .close{
+  margin: 0rem;
+  color: black;
+}
+
+.modal-footer {
   border-top: 0px;
+}
+
+.bookmark-header {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-bottom-style: dashed;
+  border-color: lightgrey;
+  border-width: .1rem;
+  justify-content: flex-start;
+}
+
+.bookmark-title{
+  font-size: 1.5rem;
+}
+
+.list-creator{
+  color: gray;
+  font-style: italic;
 }
 
 /* the individual user's lists */
 .userlist {
-  font-size: 1.5rem;
-  margin-top: 1.5rem;
-  margin-left: .5rem;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 1.3rem;
+}
+
+.sidebar-container{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  padding: 1rem;
+  border-width: thin;
+  border-color: lightgray;
+  white-space: nowrap;
 }
 
 .userlist:hover {
@@ -312,7 +386,8 @@ i{
 }
 
 /* venue cards */
-.map-venue-cards {   /* this is the set of cards */
+.map-venue-cards {
+  /* this is the set of cards */
   width: 100%;
   overflow-x: auto;
   position: absolute;
@@ -333,79 +408,87 @@ i{
   transition: 0.1s;
 }
 
-.card-icon{
+.card-icon {
   color: lightgrey;
   font-size: 1.3rem;
-  padding-left: .1rem;
+  padding-left: 0.1rem;
 }
 
-.card-icon:hover{
+.card-icon:hover {
   cursor: pointer;
 }
 
-.default-like:hover{
+.default-like:hover {
   cursor: pointer;
   color: #e4324c;
   transition: 0.1s;
 }
 
-.liked-venue{
+.liked-venue {
   color: #e4324c;
 }
 
-.grey{
+.grey {
   color: lightgrey;
 }
 
-.venue-info-card{
+.venue-card-container{
+  display: flex;
+  justify-content: flex-end;
+}
+
+.venue-info-card {
   position: absolute;
   z-index: 1;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   margin-left: 0;
   top: 60rem;
   overflow: hidden;
   transition: 0.1s;
 }
 
-.height{
-  top:0rem;
+.height {
+  top: 0rem;
 }
 
-.default-bookmark:hover{
+.default-bookmark:hover {
   color: black;
   transition: 0.1s;
   cursor: pointer;
 }
 
-.venue-source
-
-.bookmarked-venue{
+.venue-source .bookmarked-venue {
   color: black;
 }
 
-.userlistModal{
-  padding: .3rem;
+.userlistModal {
+  padding: 0.3rem;
   width: 45rem;
   font-size: 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.userlistModal:hover{
+.userlistModal:hover {
   cursor: pointer;
   color: grey;
+}
+
+.shepherd-text{
+  font-size: 1.3rem;
 }
 
 /* validation  */
 /* validation snackbar after user adds to list */
 #snackbar {
-  z-index: ;
   visibility: hidden;
   min-width: 25rem;
   margin-left: -12.5rem;
-  background-color: grey;
+  background-color: black;
   color: #fff;
   text-align: center;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   padding: 1.6rem;
   position: fixed;
   z-index: 1;
@@ -473,10 +556,10 @@ i{
   visibility: hidden;
   min-width: 25rem;
   margin-left: -1.25rem;
-  background-color: grey;
+  background-color: black;
   color: #fff;
   text-align: center;
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   padding: 1.6rem;
   position: fixed;
   z-index: 1;
@@ -498,13 +581,13 @@ i{
   /* Set a default minimum width */
   margin-left: -12.5rem;
   /* Divide value of min-width by 2 */
-  background-color: grey;
+  background-color: black;
   /* Black background color */
   color: #fff;
   /* White text color */
   text-align: center;
   /* Centered text */
-  border-radius: .2rem;
+  border-radius: 0.2rem;
   /* Rounded borders */
   padding: 1.6rem;
   /* Padding */
@@ -542,31 +625,52 @@ i{
   font-size: 1.2rem;
 }
 
-.modal-title{
+.modal-title {
   font-size: 2.5rem;
   margin: 1.5rem;
 }
 
-.subtitle{
+.subtitle {
   font-size: 1.5rem;
   margin-top: 2rem;
-  margin-bottom: 2rem
+  margin-bottom: 2rem;
 }
 
 .body-text {
   font-size: 1.4rem;
 }
 
+.register-prompt {
+  margin: 1rem;
+  min-height: 4rem;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.permission-denied-modal{
+  margin: 1rem;
+  min-height: 4rem;
+  font-size: 1.6rem;
+}
+
 /* ***** ADD VENUE PAGE ***** */
 
 .newVenueAdd {
   margin: 1rem;
-  min-height: 4.1rem;
-  box-shadow: none;
-  border-color: #e6e6e6;
-  width: 50rem;
-  font-size: 1.75rem;
+  min-height: 4rem;
+  font-size: 1.6rem;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 3px;
+}
 
+.newVenueAdd input:focus {
+  border: 0.3rem solid black;
+}
+
+.newVenueAdd input:active {
+  border: none;
+  outline: none;
 }
 
 #addMap {
@@ -579,19 +683,26 @@ i{
 #description-box {
   height: 15rem;
   width: 20rem;
+  margin-bottom: 1rem;
 }
 
+.venuetype{
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  min-height: 4.1rem;
+  width: 100%;
+}
 /* search functionality */
 
-.search-input{
-  font-size: 1.5rem;
+.search-input {
+  font-size: 1.6rem;
   display: flex;
   height: 4rem;
 }
 
-
 .search-results {
-  --searchBorder: lightgrey solid .025rem;
+  --searchBorder: lightgrey solid 0.025rem;
   border-radius: 0rem 0rem 1rem 1rem;
   margin-top: 4rem;
   z-index: 1;
@@ -600,9 +711,7 @@ i{
   border-left: var(--searchBorder);
   border-right: var(--searchBorder);
   border-bottom: var(--searchBorder);
-  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%)
-  
-  
+  box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
 /* .searchBar {
@@ -613,7 +722,7 @@ i{
   width: 50rem;
 } */
 
-.search-list-item{
+.search-list-item {
   font-size: 1.6rem;
 }
 
@@ -621,39 +730,185 @@ i{
   cursor: pointer;
 }
 
-.card-info{
-  margin-top: .75rem;
+.card-info {
+  margin-top: 0.75rem;
 }
 
-.card-close:hover{
-  cursor:pointer;
-  color: lightgray
+.card-close-div{
+  display: flex;
+  justify-content: flex-end;
 }
 
-.venue-source{
-  margin-top: .1rem;
-  margin-bottom: .1rem;
+.card-close:hover {
+  cursor: pointer;
+  color: lightgray;
 }
 
-.venue-source:hover{
-  cursor:pointer;
-  color: black
+.venue-source {
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
 }
 
+.venue-source:hover {
+  cursor: pointer;
+  color: black;
+}
+
+/* registration */
+.registration-frame{
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.registration-art{
+  background-image: url(/static/testingland/img/vygr-map.png);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.key-value-prop-frame{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  padding: 1rem;
+  width: 50%;
+  height: 50%;
+}
+
+.key-value-prop-title{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  align-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.key-value-prop-title h1{
+  font-size: 3rem;
+  color: black;
+  font-weight: 600;
+  text-align: center;
+}
+
+.key-value-prop-body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  font-size: 1.5rem;
+  color: black;
+  flex-direction: column;
+  font-weight: 300;
+  align-content: center;
+}
+
+.key-value-prop-body p{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  font-size: 2rem;
+  color: black;
+  flex-direction: column;
+  font-weight: 300;
+  align-content: center;
+}
+
+.registration-form{
+  display: flex;
+  background: white;
+  align-items: center;
+  justify-content: center;
+}
+
+.vygr-signup-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-element {
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signup input {
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+  background: transparent;
+  border: 0.1rem solid grey;
+  outline: none;
+  padding: 0.6rem;
+  width: 100%;
+}
+
+.signup input:active {
+  border: none;
+  outline: none;
+}
+
+.signup input:focus {
+  border: 0.3rem solid black;
+}
+
+.signup button {
+  margin-bottom: 1rem;
+  align-items: center;
+  padding: 0.3rem;
+  border: none;
+  font-size: 1.6rem;
+  background-color: black;
+  color: white;
+  border-style: none;
+  width: 100%;
+}
+
+.signup button:active {
+  background-color: white;
+  color: black;
+}
+
+.signup p{
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+}
 /* ------ phone portrait ------ */
 
 @media (min-width: 0px) {
-
   /* registration */
 
-  .login-card-image{
+
+  .login-card-image {
     background: none;
   }
 
-  .login-page{
+  .login-page {
     background-image: url("/static/testingland/img/vygr-map.png");
     background-size: 50rem;
     background-position: center;
+  }
+
+  .registration-art{
+    width: 0%;
+  }
+  
+  .registration-form{
+    width: 100%;
+  }
+
+  .signup{
+    width: 55%
   }
 
   /* nav */
@@ -666,13 +921,18 @@ i{
     transition: 0.05s;
   }
 
-  .search-list-item {
-    font-size: 1.3rem;
-    padding-left: .5rem;
-    padding-top: .3rem;
+  .infowindow {
+    margin-bottom: .75rem;
+    margin-right: 1rem;
   }
 
-  #sideNav{
+  .search-list-item {
+    font-size: 1.3rem;
+    padding-left: 0.5rem;
+    padding-top: 0.3rem;
+  }
+
+  #sideNav {
     display: flex;
     flex-direction: column;
     z-index: 1;
@@ -682,31 +942,25 @@ i{
   }
 
   .pushedbtn {
-    margin-left: 19rem
+    margin-left: 14.5rem;
   }
 
   /* sidebar */
   .open-sidebar {
-    width: 18.7rem;
+    width: 14.5rem;
   }
 
-  .sidebar-lists {
-    border-top-style: solid;
-    padding-left: 1.5rem;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-top-color: lightgrey;
-    border-top-width: .1rem;
-  }
-  
-  .card-close{
+  .card-close {
     font-size: 3rem;
-    color: black;
-    margin-left: 31rem;
+    color: grey;
   }
 
-  .hide{
-    display:none
+  .card-icon {
+    font-size: 1.4rem;
+  }
+
+  .hide {
+    display: none;
   }
 
   .venue-card {
@@ -715,27 +969,77 @@ i{
     overflow-y: scroll;
     padding: 1rem;
   }
-  .card-body{
+
+  .avatar {
+    vertical-align: middle;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .card-text:last-child {
+    margin-bottom: 10rem;
+  }
+
+  .comment-submit {
+    display: flex;
+    padding: .5rem;
+    background: #efefef;
+    flex-direction: row;
+    justify-content: flex-end;
+    border-top-style: solid;
+    border-width: thin;
+    border-color: lightgray;
+  }
+
+  .user-comment {
+    display: flex;
+  }
+
+  .venue-paragraph {
+    border-bottom: 0.1rem solid lightgray;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  .comment-box {
+    border: 0.1rem solid lightgrey;
+    display: flex;
+    flex-direction: column;
+    border-radius: .25rem;
+  }
+
+  .comment-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-body {
     overflow-y: auto;
     overflow-x: hidden;
   }
 
   .card-title {
     margin-bottom: 1rem;
-    font-size: 1.75rem;
+    font-size: 1.6rem;
   }
 
-  .venue-address{
+  .venue-address {
     font-size: 1.4rem;
-    margin-bottom: .75rem;
+    margin-bottom: 0.75rem;
   }
 
-  .venue-source{
+  .venue-source {
     font-size: 1.2rem;
     color: rgb(167, 168, 171);
   }
 
-  .card-image{
+  .card-image {
     display: flex;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
@@ -743,40 +1047,72 @@ i{
     justify-content: center;
   }
 
-  .venue-text{
-    font-size: 1.24rem;
-  }
-
-  .venue-text{
+  .venue-text {
     font-size: 1.24rem;
   }
 }
 
-@media (min-width: 620px){
+@media (min-width: 600px) {
 
+  .infowindow {
+    margin-bottom: 0rem;
+    margin-right: 0rem;
+  }
 
-
+  .viewport{
+    display: flex;
+    padding-left: 0rem;
+    padding-right: 0rem;
+    justify-content: flex-end;
+  }
   /* registration */
-  .login-card-image{
+  .login-card-image {
     background-image: url("/static/testingland/img/vygr-map.png");
     background-size: 50rem;
     border-radius: 0px 30px 30px 0px;
     background-position: center;
   }
 
-  .login-page{
-    background-image: none;
-    background-color: #EAEAEA;
+  .registration-art{
+    width: 50%;
   }
 
-  .venue-text{
-    margin:1.35rem;
-    margin-bottom: .5rem;
+  .key-value-prop-body p{
+    font-size: 1.75rem;
+  }
+  
+  .registration-form{
+    width: 50%;
+  }
+
+  .errorlist{
+    text-align: center;
+    color: red;
+    margin-top: -1.4rem;
+  }
+
+  .login-page {
+    background-image: none;
+    background-color: #eaeaea;
+  }
+
+  .venue-info-card {
+    height: 100vh;
+    width: 40rem;
+    position: absolute;
+    z-index: 1;
+    transition: 0.2s;
+    top: 0rem;
+  }
+
+  .venue-text {
+    margin-left: 1rem;
+    margin-bottom: 0.5rem;
     font-size: 1.35rem;
   }
 
-  .venue-source{
-    margin-left:1.35rem;
+  .venue-source {
+    margin-left: 1.35rem;
     font-size: 1.35rem;
   }
 
@@ -785,38 +1121,32 @@ i{
     width: 100%;
   }
 
-  .card-image{
+  .card-image {
     display: flex;
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
     flex-direction: row;
-    justify-content: center ;
+    justify-content: center;
   }
 
-  .card-close{
-    margin-left: 52rem;
+  .card-close {
     font-size: 3rem;
     color: black;
   }
 
-  #sideNav{
+  #sideNav {
     display: flex;
     flex-direction: column;
     z-index: 1;
     position: absolute;
     top: 20rem;
     transition: 0.05s;
-}
-
-
-  .sidebar-lists {
-    border-top-style: solid;
-    padding-left: 1.5rem;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-top-color: lightgrey;
-    border-top-width: .1rem;
   }
+
+  .open-sidebar {
+    width: 23rem
+  }
+  
 
   .pushedbtn {
     margin-left: 25rem;
@@ -824,9 +1154,19 @@ i{
 }
 
 /* tablet */
-@media (min-width: 768px){
+@media (min-width: 900px) {
 
-  .navbar{
+  .registration-art{
+    width: 60%;
+  }
+  
+  .registration-form{
+    width: 40%;
+  }
+
+  
+
+  .navbar {
     flex-direction: row;
   }
   /* layout */
@@ -837,68 +1177,59 @@ i{
 
   .search-list-item {
     font-size: 1.7rem;
-    padding-left: .5rem;
+    padding-left: 0.5rem;
     padding-top: 1rem;
   }
 
+
   /* sidebar */
   .open-sidebar {
-    width: 25rem;
-    /* height: 100%; */
+    width: 24rem;
   }
 
-  
 
-  .pushedcards {
-    margin-left: 23rem;
-  }
-
-  .map-venue-cards {
-    top: 60rem;
-    left: 2rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .map-venue-cards{
-    top: 60rem;
-  }
-
-  .venue-info-card{
+  .venue-info-card {
     height: 100vh;
-    width: 60rem;
+    width: 50rem;
     position: absolute;
     z-index: 1;
-    left: 100rem;
     transition: 0.2s;
     top: 0rem;
   }
 
-  .venue-info-card-closed{
-    left: 180rem;
+}
+
+@media (min-width: 1024px) {
+  .map-venue-cards {
+    top: 60rem;
   }
 
-  .venue-info-card-open{
+  .venue-info-card {
+    height: 100vh;
+    width: 60rem;
+    position: absolute;
+    z-index: 1;
+    transition: 0.2s;
+    top: 0rem;
+  }
+
+  .venue-info-card-closed {
+    left: 200rem;
+  }
+
+  .venue-info-card-open {
     left: 100rem;
   }
 }
 
-
-
 /* desktop */
-@media (min-width: 1300px) {
-
+@media (min-width: 1200px) {
   .page-title {
     font-size: 6rem;
   }
 
-  /* sidebar */
-  .open-sidebar {
-    width: 27rem;
-  }
-
-  .pushedbtn {
-    margin-left: 28.5rem;
+  .signup{
+    width: 50%;
   }
 
   .pushedcards {
@@ -914,31 +1245,8 @@ i{
 
 /* registration */
 
-#id_username{
-  font-size: 1.7rem;
-}
-
-#id_username p{
-  font-size: 1.7rem;
-}
-
-#id_password{
-  font-size: 1.7rem;
-}
-.signup{
-  margin: 2.5rem;
-}
-
-.registration-header{
-  margin-bottom: 3rem;
-}
-
-.registration-font-div{
-  font-size: 1.2rem;
-}
-
-.login-page{
-  background-color: #EAEAEA;
+.login-page {
+  background-color: #eaeaea;
   display: flex;
   align-content: center;
   justify-content: center;
@@ -947,12 +1255,12 @@ i{
   flex-wrap: nowrap;
 }
 
-.login-navbar{
+.login-navbar {
   position: relative;
   flex-grow: 1;
 }
 
-.vygr-login{
+.vygr-login {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -971,18 +1279,19 @@ i{
   justify-content: center;
   flex-direction: column;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
   border-radius: 30px;
 }
 
-.form_container{
+.form_container {
   display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
-
 
 .login_btn {
   width: 100%;
@@ -1007,6 +1316,8 @@ i{
   box-shadow: none !important;
   outline: 0px !important;
 }
-.custom-checkbox .custom-control-input:checked~.custom-control-label::before {
+.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #c0392b !important;
 }
+
+

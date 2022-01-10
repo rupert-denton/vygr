@@ -1,75 +1,44 @@
-{% extends 'testingland/cafe.html' %}
-
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Dashboard</title>
-<!--Bootsrap-->
-
-<!--Bootstrap CSS -->
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-
-<!--Bootstrap responsive meta tag -->
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-<script
-src="https://code.jquery.com/jquery-3.5.1.js"
-integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-crossorigin="anonymous"></script>
-</head>
-
-  <body>
-    {% block content %}
-    Hey there,
-{% if user.is_authenticated %}
-<h1>{{user.username}}</h1>
-{% else %}
-<h1>unknown</h1>
-{% endif %}
-<a href="{% url 'main:liked' %}" >Wishlist</a>
-
-<section class="cards">
-    {% for m in music %}
-
-    <div class="card">
-
-        <div class="top">
-            <div class="label1">{{m.song}}</div>
-            {% if m.pk in wishlisted_list %}
-            {% for i in wishlisted_list %}
-            {% if m.pk is i %}
-            <span class="like heart" id="id" attr_id="{{m.pk}}" action_url="{% url 'main:add_to_wishlist' %}"><i class="fa fa-heart"></i></span>
-            {% endif %}
-            {% endfor %}
-            {% else %}
-            <span class="like" id="id" attr_id="{{m.pk}}" action_url="{% url 'main:add_to_wishlist' %}"><i class="fa fa-heart"></i></span>
-            {% endif %}
-        </div>
-
-
-        <div class="middle">
-            <a href="https://google.com" id="link" target="_blank">
-                <div class="img-container"><img src="{{ m.pic.url }}"></div>
-            </a>
-        </div>
-
-        <a href="https://google.com" id="link" target="_blank">
-            <div class="bottom">
-                <div class="label4">{{m.description}}</div>
-            </div>
-        </a>
-
+`<div id="${venueName}-venue-card" class="card venue-card" data-idtext="${venueName}">
+  <div class="card-body" id="${venueName}-cardbody" data-idtext="${venueName}">
+  <div class="card-top" id="${venueName}-card-top" data-idtext="${venueName}">
+  <i id="card-close-icon" class="card-close bi bi-x"></i>
+  <h5 class="card-title" id="${venueName}-card" data-idtext="${venueName}">${venueName}</h5>
+    <h6 class="card-subtitle venue-address mb-2 text-muted">${venueAddress}</h6>
+    <span class="card-info">
+      <i id="${venueName}-like" class="card-icon bi bi-heart-fill default-like" data-idtext="${venueId}"></i>
+      <i id="${venueName}-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-idtext="${venueId}"></i>
+      <i id="${venueName}-share" class="card-icon bi bi-share-fill default-bookmark default-bookmark" data-idtext="${venueId}"></i> 
+   </div>
+   <div class="card-image">
+   <img id="venue-image" src="">
+   </div>
+   <div class="mt-1 form-group comment-box">
+      <textarea class="form-control" id="comment-textbox" rows="3" placeholder="Add what you like/recommend/think about this place..."></textarea>
+      <div class="comment-submit">
+        <button id="comment-submit-btn" class="btn">Submit</button>
     </div>
-    {% endfor %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src = "{% static "/testingland/js/electra.js" %}"> </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-  </section>
-    {% endblock %}
-
-    <script src = "{% static "/testingland/js/electra.js" %}"> </script>
-  </body>
-</html>
+  </div>
+   <div class="card-text">
+   <div class="venue-paragraph user-comment">
+   <span class="user-details">
+   <img src="/static/testingland/img/rd.jpeg" alt="Avatar" class="avatar">
+      <div class="dropdown">
+      <a class="venue-source dropdown-toggle card-subtitle" href="#" role="button" id="dropdownMenuButton1" data-idtext="${source}-adder" data-bs-toggle="dropdown">-${source}</a>
+      <ul id="${source}-dropdown" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item viewVenues" id="viewVenues ${source}" data-idtext="viewVenues-${source}" href="#">View Added Venues</a></li>
+        <li><a class="dropdown-item viewLists" id="viewLists ${source}" data-idtext="viewLists-${source}">View Lists</a></li>
+        <li><a class="dropdown-item viewLiked" id="viewLiked ${source}" data-idtext="viewLiked-${source}">View Liked Venues</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" id="report ${source}" data-idtext="report-${source}">Report User</a></li>
+       </ul>
+      </div>
+    </span>
+    <div class="venue-text">${venueDescription}</div>
+         
+        </div>
+        <div id="venueComments" class="comment-body">
+            
+        </div>
+      </div>
+  </div>
+</div>
