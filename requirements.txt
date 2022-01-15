@@ -14,7 +14,7 @@ django-heroku==0.3.1
 django-on-heroku==1.1.2
 django-widget-tweaks==1.4.11
 djangorestframework==3.13.1
-GDAL==3.4.1
+GDAL
 gunicorn==20.1.0
 idna==3.3
 oauthlib==3.1.1
