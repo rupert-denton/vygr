@@ -86,11 +86,9 @@ INSTALLED_APPS = [
     # 'django.contrib.auth',
     # 'django.contrib.messages',
     'django.contrib.sites',
-
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
     'widget_tweaks',
 
 ]
@@ -113,7 +111,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL='/'
 # 1 day
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
   
-SITE_ID = 2
+SITE_ID = 3
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
