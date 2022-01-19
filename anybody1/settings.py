@@ -127,8 +127,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'anybody1.urls'
 
-
-
 WSGI_APPLICATION = 'anybody1.wsgi.application'
 
 
