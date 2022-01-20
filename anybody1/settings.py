@@ -111,7 +111,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL='/'
 # 1 day
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
   
-SITE_ID = 3
+SITE_ID = 4
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
