@@ -111,7 +111,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL='/'
 # 1 day
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 86400 
   
-SITE_ID = 4
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -207,3 +207,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 import django_heroku
 django_heroku.settings(locals())
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
