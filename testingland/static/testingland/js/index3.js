@@ -60,11 +60,13 @@ $(document).ready(function() {
           case positionError.TIMEOUT:
             alert("The request to get user location has aborted as it has taken too long.");
             break;
+
           case positionError.POSITION_UNAVAILABLE:
             alert("Location information is not available.");
             break;
+
           case positionError.PERMISSION_DENIED:
-            permissionDeniedModal();
+            openMapNoLocation();
             break;
           default:
             alert("An unknown error occurred.");
@@ -79,6 +81,20 @@ $(document).ready(function() {
         location.reload();
       });
 
+      const openMapNoLocation = function() {
+        console.log("No Location Provided")
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {
+            lat: 35.6762,
+            lng: 139.6503
+          },
+          zoom: 2,
+          mapId: '33df39eac4360b95',
+          disableDefaultUI: true,
+          gestureHandling: 'greedy'
+        });
+      };
+
       $("#permissionDeniedModalDenied").click(function() {
         $("#permissionDeniedModal").modal('hide')
         map = new google.maps.Map(document.getElementById('map'), {
@@ -92,6 +108,7 @@ $(document).ready(function() {
           gestureHandling: 'greedy'
         });
       });
+
 
       map = new google.maps.Map(document.getElementById('map'), {
         center: userMapCentre,
@@ -136,8 +153,7 @@ $(document).ready(function() {
           $("#vygr-nav").css("top", "0rem")
           if(userLists.hasClass("open-sidebar")){
             userLists.css("left", "0rem")
-          }
-          
+          }       
         }
 
         map.addListener("center_changed", hideUI)
@@ -602,6 +618,7 @@ function addressLookup(geocoder, resultsMap) {
   }, (results, status) => {
     if (status === "OK") {
       resultsMap.setCenter(results[0].geometry.location);
+      resultsMap.setZoom(12)
       getVenues(map) //also used for search area
     }
   })
