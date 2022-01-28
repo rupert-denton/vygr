@@ -201,8 +201,6 @@ EMAIL_HOST_PASSWORD = '160788#rdE'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
-# fix GDAL error being thrown by using M1 Mac
-
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 import django_heroku
@@ -211,3 +209,7 @@ django_heroku.settings(locals())
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
+
+# # Configure Django App for Heroku.
+# import django_on_heroku
+# django_on_heroku.settings(locals())

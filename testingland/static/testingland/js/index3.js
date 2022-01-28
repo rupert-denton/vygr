@@ -1111,7 +1111,6 @@ const showVenueCard = function(cafeId, venueName) {
               $(`#${listName}-share`).click(function(e) {
                 console.log("Clicked share")
                 fetch(`/electra/list/build_list_link/${$(e.target).data("pk")}/`).then(resp => resp.json()).then(json => {
-
                   let domain = document.location.origin
                   let link = domain + json.link
                   console.log(link)
