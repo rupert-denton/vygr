@@ -135,15 +135,22 @@ WSGI_APPLICATION = 'anybody1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        # 'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'vygr',
         'USER': 'rupertdenton',
         'PASSWORD': '41621ra',
         'HOST': 'localhost',
         'PORT': '5432'
     }
+,
 }
 
+# # Configure Django App for Heroku.
+import django_on_heroku
+django_on_heroku.settings(locals())
+
+import dj_database_url
+DATABASES['default'] = dj_database_url.config()
+DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 
 # Password validation
@@ -203,11 +210,4 @@ EMAIL_PORT = 587
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-# # Configure Django App for Heroku.
-import django_on_heroku
-django_on_heroku.settings(locals())
-
-import dj_database_url
-DATABASES['default'] = dj_database_url.config()
-DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
