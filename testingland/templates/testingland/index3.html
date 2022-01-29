@@ -44,6 +44,9 @@
     <div class="container-fluid ">
       {% if cafe %}
          <input id="bookmarked_id" type="hidden" value={{ cafe.id }}>
+         <input id="bookmarked_name" type="hidden" value={{ cafe.cafe_name }}>
+         <input id="bookmarked_long" type="hidden" value={{ cafe.cafe_long }}>
+         <input id="bookmarked_lat" type="hidden" value={{ cafe.cafe_lat }}>
       {% endif %}
       {% if list %}
          <input id="shared-list-id" type="hidden" value={{ list.id }}>
