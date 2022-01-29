@@ -60,10 +60,10 @@ urlpatterns = [
     re_path('write_image', views.write_image, name='write_image'),
     re_path('broadsheet', views.broadsheet, name='broadsheet'),
 
-    re_path('electra/build_link/<int:pk>/', views.build_link, name='build_link'),
-    re_path('electra/<uuid:uu>/', views.visit_link, name='visit_link'),
-    re_path('electra/list/<uuid:uu>/', views.visit_list_link, name='visit_list_link'),
-    re_path('electra/list/build_list_link/<int:pk>/', views.build_list_link, name='build_list_link'),
+    path('electra/build_link/<int:pk>/', views.build_link, name='build_link'),
+    path('electra/<uuid:uu>/', views.visit_link, name='visit_link'),
+    path('electra/list/<uuid:uu>/', views.visit_list_link, name='visit_list_link'),
+    path('electra/list/build_list_link/<int:pk>/', views.build_list_link, name='build_list_link'),
 
     re_path('<username>', views.view_dashboard, name='view_dashboard'),
 

@@ -675,6 +675,7 @@ const search = function() {
       'search_term': searchTerm
     },
     success: function(data) {
+      $("#search-results").html('')
       data.forEach(([cafeId, cafeName, cafeAddress]) => {
         var cafeId = cafeId;
         var cafeName = cafeName;
@@ -852,15 +853,6 @@ const removeRedMarker = function() {
   for (let i = 0; i < markers.length; i++) {
     markers[i].setIcon(markerStyles[0])
   };
-};
-
-if ($("#bookmarked_id").length) {
-  console.log(marker.title)
-  venueName = (marker.title)
-  cafeId = (marker.cafeId)
-  showVenueCard(cafeId, venueName)
-  map.panTo(marker.getPosition())
-  map.setZoom(15);
 };
 
 const showVenueCard = function(cafeId, venueName) {
@@ -1331,6 +1323,18 @@ const showVenueCard = function(cafeId, venueName) {
     }
   });
 }
+
+
+
+if ($("#bookmarked_id").length) {
+  console.log(marker.title)
+  venueName = (marker.title)
+  cafeId = (marker.cafeId)
+  showVenueCard(cafeId, venueName)
+  map.panTo(marker.getPosition())
+  map.setZoom(15);
+};
+
 
 //adding/removing venue from a list
 const addToListModal = function(venueToAdd) {

@@ -255,14 +255,15 @@ def connections(request):
 
 def build_link(request, pk):
     try:
+        
         # /electra/4bc09c1e-323b-4682-b9d3-6d6b5e086db5/
         cafe = mapCafes.objects.get(pk=pk)
-        print(cafe)
+        print("Print ", cafe)
         link, _ = SharedLink.objects.get_or_create(cafe=cafe, defaults={
             'cafe': cafe
         })
         
-        return JsonResponse({'link': reverse(visit_link, kwargs={'uu': link.uuid}) } )
+        return JsonResponse({'link': reverse(visit_link, kwargs={'uu': str(link.uuid)}) } )
     except mapCafes.DoesNotExist:
         return JsonResponse({'link': '' } )
 
