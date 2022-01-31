@@ -15,7 +15,7 @@ class UserVenueAdmin(admin.ModelAdmin):
 admin.site.register(UserVenue, UserVenueAdmin)
 
 class mapCafesAdmin(admin.ModelAdmin):
-    list_display = ['cafe_name', 'cafe_address', 'description', 'source']
+    list_display = ['cafe_name', 'cafe_address', 'source', 'cafe_image_url']
 
 admin.site.register(mapCafes, mapCafesAdmin)
 

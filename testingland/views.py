@@ -405,7 +405,7 @@ def info_box(request):
     pk = request.GET.get('pk', None)
     qs = mapCafes.objects.filter(pk = pk) 
     return JsonResponse([
-            [cafe.id, cafe.cafe_name, cafe.cafe_address, cafe.description, cafe.source, cafe.venue_type]
+            [cafe.id, cafe.cafe_name, cafe.cafe_address, cafe.source, cafe.venue_type, cafe.cafe_image_url]
             for cafe in qs
     ], safe=False)
 
@@ -423,7 +423,7 @@ def getUserMarkers(request):
     qs = mapCafes.objects.filter(pk=pk)
     print(qs)
     return JsonResponse([
-        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.description, cafe.source, cafe.venue_type, cafe.id]
+        [cafe.cafe_name, cafe.cafe_address, cafe.cafe_lat, cafe.cafe_long, cafe.source, cafe.venue_type, cafe.id]
         for cafe in qs
     ], safe=False)
 

@@ -1,3 +1,4 @@
+
 var markerSet = new Set(); //empty array
 var selectedPlaces = new Set();
 var marker, i;
@@ -799,6 +800,8 @@ const gatherSearchedMarkerData = function (listOfCafes, map, listId) {
         pk: cafeId,
       },
       success: function (data) {
+        console.log(data)
+
         putSearchedMarkersOnMap(data, map, listId);
       },
     });
@@ -806,17 +809,16 @@ const gatherSearchedMarkerData = function (listOfCafes, map, listId) {
 };
 
 const putSearchedMarkersOnMap = function (data, map) {
-  console.log(data);
 
   for (let i = 0; i < data.length; i++) {
-    let cafeId = data[i][7];
+    let cafeId = data[i][6];
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(data[i][2], data[i][3]),
       map: map,
       animation: google.maps.Animation.DROP,
       icon: markerStyles[0],
       title: data[i][0],
-      cafeId: data[i][7],
+      cafeId: data[i][6],
     });
 
     markers.push(marker);
@@ -913,6 +915,8 @@ const showVenueCard = function (cafeId, venueName) {
       let venueId = data[0][0];
       let venueName = data[0][1];
       let venueAddress = data[0][2];
+      let venuePhoto = data[0][5];
+      console.log(venuePhoto)
 
       assignHeartIfVenueLiked(venueName);
 
@@ -1205,6 +1209,69 @@ const showVenueCard = function (cafeId, venueName) {
         });
       }
 
+      var request = {
+        query: venueName,
+        fields: ["place_id"],
+      };
+
+      let testNode = $("#hidden").get(0);
+
+      var service = new google.maps.places.PlacesService(testNode);
+      service.findPlaceFromQuery(request, function (results, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          for (var i = 0; i < results.length; i++) {
+            let placeId = results[i].place_id;
+            getPlaceDetails(placeId);
+          }
+        }
+      });
+
+      const getPlaceDetails = function (placeId) {
+
+        let testNode = $("#hidden").get(0);
+
+        let request = {
+          placeId: placeId,
+          fields: [
+            "rating",
+            "opening_hours",
+            "website",
+            "price_level",
+            "review",
+            "photos",
+          ],
+        };
+        
+        // check DB for image URL
+
+        if (venuePhoto == "empty"){
+          console.log("No Photo getting Google Images API")
+
+        service = new google.maps.places.PlacesService(testNode);
+        service.getDetails(request, callback);
+
+        
+        
+
+        function callback(results, status) {
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            // $("#website").attr("src", results.website)
+            // $("#website").html(results.website)
+            photos = results.photos;
+            photo = photos[0].getUrl({
+            
+            });
+            $("#venue-image").attr("src", photo);
+          }
+        }
+      } else {
+        console.log("Photo avaiable getting from DB")
+        $("#venue-image").attr("src", venuePhoto);
+
+      }
+      };
+
+      //share/like/bookmark card buttons
       const addVenueToLiked = function (placeToAdd) {
         console.log(placeToAdd);
         $.ajax({
@@ -1305,54 +1372,6 @@ const showVenueCard = function (cafeId, venueName) {
             }
           });
       });
-
-      var request = {
-        query: venueName,
-        fields: ["place_id"],
-      };
-
-      let testNode = $("#hidden").get(0);
-
-      var service = new google.maps.places.PlacesService(testNode);
-      service.findPlaceFromQuery(request, function (results, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          for (var i = 0; i < results.length; i++) {
-            let placeId = results[i].place_id;
-            getPlaceDetails(placeId);
-          }
-        }
-      });
-
-      const getPlaceDetails = function (placeId) {
-        let testNode = $("#hidden").get(0);
-        let request = {
-          placeId: placeId,
-          fields: [
-            "rating",
-            "opening_hours",
-            "website",
-            "price_level",
-            "review",
-            "photos",
-          ],
-        };
-
-        service = new google.maps.places.PlacesService(testNode);
-        service.getDetails(request, callback);
-
-        function callback(results, status) {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            // $("#website").attr("src", results.website)
-            // $("#website").html(results.website)
-            photos = results.photos;
-            photo = photos[0].getUrl({
-              maxWidth: 500,
-              maxHeight: 500,
-            });
-            $("#venue-image").attr("src", photo);
-          }
-        }
-      };
     },
   });
 };
