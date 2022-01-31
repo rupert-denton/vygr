@@ -18,6 +18,11 @@ ul {
   padding: 0;
 }
 
+li {
+  list-style-type: none;
+  padding: 0;
+}
+
 .btn {
   border: none;
   font-size: 1.5rem;
@@ -29,23 +34,22 @@ ul {
   box-shadow: 0 1px 6px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
-.commentSubmitBtn{
-    border: none;
-    font-size: 1.5rem;
-    background-color: white;
-    color: black;
-    padding: .5rem;
-    border-radius: 0.5rem;
-    border-style: none;
-    font-size: 1.5rem;
-  }
+.commentSubmitBtn {
+  border: none;
+  font-size: 1.5rem;
+  background-color: white;
+  color: black;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border-style: none;
+  font-size: 1.5rem;
+}
 
-  .commentSubmitBtn:hover{
-    cursor: pointer;
-    background-color: black;
-    color: white;
-  }
-
+.commentSubmitBtn:hover {
+  cursor: pointer;
+  background-color: black;
+  color: white;
+}
 
 .btn:hover {
   cursor: pointer;
@@ -61,7 +65,7 @@ ul {
 
 .infowindow:hover {
   cursor: pointer;
-  color: lightgray
+  color: lightgray;
 }
 
 .navbtn {
@@ -86,20 +90,20 @@ ul {
   margin-right: 0rem;
 }
 
-.modal-content{
-  border-radius: .75rem;
+.modal-content {
+  border-radius: 0.75rem;
 }
 
-.userlist-modal-dialog{
-  height: 100%
+.userlist-modal-dialog {
+  height: 100%;
 }
 
-.userlist-modal-content{
-  height: 70%
+.userlist-modal-content {
+  height: 70%;
 }
 
-.userlist-modal-body{
-  padding:0rem;
+.userlist-modal-body {
+  padding: 0rem;
   overflow-y: scroll;
   overflow-x: auto;
   text-overflow: ellipsis;
@@ -282,10 +286,15 @@ i {
 }
 
 .sidebar-lists {
-  overflow: hidden;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
 
-.list-details{
+.sidebar-bottom {
+}
+
+.list-details {
   overflow: hidden;
   text-overflow: ellipsis;
   display: flex;
@@ -313,7 +322,7 @@ i {
   resize: none;
 }
 
-.venue-type-list{
+.venue-type-list {
   border: none;
   padding: 0rem;
 }
@@ -326,7 +335,7 @@ i {
   color: black;
 }
 
-.modal-header .close{
+.modal-header .close {
   margin: 0rem;
   color: black;
 }
@@ -341,15 +350,15 @@ i {
   padding: 1rem;
   border-bottom-style: dashed;
   border-color: lightgrey;
-  border-width: .1rem;
+  border-width: 0.1rem;
   justify-content: flex-start;
 }
 
-.bookmark-title{
+.bookmark-title {
   font-size: 1.5rem;
 }
 
-.list-creator{
+.list-creator {
   color: gray;
   font-style: italic;
 }
@@ -361,7 +370,7 @@ i {
   font-size: 1.3rem;
 }
 
-.sidebar-container{
+.sidebar-container {
   display: flex;
   flex-direction: row;
   align-content: center;
@@ -432,7 +441,7 @@ i {
   color: lightgrey;
 }
 
-.venue-card-container{
+.venue-card-container {
   display: flex;
   justify-content: flex-end;
 }
@@ -475,7 +484,7 @@ i {
   color: grey;
 }
 
-.shepherd-text{
+.shepherd-text {
   font-size: 1.3rem;
 }
 
@@ -647,7 +656,7 @@ i {
   text-align: center;
 }
 
-.permission-denied-modal{
+.permission-denied-modal {
   margin: 1rem;
   min-height: 4rem;
   font-size: 1.6rem;
@@ -686,7 +695,7 @@ i {
   margin-bottom: 1rem;
 }
 
-.venuetype{
+.venuetype {
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
@@ -734,7 +743,7 @@ i {
   margin-top: 0.75rem;
 }
 
-.card-close-div{
+.card-close-div {
   display: flex;
   justify-content: flex-end;
 }
@@ -755,13 +764,13 @@ i {
 }
 
 /* registration */
-.registration-frame{
+.registration-frame {
   display: flex;
   flex-direction: row;
   height: 100vh;
 }
 
-.registration-art{
+.registration-art {
   background-image: url(/static/testingland/img/vygr-map.png);
   display: flex;
   flex-direction: column;
@@ -769,7 +778,7 @@ i {
   justify-content: center;
 }
 
-.key-value-prop-frame{
+.key-value-prop-frame {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -779,7 +788,7 @@ i {
   height: 50%;
 }
 
-.key-value-prop-title{
+.key-value-prop-title {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -788,14 +797,14 @@ i {
   margin-bottom: 1.5rem;
 }
 
-.key-value-prop-title h1{
+.key-value-prop-title h1 {
   font-size: 3rem;
   color: black;
   font-weight: 600;
   text-align: center;
 }
 
-.key-value-prop-body{
+.key-value-prop-body {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -807,7 +816,7 @@ i {
   align-content: center;
 }
 
-.key-value-prop-body p{
+.key-value-prop-body p {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -819,7 +828,7 @@ i {
   align-content: center;
 }
 
-.registration-form{
+.registration-form {
   display: flex;
   background: white;
   align-items: center;
@@ -878,7 +887,7 @@ i {
   color: black;
 }
 
-.signup p{
+.signup p {
   margin-top: 1rem;
   text-align: center;
   font-size: 1.2rem;
@@ -887,7 +896,6 @@ i {
 
 @media (min-width: 0px) {
   /* registration */
-
 
   .login-card-image {
     background: none;
@@ -899,16 +907,16 @@ i {
     background-position: center;
   }
 
-  .registration-art{
+  .registration-art {
     width: 0%;
   }
-  
-  .registration-form{
+
+  .registration-form {
     width: 100%;
   }
 
-  .signup{
-    width: 55%
+  .signup {
+    width: 55%;
   }
 
   /* nav */
@@ -922,7 +930,7 @@ i {
   }
 
   .infowindow {
-    margin-bottom: .75rem;
+    margin-bottom: 0.75rem;
     margin-right: 1rem;
   }
 
@@ -988,7 +996,7 @@ i {
 
   .comment-submit {
     display: flex;
-    padding: .5rem;
+    padding: 0.5rem;
     background: #efefef;
     flex-direction: row;
     justify-content: flex-end;
@@ -1011,7 +1019,7 @@ i {
     border: 0.1rem solid lightgrey;
     display: flex;
     flex-direction: column;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
   }
 
   .comment-body {
@@ -1054,13 +1062,12 @@ i {
 }
 
 @media (min-width: 600px) {
-
   .infowindow {
     margin-bottom: 0rem;
     margin-right: 0rem;
   }
 
-  .viewport{
+  .viewport {
     display: flex;
     padding-left: 0rem;
     padding-right: 0rem;
@@ -1074,19 +1081,19 @@ i {
     background-position: center;
   }
 
-  .registration-art{
+  .registration-art {
     width: 50%;
   }
 
-  .key-value-prop-body p{
+  .key-value-prop-body p {
     font-size: 1.75rem;
   }
-  
-  .registration-form{
+
+  .registration-form {
     width: 50%;
   }
 
-  .errorlist{
+  .errorlist {
     text-align: center;
     color: red;
     margin-top: -1.4rem;
@@ -1145,9 +1152,8 @@ i {
   }
 
   .open-sidebar {
-    width: 23rem
+    width: 23rem;
   }
-  
 
   .pushedbtn {
     margin-left: 25rem;
@@ -1156,16 +1162,13 @@ i {
 
 /* tablet */
 @media (min-width: 900px) {
-
-  .registration-art{
+  .registration-art {
     width: 60%;
   }
-  
-  .registration-form{
+
+  .registration-form {
     width: 40%;
   }
-
-  
 
   .navbar {
     flex-direction: row;
@@ -1182,12 +1185,10 @@ i {
     padding-top: 1rem;
   }
 
-
   /* sidebar */
   .open-sidebar {
     width: 24rem;
   }
-
 
   .venue-info-card {
     height: 100vh;
@@ -1197,7 +1198,6 @@ i {
     transition: 0.2s;
     top: 0rem;
   }
-
 }
 
 @media (min-width: 1024px) {
@@ -1229,7 +1229,7 @@ i {
     font-size: 6rem;
   }
 
-  .signup{
+  .signup {
     width: 50%;
   }
 
@@ -1320,5 +1320,3 @@ i {
 .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
   background-color: #c0392b !important;
 }
-
-

@@ -1,4 +1,3 @@
-
 var markerSet = new Set(); //empty array
 var selectedPlaces = new Set();
 var marker, i;
@@ -282,7 +281,15 @@ $("#user-lists").click(function () {
   }
 });
 
-$("#createList").click(function () {
+$("#sidebar-header").click(function (e) {
+  console.log("Cliccked teh header");
+  if (e.target && e.target.matches(`li.create-list`)) {
+    console.log("clicked create lsit");
+    checkRegistration();
+  }
+});
+
+const checkRegistration = function () {
   console.log("Create list clicked on");
   let loginButton = $("#login");
   if (loginButton.length) {
@@ -290,17 +297,19 @@ $("#createList").click(function () {
     $("#registerText").html("");
     $("#registerText").append(
       `
-          <ul>
-            <li>Create and share lists of the places you love, would love to go... or just want to keep on a list.</li>
-          </ul>
-          `
+        <ul>
+          <li>Create and share lists of the places you love, would love to go... or just want to keep on a list.</li>
+        </ul>
+        `
     );
   } else {
     closeNavButtons();
     closeSidebar();
     createNewList();
   }
-});
+};
+
+// $("#createList").click(function () {});
 
 //toggle navigation buttons
 const toggleNavButtons = function () {
@@ -354,7 +363,7 @@ const showUserLists = function (map) {
   }
 
   let likedList = `
-  <div class="sidebar-container">
+  <div id="liked" class="sidebar-container">
     <div class="list-details">
       <li class="userlist likedplaceslist" id="liked-venues" data-name="liked-venues"><i class="bi bi-heart-fill"></i>
         Liked Places
@@ -365,6 +374,7 @@ const showUserLists = function (map) {
 
   $("#userLists").html("");
   $(".venue-info-card").html("");
+  $("#sidebar-header").html("");
   toggleNavButtons();
 
   $.ajax({
@@ -381,7 +391,7 @@ const showUserLists = function (map) {
           data: {},
           success: function (data) {
             console.log(data);
-            $("#userLists").append(
+            $("#sidebar-header").append(
               ` 
               <div class="bookmark-header">
                 <h5 class="bookmark-title">${data[0].username}'s Lists</h5>
@@ -389,11 +399,22 @@ const showUserLists = function (map) {
               `
             );
 
-            $("#userLists").append(likedList);
+            $("#sidebar-header").append(likedList);
+            $("#sidebar-header").append(
+              `
+              <div id="create-list" class="sidebar-container">
+                <div class="list-details">
+                  <li class="userlist likedplaceslist" id="create-list" data-name="create-list"><i class="bi bi-plus-circle-fill"></i>
+                   Create New List
+                  </li>        
+                </div>
+              </div>
+              `
+            );
           },
         });
       } else {
-        $("#userLists").append(
+        $("#sidebar-header").append(
           ` 
         <div class="bookmark-header">
           <h5 class="bookmark-title">${data[0].user.username}'s Lists</h5>
@@ -401,7 +422,18 @@ const showUserLists = function (map) {
         `
         );
 
-        $("#userLists").append(likedList);
+        $("#sidebar-header").append(likedList);
+        $("#sidebar-header").append(
+          `
+          <div id="createListContainer" class="sidebar-container">
+            <div class="list-details">
+              <li class="userlist likedplaceslist create-list" id="createList" type="button" data-name="create-list" data-dismiss="modal"><i class="bi bi-plus-circle-fill"></i>
+               Create New List
+              </li>        
+            </div>
+          </div>
+          `
+        );
       }
       for (i = 0; i < data.length; i++) {
         var listName = data[i].list_name;
@@ -800,7 +832,7 @@ const gatherSearchedMarkerData = function (listOfCafes, map, listId) {
         pk: cafeId,
       },
       success: function (data) {
-        console.log(data)
+        console.log(data);
 
         putSearchedMarkersOnMap(data, map, listId);
       },
@@ -809,7 +841,6 @@ const gatherSearchedMarkerData = function (listOfCafes, map, listId) {
 };
 
 const putSearchedMarkersOnMap = function (data, map) {
-
   for (let i = 0; i < data.length; i++) {
     let cafeId = data[i][6];
     const marker = new google.maps.Marker({
@@ -916,7 +947,7 @@ const showVenueCard = function (cafeId, venueName) {
       let venueName = data[0][1];
       let venueAddress = data[0][2];
       let venuePhoto = data[0][5];
-      console.log(venuePhoto)
+      console.log(venuePhoto);
 
       assignHeartIfVenueLiked(venueName);
 
@@ -1105,12 +1136,18 @@ const showVenueCard = function (cafeId, venueName) {
               var listName = item[1];
               var listId = item[0];
               console.log(`Loaded ${listName}:${listId}`);
-              $("#userLists").append(
+              $("#sidebar-header").append(
+                ` 
+                  <h5 class="bookmark-header">Fuck</h5>
+                  `
+              );
+
+              $("#sidebar-header").append(
                 ` 
                   <h5 class="bookmark-header">${data[0].user.username}'s Lists</h5>
                   `
               );
-              $("#userLists").append(
+              $("#sidebar-lists").append(
                 `
               <li class="userlist sidebarlist" id="liked-venues" data-name="liked-venues">
                 Liked Places
@@ -1227,7 +1264,6 @@ const showVenueCard = function (cafeId, venueName) {
       });
 
       const getPlaceDetails = function (placeId) {
-
         let testNode = $("#hidden").get(0);
 
         let request = {
@@ -1241,34 +1277,28 @@ const showVenueCard = function (cafeId, venueName) {
             "photos",
           ],
         };
-        
+
         // check DB for image URL
 
-        if (venuePhoto == "empty"){
-          console.log("No Photo getting Google Images API")
+        if (venuePhoto == "empty") {
+          console.log("No Photo getting Google Images API");
 
-        service = new google.maps.places.PlacesService(testNode);
-        service.getDetails(request, callback);
+          service = new google.maps.places.PlacesService(testNode);
+          service.getDetails(request, callback);
 
-        
-        
-
-        function callback(results, status) {
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            // $("#website").attr("src", results.website)
-            // $("#website").html(results.website)
-            photos = results.photos;
-            photo = photos[0].getUrl({
-            
-            });
-            $("#venue-image").attr("src", photo);
+          function callback(results, status) {
+            if (status == google.maps.places.PlacesServiceStatus.OK) {
+              // $("#website").attr("src", results.website)
+              // $("#website").html(results.website)
+              photos = results.photos;
+              photo = photos[0].getUrl({});
+              $("#venue-image").attr("src", photo);
+            }
           }
+        } else {
+          console.log("Photo avaiable getting from DB");
+          $("#venue-image").attr("src", venuePhoto);
         }
-      } else {
-        console.log("Photo avaiable getting from DB")
-        $("#venue-image").attr("src", venuePhoto);
-
-      }
       };
 
       //share/like/bookmark card buttons
@@ -1402,7 +1432,6 @@ const addToListModal = function (venueToAdd) {
                   ${listName}
               </li>
               <li id="${listId}-list-status" class="grey-text">
-                
               </li>
             </div>
           </div>
