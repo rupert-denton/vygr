@@ -281,8 +281,8 @@ $("#user-lists").click(function () {
   }
 });
 
-$("#sidebar-header").click(function (e) {
-  console.log("Cliccked teh header");
+$("#sidebar-subheader").click(function (e) {
+  console.log("Clicked teh header");
   if (e.target && e.target.matches(`li.create-list`)) {
     console.log("clicked create lsit");
     checkRegistration();
@@ -309,7 +309,6 @@ const checkRegistration = function () {
   }
 };
 
-// $("#createList").click(function () {});
 
 //toggle navigation buttons
 const toggleNavButtons = function () {
@@ -422,8 +421,8 @@ const showUserLists = function (map) {
         `
         );
 
-        $("#sidebar-header").append(likedList);
-        $("#sidebar-header").append(
+        $("#sidebar-subheader").append(likedList);
+        $("#sidebar-subheader").append(
           `
           <div id="createListContainer" class="sidebar-container">
             <div class="list-details">
@@ -511,11 +510,6 @@ const showUserLists = function (map) {
   });
 };
 
-$("#createListModal").on("hide.bs.modal", function () {
-  var listName = $("#newListName");
-  listName.empty();
-});
-
 //create new list
 const createNewList = function () {
   console.log("creating a new list");
@@ -531,6 +525,12 @@ const createNewList = function () {
 $("#createListModal").click(function () {
   createNewList();
 });
+
+$("#createListModal").on("hide.bs.modal", function () {
+  var listName = $("#newListName");
+  listName.empty();
+});
+
 
 $("#save-list").click(function () {
   var listName = $("#newListName").val();
@@ -1136,12 +1136,7 @@ const showVenueCard = function (cafeId, venueName) {
               var listName = item[1];
               var listId = item[0];
               console.log(`Loaded ${listName}:${listId}`);
-              $("#sidebar-header").append(
-                ` 
-                  <h5 class="bookmark-header">Fuck</h5>
-                  `
-              );
-
+         
               $("#sidebar-header").append(
                 ` 
                   <h5 class="bookmark-header">${data[0].user.username}'s Lists</h5>
@@ -1569,21 +1564,22 @@ const removeVenueFromList = function (venueName, listId) {
 };
 
 //liked venues
-$("#liked-venues").click(function () {
-  console.log("ClickedLike");
-  let loginButton = $("#login");
-  if (loginButton.length) {
-    alert("Login or Signup to view venues you've liked");
-  } else {
-    let sideBar = $("#vygr-sidebar");
-    let sideNav = $("#sideNav");
-    if (sideBar.hasClass("open-sidebar")) {
-      sideBar.removeClass("open-sidebar");
-      sideBar.addClass("closed-sidebar");
-      sideNav.removeClass("pushedbtn");
-      // mapCards.removeClass("pushedcards")
+$("#sidebar-subheader").click(function (e) {
+  if (e.target && e.target.matches(`li.likedplaceslist`)) {
+    console.log("ClickedLike");
+    let loginButton = $("#login");
+    if (loginButton.length) {
+      alert("Login or Signup to view venues you've liked");
+    } else {
+      let sideBar = $("#vygr-sidebar");
+      let sideNav = $("#sideNav");
+      if (sideBar.hasClass("open-sidebar")) {
+        sideBar.removeClass("open-sidebar");
+        sideBar.addClass("closed-sidebar");
+        sideNav.removeClass("pushedbtn");
+      }
+      getLikedVenues();
     }
-    getLikedVenues();
   }
 });
 
