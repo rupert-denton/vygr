@@ -228,6 +228,11 @@ i {
   font-size: 1.9rem;
 }
 
+.user-list-open{
+  background-color: black;
+  color: white;
+}
+
 /* profile modal */
 .profile-stat-name {
   font-size: 1rem;

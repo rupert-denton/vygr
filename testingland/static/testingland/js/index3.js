@@ -1,3 +1,4 @@
+
 var markerSet = new Set(); //empty array
 var selectedPlaces = new Set();
 var marker, i;
@@ -284,7 +285,7 @@ $("#user-lists").click(function () {
 $("#sidebar-subheader").click(function (e) {
   console.log("Clicked teh header");
   if (e.target && e.target.matches(`li.create-list`)) {
-    console.log("clicked create lsit");
+    console.log("clicked create list");
     checkRegistration();
   }
 });
@@ -309,7 +310,6 @@ const checkRegistration = function () {
   }
 };
 
-
 //toggle navigation buttons
 const toggleNavButtons = function () {
   let sideNav = $("#sideNav");
@@ -324,12 +324,18 @@ const toggleNavButtons = function () {
 //toggle sidebar buttons
 const toggleSideBar = function () {
   let sideBar = $("#vygr-sidebar");
+  let userListButton = $("#user-lists")
+
   if (sideBar.hasClass("closed-sidebar")) {
     sideBar.removeClass("closed-sidebar");
     sideBar.addClass("open-sidebar");
+    userListButton.css({"background-color": "black", "color":"white"})
+    
   } else {
     sideBar.removeClass("open-sidebar");
     sideBar.addClass("closed-sidebar");
+    userListButton.css({"background-color": "white", "color":"black"})
+
   }
 };
 
@@ -360,6 +366,25 @@ const showUserLists = function (map) {
     sideBar.removeClass("closed-sidebar");
     sideBar.addClass("open-sidebar");
   }
+  
+
+  $("#userLists").html("");
+  $(".venue-info-card").html("");
+  $("#sidebar-header").html("");
+  $("#sidebar-subheader").html("");
+  toggleNavButtons();
+
+  const appendUserTitle = function (data) {
+    console.log(data[0].user.username)
+    $("#sidebar-header").append(
+      ` 
+      <div class="bookmark-header">
+        <h5 class="bookmark-title">${data[0].user.username}'s Lists</h5>
+      </div>
+      `
+    );
+  };
+
 
   let likedList = `
   <div id="liked" class="sidebar-container">
@@ -371,10 +396,31 @@ const showUserLists = function (map) {
   </div>
     `;
 
-  $("#userLists").html("");
-  $(".venue-info-card").html("");
-  $("#sidebar-header").html("");
-  toggleNavButtons();
+    let createList = `
+    <div id="create-list" class="sidebar-container">
+      <div class="list-details">
+        <li class="userlist create-list" id="create-list" data-name="create-list"><i class="bi bi-plus-circle-fill"></i>
+         Create New List
+        </li>        
+      </div>
+    </div>
+    `;
+
+  const appendLikedList = function () {
+    $("#sidebar-subheader").append(likedList);
+  };
+
+  const appendCreateList = function () {
+    $("#sidebar-subheader").append(createList);
+  };
+
+  const removeLikedVenue = function(){
+    $("#sidebar-subheader").remove(likedList);
+  }
+
+  const removeCreateList = function() {
+    $("#sidebar-subheader").remove(createList);
+  }
 
   $.ajax({
     type: "GET",
@@ -390,55 +436,21 @@ const showUserLists = function (map) {
           data: {},
           success: function (data) {
             console.log(data);
-            $("#sidebar-header").append(
-              ` 
-              <div class="bookmark-header">
-                <h5 class="bookmark-title">${data[0].username}'s Lists</h5>
-              </div>
-              `
-            );
-
-            $("#sidebar-header").append(likedList);
-            $("#sidebar-header").append(
-              `
-              <div id="create-list" class="sidebar-container">
-                <div class="list-details">
-                  <li class="userlist likedplaceslist" id="create-list" data-name="create-list"><i class="bi bi-plus-circle-fill"></i>
-                   Create New List
-                  </li>        
-                </div>
-              </div>
-              `
-            );
+            appendUserTitle(data);
+            $("#sidebar-subheader").show();
+            appendLikedList();
+            appendCreateList();
           },
         });
       } else {
-        $("#sidebar-header").append(
-          ` 
-        <div class="bookmark-header">
-          <h5 class="bookmark-title">${data[0].user.username}'s Lists</h5>
-        </div>
-        `
-        );
-
-        $("#sidebar-subheader").append(likedList);
-        $("#sidebar-subheader").append(
-          `
-          <div id="createListContainer" class="sidebar-container">
-            <div class="list-details">
-              <li class="userlist likedplaceslist create-list" id="createList" type="button" data-name="create-list" data-dismiss="modal"><i class="bi bi-plus-circle-fill"></i>
-               Create New List
-              </li>        
-            </div>
-          </div>
-          `
-        );
+          appendUserTitle(data);
+          $("#sidebar-subheader").show();
+          appendLikedList();
+          appendCreateList();
       }
       for (i = 0; i < data.length; i++) {
         var listName = data[i].list_name;
         var listId = data[i].id;
-        // var venueList = [];
-        // venueList.push(item.venue.id)
         console.log(`Loaded ${listName}:${listId}`);
         $("#userLists").append(
           `
@@ -457,6 +469,7 @@ const showUserLists = function (map) {
           </div>
           `
         );
+
         // edits list
         document
           .getElementById("list-" + listId + "-edit")
@@ -530,7 +543,6 @@ $("#createListModal").on("hide.bs.modal", function () {
   var listName = $("#newListName");
   listName.empty();
 });
-
 
 $("#save-list").click(function () {
   var listName = $("#newListName").val();
@@ -625,7 +637,14 @@ const deleteList = function (clickedListId, clickedList) {
 };
 
 //shows clicked list's venues on map
+
+const removeSideBarSubheader = function(){
+  $("#sidebar-subheader").hide();
+}
+
 $("#userLists").on("click", "li", function (e) {
+  removeSideBarSubheader()
+  
   if ($(e.target).hasClass("sidebarlist")) {
     var listName = e.target.getAttribute("data-name");
     var listId = e.target.getAttribute("data-pk");
@@ -635,8 +654,6 @@ $("#userLists").on("click", "li", function (e) {
     toggleSideBar();
     e.preventDefault();
   } else if ($(e.target).hasClass("likedplaceslist")) {
-    var listName = e.target.getAttribute("data-name");
-    console.log(`Clicked ${listName}:${listId}`);
     getLikedVenues();
     toggleNavButtons();
     toggleSideBar();
@@ -1136,7 +1153,7 @@ const showVenueCard = function (cafeId, venueName) {
               var listName = item[1];
               var listId = item[0];
               console.log(`Loaded ${listName}:${listId}`);
-         
+
               $("#sidebar-header").append(
                 ` 
                   <h5 class="bookmark-header">${data[0].user.username}'s Lists</h5>
@@ -1695,6 +1712,7 @@ const showVenuesInSidebar = function (data, listId, listName) {
 };
 
 const showLikedVenuesInSidebar = function (data) {
+  removeSideBarSubheader()
   toggleSideBar();
   toggleNavButtons();
   $("#userLists").html("");
@@ -1792,7 +1810,7 @@ const putMarkersOnMap = function (data, map, listId) {
   };
 
   for (let i = 0; i < data.length; i++) {
-    let cafeId = data[i][7];
+    let cafeId = data[i][6];
     console.log(
       cafeId,
       data[i][0],
@@ -1805,7 +1823,7 @@ const putMarkersOnMap = function (data, map, listId) {
       animation: google.maps.Animation.DROP,
       // title: data[i][0],
       icon: svgMarker,
-      cafeId: data[i][7],
+      cafeId: data[i][6],
     });
 
     console.log("Opening marker title");
