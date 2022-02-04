@@ -660,7 +660,7 @@ $("#userLists").on("click", "li", function (e) {
     e.preventDefault();
   } else if ($(e.target).hasClass("sidebarvenue")) {
     var venueId = e.target.getAttribute("data-pk");
-    console.log(`clicked a veenue with id ${venueId}`);
+    console.log(`clicked a venue with id ${venueId}`);
     putSingleVenueOnMap(venueId);
   }
 });
@@ -787,8 +787,9 @@ $("#search-results").click(function (e) {
   putSingleVenueOnMap(venueId);
 });
 
-//fix
+//drops a single pin
 const putSingleVenueOnMap = function (venueId) {
+  clearMarkers();
   $.ajax({
     type: "GET",
     url: "electra/place_search/",
@@ -1389,6 +1390,7 @@ const showVenueCard = function (cafeId, venueName) {
           }
         });
 
+      
       const shareVenue = document.getElementById(venueName + "-share");
       // Must be triggered some kind of "user activation"
       shareVenue.addEventListener("click", function (e) {
@@ -1560,17 +1562,17 @@ const addVenueToList = function (listId, venueToAdd) {
 };
 
 //removing venue from list
-const removeVenueFromList = function (venueName, listId) {
+const removeVenueFromList = function (venueId, listId) {
+  console.log(venueId, listId)
   $.ajax({
     type: "GET",
     url: "/electra/remove_venue_from_list",
     data: {
       user_list: listId,
-      venue: venueName,
+      venue: venueId,
     },
     success: function (data) {
       console.log("removed");
-      // $("#userlist-modal").modal('hide');
       $(`#list-${listId}`).removeClass("black-text");
       $(`#list-${listId}`).addClass("grey-text");
       $(`#${listId}-list-status`).empty();
@@ -1681,9 +1683,9 @@ const showVenuesInSidebar = function (data, listId, listName) {
           </div>
           <div class="list-options">
           <span id="venue-options" class="card-info">
-            <i id="list-bookmark" class="card-icon bi bi-bookmark-plus-fill default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i>
-            <i id="${data[i].venue.cafe_name}-list-share" class="card-icon bi bi-share-fill default-bookmark default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i> 
-            <i id="venue-${data[i].venue.cafe_name}-list-delete" class="card-icon bi bi-x-circle-fill default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i>
+            <i id="list-bookmark" class="card-icon bi bi-bookmark-plus-fill list-venue-bookmark default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i>
+            <i id="${data[i].venue.cafe_name}-list-share" class="card-icon bi bi-share-fill list-venue-share default-bookmark default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i> 
+            <i id="venue-${data[i].venue.cafe_name}-list-delete" class="card-icon bi bi-x-circle-fill list-venue-delete default-bookmark" data-name="${data[i].venue.cafe_name}" data-pk="${data[i].venue.id}"></i>
           </div>
         </div>
         `
@@ -1698,16 +1700,40 @@ const showVenuesInSidebar = function (data, listId, listName) {
   });
 
   $("#venue-options").on("click", "i", function (e) {
-    if ($(e.target).hasClass("default-bookmark")) {
+    if ($(e.target).hasClass("list-venue-bookmark")) {
       let venueToAdd = e.target.getAttribute("data-pk");
-      let loginButton = $("#login");
-      if (loginButton.length) {
-        alert("Login or Signup to bookmark venues to lists");
-      } else {
-        console.log("Bookmarking " + venueToAdd);
+      console.log("Bookmarking " + venueToAdd);
         addToListModal(venueToAdd);
+      // let loginButton = $("#login");
+      // if (loginButton.length) {
+      //   alert("Login or Signup to bookmark venues to lists");
+      } else if ($(e.target).hasClass("list-venue-share")){
+        console.log(e.target)
+        fetch(`/electra/build_link/${$(e.target).data("pk")}/`)
+        .then((resp) => resp.json())
+        .then((json) => {
+          let domain = document.location.origin;
+          let link = domain + json.link;
+          console.log(link);
+          if (navigator.share) {
+            navigator
+              .share({
+                title: "VYGR: Share Your World",
+                text: "Check out this great place!",
+                url: link,
+              })
+              .then(() => {
+                console.log("Thanks for sharing!");
+              })
+              .catch(console.error);
+          } else {
+            // deskop
+          }
+        });
+      } else if ($(e.target).hasClass("list-venue-delete")){
+        let venueId = $(e.target).data("pk")
+        removeVenueFromList(venueId, listId)
       }
-    }
   });
 };
 

@@ -6,10 +6,11 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username']
+    
 class mapCafesSerializer(serializers.ModelSerializer):
     class Meta:
         model = mapCafes
-        fields = ['id', 'cafe_name', 'cafe_address', 'venue_type', 'description']
+        fields = ['id', 'cafe_name', 'cafe_address', 'venue_type', 'source', 'cafe_image_url']
 
 class CreateUserListSerializer(serializers.ModelSerializer):
     class Meta:
