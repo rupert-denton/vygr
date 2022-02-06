@@ -1326,35 +1326,44 @@ const showVenueCard = function (cafeId, venueName) {
             console.log(placeToAdd);
             liked[0].classList.add("liked-venue");
             if (
+              (
               $("#vygr-sidebar").hasClass("open-sidebar") ||
               $("#vygr-sidebar").hasClass("liked-venue-list")
-            ) {
+            ) && !$(`venue-${placeToAdd}-container`).length)
+            {
+              console.log("Venue not on list")
               $.ajax({
                 type: "GET",
-                url: "/api/userlist/",
+                url: "/api/liked/",
                 data: {},
                 success: function (data) {
                   console.log(data);
-                }
+                  for (i = 0; i < data.length; i++) {
+                    if (data[i].liked_venue.id == placeToAdd) {
+                      console.log(data[i]);
+                      $("#userLists").append(
+                        `
+                          <div id="venue-${data[i].liked_venue.id}-container" class="sidebar-container">
+                            <div class="list-details">
+                              <li class="userlist sidebarvenue" id="venue-${data[i].liked_venue.id}" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}">
+                                ${data[i].liked_venue.cafe_name}
+                              </li>
+                            </div>
+                            <div class="list-options">
+                            <span class="card-info">
+                              <i id="${data[i].liked_venue.cafe_name}-bookmark" class="list-venue-bookmark card-icon bi bi-bookmark-plus-fill default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i>
+                              <i id="${data[i].liked_venue.cafe_name}-share" class="list-venue-share card-icon bi bi-share-fill default-bookmark default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i> 
+                              <i id="${data[i].liked_venue.cafe_name}-delete" class="card-icon bi bi-x-circle-fill list-venue-delete default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i>
+                            </div>
+                          </div>
+                          `
+                      );
+                    }
+                  }
+                },
               });
-              
-              // $("#userLists").append(
-              // `
-              //   <div id="venue-${placeToAdd}-container" class="sidebar-container">
-              //     <div class="list-details">
-              //       <li class="userlist sidebarvenue" id="list-venue-${placeToAdd}" data-name="${placeToAdd}" data-pk="${placeToAdd}">
-              //         ${placeToAdd}
-              //       </li>
-              //     </div>
-              //   <div class="list-options">
-              //   <span id="${placeToAdd}-venue-options" class="card-info">
-              //     <i id="${placeToAdd}-list-bookmark" class="card-icon bi bi-bookmark-plus-fill list-venue-bookmark default-bookmark" data-name="${liked}" data-pk="${liked}"></i>
-              //     <i id="${placeToAdd}-list-share" class="card-icon bi bi-share-fill list-venue-share default-bookmark default-bookmark" data-name="${liked}" data-pk="${liked}"></i> 
-              //     <i id="venue-${placeToAdd}-list-delete" class="card-icon bi bi-x-circle-fill list-venue-delete default-bookmark" data-name="${liked}" data-pk="${liked}"></i>
-              //   </div>
-              // </div>
-              // `
-              // );
+            } else {
+              removeVenueFromliked(data[i].liked_venue.id)
             }
             showSnackBar();
           },
