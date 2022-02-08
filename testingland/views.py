@@ -22,8 +22,6 @@ import re
 from allauth.account.decorators import verified_email_required
 
 
-
-
 #what is the purpose of this function?
 
 @ensure_csrf_cookie

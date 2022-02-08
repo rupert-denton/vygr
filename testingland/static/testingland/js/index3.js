@@ -1,3 +1,4 @@
+
 var markerSet = new Set(); //empty array
 var selectedPlaces = new Set();
 var marker, i;
@@ -358,6 +359,9 @@ var clickedList = undefined;
 //userlists functionality
 //displays lists in sidebar
 const showUserLists = function (map) {
+  $("#userLists").html("");
+  $("#sidebar-header").html("");
+  $("#sidebar-subheader").html("");
   let sideBar = $("#vygr-sidebar");
   if (sideBar.hasClass("closed-sidebar")) {
     sideBar.removeClass("closed-sidebar");
@@ -668,6 +672,7 @@ const getClickedListVenues = function (listId, listName) {
       list_id: listId,
     },
     success: function (data) {
+      console.log(data)
       $("#userLists").html("");
       showVenuesInSidebar(data, listId, listName);
       addClickedListMarkersToMap(data, map, listId);
@@ -1359,6 +1364,9 @@ const showVenueCard = function (cafeId, venueName) {
                       );
                     }
                   }
+                  $(`span`).on("click", "i", function (e) {
+                    venueOptionsButtons(e);
+                  });
                 },
               });
             } else {
@@ -1589,38 +1597,75 @@ const addVenueToList = function (listId, venueToAdd) {
 
 //removing venue from list
 const removeVenueFromList = function (venueId, listId, target) {
-  $.ajax({
-    type: "GET",
-    url: "/electra/remove_venue_from_list",
-    data: {
-      user_list: listId,
-      venue: venueId,
-    },
-    success: function (data) {
-      console.log("removed");
-      $(`#list-${listId}`).removeClass("black-text");
-      $(`#list-${listId}`).addClass("grey-text");
-      $(`#${listId}-list-status`).empty();
-      $(`#${listId}-list-status`).text("Not On List.");
-      if ($("#vygr-sidebar").hasClass("open-sidebar")) {
-        console.log(venueId);
-        let removedVenue = $(`#venue-${venueId}-container`);
-        console.log(removedVenue);
-        // $("#userLists").remove(removedVenue);
-        $(removedVenue).remove();
-        $(removedVenue).empty();
-      }
+  const deleteVenueContainer = function(venueId){
+    if ($("#vygr-sidebar").hasClass("open-sidebar")) {
+      console.log(venueId);
+      let removedVenue = $(`#venue-${venueId}-container`);
+      console.log(removedVenue);
+      $(removedVenue).remove();
+      $(removedVenue).empty();
+    }
+  }
 
-      if ($("#venueCard").length) {
-        console.log(`venue card for venue ${venueId} open`);
-        let heart = $(".bi-heart-fill");
-        heart.removeClass("liked-venue");
-        heart.removeClass("default-like");
+  const removeHeartIfInfoCardIsOpen = function(venueId){
+    if ($("#venueCard").length) {
+      console.log(`venue card for venue ${venueId} open`);
+      let heart = $(".bi-heart-fill");
+      heart.removeClass("liked-venue");
+      heart.removeClass("default-like");
+    }
+  }
+  console.log(venueId, listId)
+  if (listId = "efijeipfe"){
+    console.log("Liked List!!")
+    $.ajax({
+      type: "GET",
+      url: "/electra/remove_venue_from_liked",
+      data: {
+        venue: venueId,
+      },
+      success: function (data) {
+        console.log("removed");
+        deleteVenueContainer(venueId);
+        removeHeartIfInfoCardIsOpen(venueId);
+        showRemovedSuccessSnackBar();
+        getLikedVenuesNoList()
+        $.ajax({
+          type: "GET",
+          url: "/api/liked/",
+          data: {},
+          success: function (data) {
+            console.log(data)
+              let listName = "3oi4hj32o4ih320irjoweinfewifn"
+              showVenuesInSidebar(data, 'x', listName);
+            },
+          });
       }
-      showRemovedSuccessSnackBar();
-      showVenuesInSidebar();
-    },
-  });
+    });
+  } else {
+    $.ajax({
+      type: "GET",
+      url: "/electra/remove_venue_from_list",
+      data: {
+        user_list: listId,
+        venue: venueId,
+      },
+      success: function (data) {
+        console.log("removed");
+        $(`#list-${listId}`).removeClass("black-text");
+        $(`#list-${listId}`).addClass("grey-text");
+        $(`#${listId}-list-status`).empty();
+        $(`#${listId}-list-status`).text("Not On List.");
+       
+        console.log(data)
+        deleteVenueContainer(venueId);
+        showRemovedSuccessSnackBar();
+        showVenuesInSidebar(data);
+       
+      },
+    });
+  }
+ 
 };
 
 //liked venues
@@ -1647,9 +1692,22 @@ const getLikedVenues = function () {
   });
 };
 
+const getLikedVenuesNoList = function () {
+  $.ajax({
+    type: "GET",
+    url: "/api/liked/",
+    data: {},
+    success: function (data) {
+      console.log(data);
+      $("#userLists").html("");
+      addLikedVenuesToMap(data, map);
+    },
+  });
+};
+
 const addLikedVenuesToMap = function (data, map) {
   console.log(data);
-  likedVenuesList = [];
+  var likedVenuesList = [];
   clearMarkers();
   $("#venueCard").empty();
   for (i = 0; i < data.length; i++) {
@@ -1686,13 +1744,13 @@ const venueOptionsButtons = function (e, listId) {
         let domain = document.location.origin;
         let link = domain + json.link;
         console.log(link);
-      
+
         /* Copy the text inside the text field */
         navigator.clipboard.writeText(link);
 
         /* Alert the copied text */
         alert("Copied the text: " + link);
-        
+
         if (navigator.share) {
           navigator
             .share({
@@ -1708,7 +1766,8 @@ const venueOptionsButtons = function (e, listId) {
       });
   } else if ($(e.target).hasClass("liked-venue-delete")) {
     let venueId = $(e.target).data("pk");
-    removeVenueFromList(venueId);
+    let listId = "efijeipfe"
+    removeVenueFromList(venueId, listId);
   } else if ($(e.target).hasClass("list-venue-delete")) {
     let venueId = $(e.target).data("pk");
     removeVenueFromList(venueId, listId, e.target);
@@ -1717,10 +1776,34 @@ const venueOptionsButtons = function (e, listId) {
 
 //the venues in clicked list
 const showVenuesInSidebar = function (data, listId, listName) {
-  if (listName == "3oi4hj32o4ih320irjoweinfewifn") {
+  console.log(data, listName)
+  if (data.length == 0 && listName !== "3oi4hj32o4ih320irjoweinfewifn"){
+    addBackToListsButton();
+    console.log("Empty List");
+    $.ajax({
+      type: "GET",
+      url: "/api/currentuserinfo/",
+      data: {},
+      success: function (data) {
+        console.log(data);
+        $("#sidebar-header").append(
+          `
+          <div class="bookmark-header">
+            <h5 class="bookmark-title" id="list-name">${listName}</h5>
+            <h6 class="list-creator">Created by ${data[0].username}</h6>
+          </div>
+          `
+        );
+      },
+    });
+  } else if (listName == "3oi4hj32o4ih320irjoweinfewifn") {
+    $("#userLists").html("");
+    $("#sidebar-header").html("");
+    $("#sidebar-subheader").html("");
     removeSideBarSubheader();
     console.log("Showing Liked Places");
     listName = "Your Liked Places";
+    
     $("#sidebar-header").append(
       `
       <div class="bookmark-header">
@@ -1751,35 +1834,6 @@ const showVenuesInSidebar = function (data, listId, listName) {
         `
       );
     }
-    $(".back").click(function () {
-      closeNavButtons();
-      closeSidebar();
-      showUserLists();
-    });
-    $(`span`).on("click", "i", function (e) {
-      venueOptionsButtons(e, listId);
-    });
-  }
-
-  if (data.length == 0) {
-    addBackToListsButton();
-    console.log("Empty List");
-    $.ajax({
-      type: "GET",
-      url: "/api/currentuserinfo/",
-      data: {},
-      success: function (data) {
-        console.log(data);
-        $("#sidebar-header").append(
-          `
-          <div class="bookmark-header">
-            <h5 class="bookmark-title" id="list-name">${listName}</h5>
-            <h6 class="list-creator">Created by ${data[0].username}</h6>
-          </div>
-          `
-        );
-      },
-    });
   } else {
     $("#sidebar-header").append(
       `
@@ -1810,8 +1864,8 @@ const showVenuesInSidebar = function (data, listId, listName) {
         </div>
         `
       );
-    }
-  }
+    };
+  };
 
   $(".back").click(function () {
     closeNavButtons();
@@ -1865,6 +1919,7 @@ const showLikedVenuesInSidebar = function (data) {
     );
   }
   $("#back-to-lists").click(function () {
+    console.log("clicked Back");
     closeNavButtons();
     closeSidebar();
     showUserLists();
@@ -1933,7 +1988,7 @@ const putMarkersOnMap = function (data, map, listId) {
     const marker = new google.maps.Marker({
       position: new google.maps.LatLng(data[i][2], data[i][3]),
       map: map,
-      animation: google.maps.Animation.DROP,
+      // animation: google.maps.Animation.DROP,
       // title: data[i][0],
       icon: svgMarker,
       cafeId: data[i][6],
