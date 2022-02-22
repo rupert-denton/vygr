@@ -1,4 +1,3 @@
-
 var markerSet = new Set(); //empty array
 var selectedPlaces = new Set();
 var marker, i;
@@ -373,17 +372,34 @@ const showUserLists = function (map) {
   $("#sidebar-header").html("");
   $("#sidebar-subheader").html("");
   toggleNavButtons();
-
   const appendUserTitle = function (data) {
-    console.log(data[0].user.username);
-    $("#sidebar-header").append(
-      ` 
-      <div class="bookmark-header">
-        <h5 class="bookmark-title">${data[0].user.username}'s Lists</h5>
-      </div>
-      `
-    );
+    $.ajax({
+      type: "GET",
+      url: "/api/currentuserinfo/",
+      data: {},
+      success: function (data) {
+        console.log(data);
+        $("#sidebar-header").append(
+          `
+          <div class="bookmark-header">
+            <h5 class="bookmark-title" id="list-name">${data[0].username}'s Lists</h5>
+          </div>
+          `
+        );
+      },
+    });
   };
+
+  // const appendUserTitle = function (data) {
+  //   console.log(data[0].user.username);
+  //   $("#sidebar-header").append(
+  //     `
+  //     <div class="bookmark-header">
+  //       <h5 class="bookmark-title">${data[0].user.username}'s Lists</h5>
+  //     </div>
+  //     `
+  //   );
+  // };
 
   let likedList = `
   <div id="liked" class="sidebar-container">
@@ -453,7 +469,7 @@ const showUserLists = function (map) {
         console.log(`Loaded ${listName}:${listId}`);
         $("#userLists").append(
           `
-          <div class="sidebar-container">
+          <div id="list-container-${listId}" class="sidebar-container">
             <div class="list-details">
               <li class="userlist sidebarlist" id="list-${listId}" data-name="${listName}" data-pk="${listId}">
                 ${listName}
@@ -478,7 +494,6 @@ const showUserLists = function (map) {
             console.log(e.target);
             clickedList = e.target.getAttribute("data-name");
             clickedListId = e.target.getAttribute("data-pk");
-
             editList();
           });
         // deletes list
@@ -501,6 +516,19 @@ const showUserLists = function (map) {
                 let domain = document.location.origin;
                 let link = domain + json.link;
                 console.log(link);
+
+                /* Alert the copied text */
+                $("#share-modal").modal("show");
+                $("#modal-share-title").html(`Sharing ${listName}`);
+                $("#modal-share-field").val(link);
+                const input = $("#modal-share-field");
+                input.focus();
+                input.select();
+                $("#copy-link").click(function () {
+                  console.log("Copying Link");
+                  /* Copy the text inside the text field */
+                  navigator.clipboard.writeText(link);
+                });
                 if (navigator.share) {
                   navigator
                     .share({
@@ -627,9 +655,12 @@ const deleteList = function (clickedListId, clickedList) {
       ).value,
     },
     success: function (data) {
-      $("#userLists").html("");
-      closeNavButtons();
-      closeSidebar();
+      let deletedList = $(`#list-container-${clickedListId}`);
+      $(deletedList).remove();
+      $(deletedList).empty();
+      // $("#userLists").html("");
+      // closeNavButtons();
+      // closeSidebar();
       showDeleteSuccessSnackBar();
     },
   });
@@ -672,7 +703,7 @@ const getClickedListVenues = function (listId, listName) {
       list_id: listId,
     },
     success: function (data) {
-      console.log(data)
+      console.log(data);
       $("#userLists").html("");
       showVenuesInSidebar(data, listId, listName);
       addClickedListMarkersToMap(data, map, listId);
@@ -902,28 +933,23 @@ const putSearchedMarkersOnMap = function (data, map) {
 };
 
 $(`div`).on("click", ".infowindow", function (e) {
-  console.log("clicked");
+  console.log("clicked the info window");
+  console.log(e);
   console.log(markers);
   venueName = $(e.target).attr("data-text");
   cafeId = e.target.id;
   for (let i = 0; i < markers.length; i++) {
+    console.log(markers[i]);
     if (markers[i].cafeId == cafeId) {
       let matchedMarker = markers[i];
       let cafeId = markers[i].cafeId;
       console.log(`Found match: ${cafeId} - ${venueName}`);
       activateMarker(cafeId, venueName, matchedMarker);
+      break;
     }
   }
   e.stopPropagation();
 });
-
-const activateMarker = function (cafeId, venueName, activatedMarker) {
-  removeRedMarker();
-  activatedMarker.setIcon(markerStyles[1]);
-  showVenueCard(cafeId, venueName);
-  map.panTo(activatedMarker.getPosition());
-  map.setZoom(15);
-};
 
 const removeRedMarker = function () {
   for (let i = 0; i < markers.length; i++) {
@@ -987,7 +1013,7 @@ const showVenueCard = function (cafeId, venueName) {
          <div class="card-image">
          <img id="venue-image" src="">
          </div>
-         <div class="mt-1 form-group comment-box">
+         <div id="comment-form" class="mt-1 form-group comment-box">
             <textarea class="form-control" id="comment-textbox" rows="4" placeholder="Add what you like/recommend/think about this place..."></textarea>
             <div class="comment-submit">
               <button id="comment-submit-btn" class="commentSubmitBtn">Comment</button>
@@ -1044,8 +1070,7 @@ const showVenueCard = function (cafeId, venueName) {
                 </div>
               </div>
             </div>
-
-              `);
+            `);
           }
           //view the user's lists, added venues and liked venues
 
@@ -1080,10 +1105,10 @@ const showVenueCard = function (cafeId, venueName) {
           });
         },
       });
-
       //post comments
+      
 
-      $("#comment-submit-btn").click(function () {
+      const submitComment = function () {
         let commentText = $("#comment-textbox").val();
         console.log(commentText);
         console.log(`Sending comments for venue ${venueId}`);
@@ -1098,10 +1123,44 @@ const showVenueCard = function (cafeId, venueName) {
             comment: commentText,
           },
           success: function (data) {
+            $("#comment-textbox").val("");
+
             console.log(data);
+            let untrimmedUser = $("#username").text()
+            let user = $.trim(untrimmedUser)
+            console.log(user)
+            let comment = data[0]
+            $("#venueComments").append(`
+            <div class="card-text">
+            <div class="venue-paragraph user-comment">
+              <span class="user-details">
+                <img src="/static/testingland/img/rd.jpeg" alt="Avatar" class="avatar">
+                <div class="dropdown">
+                  <a class="venue-source dropdown-toggle card-subtitle" href="#" role="button" id="${user}-dropdown" data-idtext="${user}-adder" data-bs-toggle="dropdown">-${user}</a>
+                  <ul id="${user}-dropdown-menu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item viewVenues" id="viewVenues-${user}" data-idtext="viewVenues-${user}" href="#">View Added Venues</a></li>
+                    <li><a class="dropdown-item viewLists" id="viewLists ${user}" data-idtext="viewLists-${user}">View Lists</a></li>
+                    <li><a class="dropdown-item viewLiked" id="viewLiked ${user}" data-idtext="viewLiked-${user}">View Liked Venues</a></li>
+                    <li>
+                      <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-danger" id="report ${user}" data-idtext="report-${user}">Report User</a></li>
+                  </ul>
+                </div>
+              </span>
+              <div id="venueComments" class="comment-body">
+                <div class="venue-text">${comment}</div>
+              </div>
+            </div>
+          </div>
+          `);
           },
         });
-      });
+      };
+
+      var commentBtn = document.getElementById("comment-submit-btn")
+      commentBtn.removeEventListener("click", submitComment)
+      commentBtn.addEventListener("click", submitComment)
 
       let venueInfo = $("#venueCard");
 
@@ -1162,7 +1221,7 @@ const showVenueCard = function (cafeId, venueName) {
               );
               $("#sidebar-lists").append(
                 `
-              <li class="userlist sidebarlist" id="liked-venues" data-name="liked-venues">
+              <li class="userlist sidebarlist likedvenues" id="liked-venues" data-name="liked-venues">
                 Liked Places
               </li>
               `
@@ -1377,6 +1436,24 @@ const showVenueCard = function (cafeId, venueName) {
         });
       };
 
+      const addOrRemoveVenueToLiked = function (e) {
+        let likedPlace = e.target.getAttribute("data-idtext");
+        let venue = document.getElementById(venueName + "-like");
+        console.log(venue);
+        let loginButton = $("#login");
+        if (loginButton.length) {
+          alert("Login or Signup to like venues");
+        } else {
+          if (venue.classList.contains("liked-venue")) {
+            // venue.add("card-icon")
+            removeVenueFromliked(venue, likedPlace);
+          } else {
+            console.log("Liking " + likedPlace);
+            addVenueToLiked(likedPlace);
+          }
+        }
+      };
+
       //this function removes venue from liked list
       const removeVenueFromliked = function (venue, likedPlace) {
         console.log("Removing " + likedPlace);
@@ -1416,25 +1493,11 @@ const showVenueCard = function (cafeId, venueName) {
           }
         });
 
-      document
-        .getElementById(venueName + "-like")
-        .addEventListener("click", function (e) {
-          let likedPlace = e.target.getAttribute("data-idtext");
-          let venue = document.getElementById(venueName + "-like");
-          console.log(venue);
-          let loginButton = $("#login");
-          if (loginButton.length) {
-            alert("Login or Signup to like venues");
-          } else {
-            if (venue.classList.contains("liked-venue")) {
-              // venue.add("card-icon")
-              removeVenueFromliked(venue, likedPlace);
-            } else {
-              console.log("Liking " + likedPlace);
-              addVenueToLiked(likedPlace);
-            }
-          }
-        });
+      //error happens here somewhere
+      var venueLike = document.getElementById(venueName + "-like");
+
+      venueLike.removeEventListener("click", addOrRemoveVenueToLiked);
+      venueLike.addEventListener("click", addOrRemoveVenueToLiked);
 
       const shareVenue = document.getElementById(venueName + "-share");
       // Must be triggered some kind of "user activation"
@@ -1463,6 +1526,14 @@ const showVenueCard = function (cafeId, venueName) {
       });
     },
   });
+};
+
+const activateMarker = function (cafeId, venueName, activatedMarker) {
+  removeRedMarker();
+  activatedMarker.setIcon(markerStyles[1]);
+  showVenueCard(cafeId, venueName);
+  map.panTo(activatedMarker.getPosition());
+  map.setZoom(15);
 };
 
 //adding/removing venue from a list
@@ -1597,27 +1668,26 @@ const addVenueToList = function (listId, venueToAdd) {
 
 //removing venue from list
 const removeVenueFromList = function (venueId, listId, target) {
-  const deleteVenueContainer = function(venueId){
+  console.log(venueId, listId);
+  const deleteVenueContainer = function (venueId) {
     if ($("#vygr-sidebar").hasClass("open-sidebar")) {
       console.log(venueId);
       let removedVenue = $(`#venue-${venueId}-container`);
-      console.log(removedVenue);
       $(removedVenue).remove();
       $(removedVenue).empty();
     }
-  }
-
-  const removeHeartIfInfoCardIsOpen = function(venueId){
+  };
+  const removeHeartIfInfoCardIsOpen = function (venueId) {
     if ($("#venueCard").length) {
       console.log(`venue card for venue ${venueId} open`);
       let heart = $(".bi-heart-fill");
       heart.removeClass("liked-venue");
       heart.removeClass("default-like");
     }
-  }
-  console.log(venueId, listId)
-  if (listId = "efijeipfe"){
-    console.log("Liked List!!")
+  };
+
+  if (listId == "efijeipfe") {
+    console.log("Liked List!!");
     $.ajax({
       type: "GET",
       url: "/electra/remove_venue_from_liked",
@@ -1629,20 +1699,21 @@ const removeVenueFromList = function (venueId, listId, target) {
         deleteVenueContainer(venueId);
         removeHeartIfInfoCardIsOpen(venueId);
         showRemovedSuccessSnackBar();
-        getLikedVenuesNoList()
+        getLikedVenuesNoList();
         $.ajax({
           type: "GET",
           url: "/api/liked/",
           data: {},
           success: function (data) {
-            console.log(data)
-              let listName = "3oi4hj32o4ih320irjoweinfewifn"
-              showVenuesInSidebar(data, 'x', listName);
-            },
-          });
-      }
+            console.log(data);
+            let listName = "3oi4hj32o4ih320irjoweinfewifn";
+            showVenuesInSidebar(data, "x", listName);
+          },
+        });
+      },
     });
   } else {
+    console.log(`Removing venue from ${listId}`);
     $.ajax({
       type: "GET",
       url: "/electra/remove_venue_from_list",
@@ -1656,16 +1727,25 @@ const removeVenueFromList = function (venueId, listId, target) {
         $(`#list-${listId}`).addClass("grey-text");
         $(`#${listId}-list-status`).empty();
         $(`#${listId}-list-status`).text("Not On List.");
-       
-        console.log(data)
-        deleteVenueContainer(venueId);
         showRemovedSuccessSnackBar();
-        showVenuesInSidebar(data);
-       
+        if ($("#vygr-sidebar").hasClass("open-sidebar")) {
+          deleteVenueContainer(venueId);
+          $.ajax({
+            type: "GET",
+            url: "/api/savedvenues/",
+            data: {
+              list_id: listId,
+            },
+            success: function (data) {
+              console.log(data);
+              getListVenuesNoList(data, listId);
+              // showVenuesInSidebar(data);
+            },
+          });
+        }
       },
     });
   }
- 
 };
 
 //liked venues
@@ -1690,6 +1770,19 @@ const getLikedVenues = function () {
       addLikedVenuesToMap(data, map);
     },
   });
+};
+
+const getListVenuesNoList = function (data, listId) {
+  console.log(data);
+  clearMarkers();
+  clickedListCafeNamesList = [];
+
+  for (i = 0; i < data.length; i++) {
+    console.log(clickedListCafeNamesList);
+    //puts markers in the markers set
+    clickedListCafeNamesList.push(data[i].venue.id);
+  }
+  gatherListMarkerData(clickedListCafeNamesList, map, listId);
 };
 
 const getLikedVenuesNoList = function () {
@@ -1730,6 +1823,8 @@ const addBackToListsButton = function () {
 };
 
 const venueOptionsButtons = function (e, listId) {
+  console.log(e);
+  console.log(listId);
   var venueId = e.target.getAttribute("data-pk");
   console.log(venueId, listId);
   if ($(e.target).hasClass("list-venue-bookmark")) {
@@ -1765,10 +1860,13 @@ const venueOptionsButtons = function (e, listId) {
         }
       });
   } else if ($(e.target).hasClass("liked-venue-delete")) {
+    console.log("deleting a liked venue");
     let venueId = $(e.target).data("pk");
-    let listId = "efijeipfe"
+    let listId = "efijeipfe";
     removeVenueFromList(venueId, listId);
   } else if ($(e.target).hasClass("list-venue-delete")) {
+    console.log("Deleting a regular venue");
+
     let venueId = $(e.target).data("pk");
     removeVenueFromList(venueId, listId, e.target);
   }
@@ -1776,8 +1874,8 @@ const venueOptionsButtons = function (e, listId) {
 
 //the venues in clicked list
 const showVenuesInSidebar = function (data, listId, listName) {
-  console.log(data, listName)
-  if (data.length == 0 && listName !== "3oi4hj32o4ih320irjoweinfewifn"){
+  console.log(data, listName);
+  if (data.length == 0 && listName !== "3oi4hj32o4ih320irjoweinfewifn") {
     addBackToListsButton();
     console.log("Empty List");
     $.ajax({
@@ -1803,7 +1901,7 @@ const showVenuesInSidebar = function (data, listId, listName) {
     removeSideBarSubheader();
     console.log("Showing Liked Places");
     listName = "Your Liked Places";
-    
+
     $("#sidebar-header").append(
       `
       <div class="bookmark-header">
@@ -1814,7 +1912,6 @@ const showVenuesInSidebar = function (data, listId, listName) {
     addBackToListsButton();
 
     for (i = 0; i < data.length; i++) {
-      console.log(data[i]);
       $(".venue-info-card").html("");
       $("#userLists").append(
         `
@@ -1828,13 +1925,15 @@ const showVenuesInSidebar = function (data, listId, listName) {
           <span class="card-info">
             <i id="${data[i].liked_venue.cafe_name}-bookmark" class="list-venue-bookmark card-icon bi bi-bookmark-plus-fill default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i>
             <i id="${data[i].liked_venue.cafe_name}-share" class="list-venue-share card-icon bi bi-share-fill default-bookmark default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i> 
-            <i id="${data[i].liked_venue.cafe_name}-delete" class="card-icon bi bi-x-circle-fill liked-venue-delete default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i>
+            <i id="${data[i].liked_venue.cafe_name}-delete" class="liked-venue-delete card-icon bi bi-x-circle-fill default-bookmark" data-name="${data[i].liked_venue.cafe_name}" data-pk="${data[i].liked_venue.id}"></i>
           </div>
         </div>
         `
       );
     }
   } else {
+    console.log(data);
+    let listId = data[0].user_list.id;
     $("#sidebar-header").append(
       `
       <div class="bookmark-header">
@@ -1845,7 +1944,6 @@ const showVenuesInSidebar = function (data, listId, listName) {
     );
     addBackToListsButton();
     for (i = 0; i < data.length; i++) {
-      console.log(data[i]);
       $(".venue-info-card").html("");
       $("#userLists").append(
         `
@@ -1864,8 +1962,8 @@ const showVenuesInSidebar = function (data, listId, listName) {
         </div>
         `
       );
-    };
-  };
+    }
+  }
 
   $(".back").click(function () {
     closeNavButtons();
@@ -1874,7 +1972,7 @@ const showVenuesInSidebar = function (data, listId, listName) {
   });
 
   $(`span`).on("click", "i", function (e) {
-    venueOptionsButtons(e);
+    venueOptionsButtons(e, listId);
   });
 };
 

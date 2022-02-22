@@ -52,7 +52,7 @@
          <input id="shared-list-id" type="hidden" value={{ list.id }}>
       {% endif %}
     <nav id="vygr-nav" class="navbar col-12">
-      <div class="navbar-brand page-title" href="#" style="color: red;">VYGR</div>
+      <div class="navbar-brand page-title" href="#" style="color: black;">VYGR</div>
       <div class="search-bar input-group">
         <button id="search-type" class="navbtn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i id="search-type-icon" class="bi bi-geo-alt-fill"></i></button>
         <ul class="dropdown-menu">
@@ -522,6 +522,34 @@
         </div>
       </div>
     </div>
+
+
+    <div id="share-modal" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="modal-share-title" class="modal-title"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body share-modal-body">
+            <div id="modal-share-link" class="share-link"></div>
+            <input id="modal-share-field" class="form-control" type="text" placeholder="Default input">
+          </div>
+          <div class="modal-footer">
+            <button id="copy-link" type="button" class="btn btn-primary">Copy Link</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
     </div>
     </div>
     </div>

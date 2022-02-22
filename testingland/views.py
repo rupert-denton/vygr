@@ -156,6 +156,8 @@ def add_venue_comment(request):
             print(comment)
             venue = request.POST.get('venue_id')
             print(venue)
+            user = request.user
+            print(user)
             map_cafes = mapCafes.objects.get(id=venue)
             new_obj = VenueComments()
             new_obj.venue = map_cafes
@@ -165,7 +167,7 @@ def add_venue_comment(request):
             new_obj.save()
     
     return JsonResponse([
-               
+        comment
     ], safe=False)
 
 def write_image(request):
