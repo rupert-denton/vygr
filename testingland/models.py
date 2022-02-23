@@ -143,7 +143,7 @@ class mapCafes(models.Model):
     geolocation = models.PointField(geography=True, blank=True, null=True)
     venue_type = models.CharField(max_length=200)
     source = models.CharField(max_length=200)
-    cafe_image_url = models.CharField(max_length=200, default='0000000', null=False)
+    cafe_image_url = models.CharField(max_length=200, null=False)
 
     # class Meta:
     #     # managed = False
