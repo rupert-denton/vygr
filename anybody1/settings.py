@@ -75,12 +75,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    
-    #'shops',
     'testingland',
     'rest_framework',
     'bootstrap_modal_forms',
-
     # all auth
     # The following apps are required:
     # 'django.contrib.auth',
