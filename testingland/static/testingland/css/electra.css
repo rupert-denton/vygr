@@ -673,9 +673,6 @@ i {
   margin: 1rem;
   min-height: 4rem;
   font-size: 1.6rem;
-  border-width: thin;
-  border-style: solid;
-  border-radius: 3px;
 }
 
 .newVenueAdd input:focus {
