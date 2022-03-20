@@ -66,7 +66,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
     
 ]
-
+`
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'widget_tweaks',
 
-]
+]`
 
 #django-allauth registraion settings
 
