@@ -1055,7 +1055,7 @@ i {
     margin-bottom: 1.5rem;
     flex-direction: column;
     justify-content: center;
-    height: 31rem;
+    /* height: 31rem; */
   }
 
   #venue-image{
