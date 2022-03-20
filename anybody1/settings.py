@@ -88,7 +88,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'widget_tweaks',
 
-]`
+]
 
 #django-allauth registraion settings
 
